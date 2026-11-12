@@ -259,4 +259,187 @@ const I18N = {
     ratings: ['', 'Very disappointing', 'Disapping', 'Okay', 'Great', 'Excellent!'],
     posTitle: 'Thank you so much! 🙏',
     posText: 'We’re delighted you enjoyed your visit. Would you share it on Google Maps? It takes one minute and helps us enormously.',
-    mapsBtn: 'Leave
+    mapsBtn: 'Leave a review on Google Maps',
+    negTitle: 'Sorry, we want to do better',
+    negText: 'Tell us what went wrong. Your message goes straight to the manager.',
+    chipsLabel: 'What went wrong?',
+    chips: {
+      kitchen_delay: '👨‍🍳 Kitchen delay / Slow food',
+      food_quality: '🍽️ Food quality / Cooking',
+      food_temp: '🥶 Food arrived cold',
+      service_delay: '🤵 Waiter service delay',
+      staff: '🗣️ Staff / Waiter attitude',
+      clean: '✨ Cleanliness',
+      price: '💰 Prices',
+      noise: '🔊 Noise / Atmosphere'
+    },
+    commentLabel: 'Comment (optional)',
+    commentPh: 'Tell us more...',
+    waBtn: 'Send to Manager via WhatsApp',
+    waHint: 'WhatsApp will open with a ready message, just hit send.',
+    poweredBy: 'Powered by',
+    msg: {
+      head: 'Hello, here is a customer review:',
+      waiter: 'Waiter',
+      rating: 'Rating', issues: 'Issues', comment: 'Comment', none: 'None', restaurant: 'Restaurant'
+    }
+  }
+};
+
+const CHIP_KEYS = [
+  'kitchen_delay',
+  'food_quality',
+  'food_temp',
+  'service_delay',
+  'staff',
+  'clean',
+  'price',
+  'noise'
+];
+
+const state = { lang: 'ar', rating: 0, hover: 0, tags: new Set() };
+const t = () => I18N[state.lang];
+
+/* Stars */
+const starsEl = document.getElementById('stars');
+const starSvg = '<svg viewBox="0 0 24 24" class="h-11 w-11 sm:h-12 sm:w-12" stroke-width="1.6" stroke-linejoin="round"><path d="M12 2.5l2.9 6.1 6.6.9-4.8 4.6 1.2 6.6L12 17.5l-5.9 3.2 1.2-6.6L2.5 9.5l6.6-.9L12 2.5z"/></svg>';
+
+for (let i = 1; i <= 5; i++) {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'star p-1';
+  b.dataset.value = i;
+  b.innerHTML = starSvg;
+  b.addEventListener('click', () => setRating(i));
+  b.addEventListener('mouseenter', () => { state.hover = i; paintStars(); });
+  b.addEventListener('mouseleave', () => { state.hover = 0; paintStars(); });
+  starsEl.appendChild(b);
+}
+
+function paintStars() {
+  const active = state.hover || state.rating;
+  [...starsEl.children].forEach((b, idx) => {
+    b.classList.toggle('on', (idx + 1) <= active);
+  });
+  document.getElementById('ratingLabel').textContent = active ? t().ratings[active] : '';
+}
+
+function setRating(n) {
+  state.rating = n;
+  paintStars();
+  const btn = starsEl.children[n - 1];
+  btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop');
+  renderResult(true);
+}
+
+function renderResult(animate) {
+  const pos = document.getElementById('positive'), neg = document.getElementById('negative');
+  const r = state.rating;
+  pos.classList.toggle('hidden', !(r >= 4));
+  neg.classList.toggle('hidden', !(r >= 1 && r <= 3));
+  if (animate) {
+    const shown = r >= 4 ? pos : (r >= 1 ? neg : null);
+    if (shown) {
+      shown.classList.remove('fade-up'); void shown.offsetWidth; shown.classList.add('fade-up');
+      setTimeout(() => shown.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80);
+    }
+  }
+}
+
+function renderChips() {
+  const wrap = document.getElementById('chips');
+  wrap.innerHTML = '';
+  CHIP_KEYS.forEach((k) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'chip rounded-full border border-ink-600 bg-ink-800 px-3.5 py-2 text-xs sm:text-sm font-semibold text-fg/80';
+    b.textContent = t().chips[k];
+    b.setAttribute('aria-pressed', String(state.tags.has(k)));
+    b.addEventListener('click', () => {
+      state.tags.has(k) ? state.tags.delete(k) : state.tags.add(k);
+      b.setAttribute('aria-pressed', String(state.tags.has(k)));
+    });
+    wrap.appendChild(b);
+  });
+}
+
+function updateLiveDate() {
+  const now = new Date();
+  const options = { day: 'numeric', month: 'short', year: 'numeric' };
+  try {
+    const formatted = now.toLocaleDateString(t().locale, options);
+    document.getElementById('liveDate').textContent = formatted;
+  } catch (e) {
+    document.getElementById('liveDate').textContent = now.toLocaleDateString();
+  }
+}
+
+function buildWhatsAppUrl() {
+  const L = t();
+  const tags = [...state.tags].map((k) => '• ' + L.chips[k]).join('\n');
+  const comment = document.getElementById('comment').value.trim() || L.msg.none;
+  const waiterVal = document.getElementById('waiterSelect').value || L.msg.none;
+  const lines = [
+    L.msg.head,
+    '',
+    '🏪 ' + L.msg.restaurant + ': ' + CONFIG.restaurantName[state.lang],
+    '👤 ' + L.msg.waiter + ': ' + waiterVal,
+    '⭐ ' + L.msg.rating + ': ' + state.rating + '/5',
+    '⚠️ ' + L.msg.issues + ':',
+    state.tags.size ? tags : L.msg.none,
+    '💬 ' + L.msg.comment + ': ' + comment
+  ];
+  return 'https://wa.me/' + CONFIG.whatsappNumber + '?text=' + encodeURIComponent(lines.join('\n'));
+}
+
+document.getElementById('waBtn').addEventListener('click', () => {
+  window.open(buildWhatsAppUrl(), '_blank', 'noopener');
+});
+
+function applyLang(lang) {
+  state.lang = lang;
+  const L = t();
+  document.documentElement.lang = L.lang;
+  document.documentElement.dir = L.dir;
+
+  document.getElementById('restName').textContent = CONFIG.restaurantName[lang];
+  document.getElementById('title').textContent = L.title;
+  document.getElementById('subtitle').textContent = L.subtitle;
+  document.getElementById('waiterLabel').textContent = L.waiterLabel;
+  document.getElementById('waiterPlaceholder').textContent = L.waiterPlaceholder;
+  document.getElementById('posTitle').textContent = L.posTitle;
+  document.getElementById('posText').textContent = L.posText;
+  document.getElementById('mapsLabel').textContent = L.mapsBtn;
+  document.getElementById('mapsBtn').href = CONFIG.googleMapsReviewUrl;
+  document.getElementById('negTitle').textContent = L.negTitle;
+  document.getElementById('negText').textContent = L.negText;
+  document.getElementById('chipsLabel').textContent = L.chipsLabel;
+  document.getElementById('commentLabel').textContent = L.commentLabel;
+  document.getElementById('comment').placeholder = L.commentPh;
+  document.getElementById('waLabel').textContent = L.waBtn;
+  document.getElementById('waHint').textContent = L.waHint;
+  document.getElementById('poweredBy').textContent = L.poweredBy + ' ';
+
+  document.querySelectorAll('#langSwitch button').forEach((b) => {
+    const on = b.dataset.lang === lang;
+    b.classList.toggle('bg-gold-500', on);
+    b.classList.toggle('text-on', on);
+    b.classList.toggle('text-fg/60', !on);
+  });
+
+  updateLiveDate();
+  renderChips();
+  paintStars();
+}
+
+document.querySelectorAll('#langSwitch button').forEach((b) =>
+  b.addEventListener('click', () => applyLang(b.dataset.lang))
+);
+
+(function init() {
+  applyLang('ar');
+  renderResult(false);
+})();
+</script>
+</body>
+</html>
