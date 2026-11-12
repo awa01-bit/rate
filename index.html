@@ -80,10 +80,11 @@
 
 <div class="relative z-10 mx-auto flex min-h-screen w-full max-w-md flex-col px-5 pb-6 pt-[max(1.25rem,env(safe-area-inset-top))]">
 
-  <!-- Top bar -->
+  <!-- Top bar: Live Date on the right, language switcher on the left -->
   <header class="flex items-center justify-between">
-    <div class="inline-flex items-center gap-2 rounded-full border border-gold-500/30 bg-ink-900/70 px-3 py-1.5 text-xs font-semibold tracking-wide text-gold-300 backdrop-blur">
-      <span class="h-1.5 w-1.5 rounded-full bg-gold-500"></span> <span dir="ltr" class="brand-font text-[12px]"><span class="text-fg">I</span>k<span class="text-fg">at</span>na</span>
+    <div class="inline-flex items-center gap-2 rounded-full border border-gold-500/30 bg-ink-900/70 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-gold-300 backdrop-blur">
+      <span class="h-1.5 w-1.5 rounded-full bg-gold-500 animate-pulse"></span>
+      <span id="liveDate">--/--/----</span>
     </div>
     <div id="langSwitch" class="inline-flex rounded-full border border-ink-600 bg-ink-900/80 p-1 text-xs font-semibold" role="group" aria-label="Language">
       <button data-lang="ar" class="rounded-full px-3 py-1.5 transition">دارجة</button>
@@ -182,7 +183,7 @@ const CONFIG = {
 
 const I18N = {
   ar: {
-    dir: 'rtl', lang: 'ar',
+    dir: 'rtl', lang: 'ar', locale: 'ar-MA',
     title: 'أهلاً بك! كيف كانت تجربتك معنا؟',
     subtitle: 'غير ضغطة وحدة على النجوم، رأيك يهمنا بزاف.',
     waiterLabel: 'شكون خدّمك اليوم؟ (اختياري)',
@@ -193,10 +194,16 @@ const I18N = {
     mapsBtn: 'خلّي تقييمك على Google Maps',
     negTitle: 'سمحو لينا، بغينا نصلحو الأمور',
     negText: 'قولو لينا واش وقع، وغادي توصل رسالتك مباشرة للمسؤول.',
-    chipsLabel: 'شنو كان المشكل؟',
+    chipsLabel: 'فين كان المشكل بالضبط؟',
     chips: {
-      delay: 'تأخير في الخدمة', food: 'جودة الأكل', clean: 'النظافة', price: 'الأسعار',
-      staff: 'التعامل', noise: 'الضوضاء / الجو'
+      kitchen_delay: '👨‍🍳 تأخير الأكل (الكوزينا)',
+      food_quality: '🍽️ جودة أو طياب الأكل',
+      food_temp: '🥶 الأكل وصل بارد',
+      service_delay: '🤵 تأخير السيرفيس / النادل',
+      staff: '🗣️ تعامل النادل',
+      clean: '✨ النظافة',
+      price: '💰 الأسعار',
+      noise: '🔊 الضوضاء / الجو'
     },
     commentLabel: 'تعليق (اختياري)',
     commentPh: 'كتب لينا بالتفصيل شنو وقع...',
@@ -206,11 +213,11 @@ const I18N = {
     msg: {
       head: 'مرحبا، هذا تقييم زبون:',
       waiter: 'النادل المسؤول',
-      rating: 'التقييم', issues: 'المشاكل', comment: 'التعليق', none: 'بدون', restaurant: 'المطعم'
+      rating: 'التقييم', issues: 'المشاكل المسجلة', comment: 'التعليق', none: 'بدون', restaurant: 'المطعم'
     }
   },
   fr: {
-    dir: 'ltr', lang: 'fr',
+    dir: 'ltr', lang: 'fr', locale: 'fr-FR',
     title: 'Bienvenue ! Comment était votre expérience ?',
     subtitle: 'Un simple tap sur les étoiles, votre avis compte beaucoup.',
     waiterLabel: 'Qui vous a servi ? (Optionnel)',
@@ -223,8 +230,14 @@ const I18N = {
     negText: 'Dites-nous ce qui s’est passé. Votre message sera transmis directement au responsable.',
     chipsLabel: 'Quel était le problème ?',
     chips: {
-      delay: 'Retard de service', food: 'Qualité des plats', clean: 'Propreté', price: 'Prix',
-      staff: 'Accueil / Personnel', noise: 'Bruit / Ambiance'
+      kitchen_delay: '👨‍🍳 Attente cuisine / Plats lents',
+      food_quality: '🍽️ Qualité / Cuisson des plats',
+      food_temp: '🥶 Plat servi froid',
+      service_delay: '🤵 Retard du serveur',
+      staff: '🗣️ Accueil / Attitude serveur',
+      clean: '✨ Propreté',
+      price: '💰 Prix',
+      noise: '🔊 Bruit / Ambiance'
     },
     commentLabel: 'Commentaire (optionnel)',
     commentPh: 'Dites-nous en plus...',
@@ -238,167 +251,12 @@ const I18N = {
     }
   },
   en: {
-    dir: 'ltr', lang: 'en',
+    dir: 'ltr', lang: 'en', locale: 'en-US',
     title: 'Welcome! How was your experience?',
     subtitle: 'Just tap the stars. Your opinion matters a lot to us.',
     waiterLabel: 'Who served you? (Optional)',
     waiterPlaceholder: 'Select a waiter...',
-    ratings: ['', 'Very disappointing', 'Disappointing', 'Okay', 'Great', 'Excellent!'],
+    ratings: ['', 'Very disappointing', 'Disapping', 'Okay', 'Great', 'Excellent!'],
     posTitle: 'Thank you so much! 🙏',
     posText: 'We’re delighted you enjoyed your visit. Would you share it on Google Maps? It takes one minute and helps us enormously.',
-    mapsBtn: 'Leave a review on Google Maps',
-    negTitle: 'Sorry, we want to do better',
-    negText: 'Tell us what went wrong. Your message goes straight to the manager.',
-    chipsLabel: 'What went wrong?',
-    chips: {
-      delay: 'Service delay', food: 'Food quality', clean: 'Cleanliness', price: 'Prices',
-      staff: 'Staff / Welcome', noise: 'Noise / Atmosphere'
-    },
-    commentLabel: 'Comment (optional)',
-    commentPh: 'Tell us more...',
-    waBtn: 'Send to Manager via WhatsApp',
-    waHint: 'WhatsApp will open with a ready message, just hit send.',
-    poweredBy: 'Powered by',
-    msg: {
-      head: 'Hello, here is a customer review:',
-      waiter: 'Waiter',
-      rating: 'Rating', issues: 'Issues', comment: 'Comment', none: 'None', restaurant: 'Restaurant'
-    }
-  }
-};
-
-const CHIP_KEYS = ['delay', 'food', 'clean', 'price', 'staff', 'noise'];
-const state = { lang: 'ar', rating: 0, hover: 0, tags: new Set() };
-const t = () => I18N[state.lang];
-
-/* Stars */
-const starsEl = document.getElementById('stars');
-const starSvg = '<svg viewBox="0 0 24 24" class="h-11 w-11 sm:h-12 sm:w-12" stroke-width="1.6" stroke-linejoin="round"><path d="M12 2.5l2.9 6.1 6.6.9-4.8 4.6 1.2 6.6L12 17.5l-5.9 3.2 1.2-6.6L2.5 9.5l6.6-.9L12 2.5z"/></svg>';
-
-for (let i = 1; i <= 5; i++) {
-  const b = document.createElement('button');
-  b.type = 'button';
-  b.className = 'star p-1';
-  b.dataset.value = i;
-  b.innerHTML = starSvg;
-  b.addEventListener('click', () => setRating(i));
-  b.addEventListener('mouseenter', () => { state.hover = i; paintStars(); });
-  b.addEventListener('mouseleave', () => { state.hover = 0; paintStars(); });
-  starsEl.appendChild(b);
-}
-
-function paintStars() {
-  const active = state.hover || state.rating;
-  [...starsEl.children].forEach((b, idx) => {
-    b.classList.toggle('on', (idx + 1) <= active);
-  });
-  document.getElementById('ratingLabel').textContent = active ? t().ratings[active] : '';
-}
-
-function setRating(n) {
-  state.rating = n;
-  paintStars();
-  const btn = starsEl.children[n - 1];
-  btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop');
-  renderResult(true);
-}
-
-function renderResult(animate) {
-  const pos = document.getElementById('positive'), neg = document.getElementById('negative');
-  const r = state.rating;
-  pos.classList.toggle('hidden', !(r >= 4));
-  neg.classList.toggle('hidden', !(r >= 1 && r <= 3));
-  if (animate) {
-    const shown = r >= 4 ? pos : (r >= 1 ? neg : null);
-    if (shown) {
-      shown.classList.remove('fade-up'); void shown.offsetWidth; shown.classList.add('fade-up');
-      setTimeout(() => shown.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80);
-    }
-  }
-}
-
-function renderChips() {
-  const wrap = document.getElementById('chips');
-  wrap.innerHTML = '';
-  CHIP_KEYS.forEach((k) => {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'chip rounded-full border border-ink-600 bg-ink-800 px-4 py-2.5 text-sm font-semibold text-fg/80';
-    b.textContent = t().chips[k];
-    b.setAttribute('aria-pressed', String(state.tags.has(k)));
-    b.addEventListener('click', () => {
-      state.tags.has(k) ? state.tags.delete(k) : state.tags.add(k);
-      b.setAttribute('aria-pressed', String(state.tags.has(k)));
-    });
-    wrap.appendChild(b);
-  });
-}
-
-function buildWhatsAppUrl() {
-  const L = t();
-  const tags = [...state.tags].map((k) => '• ' + L.chips[k]).join('\n');
-  const comment = document.getElementById('comment').value.trim() || L.msg.none;
-  const waiterVal = document.getElementById('waiterSelect').value || L.msg.none;
-  const lines = [
-    L.msg.head,
-    '',
-    '🏪 ' + L.msg.restaurant + ': ' + CONFIG.restaurantName[state.lang],
-    '👤 ' + L.msg.waiter + ': ' + waiterVal,
-    '⭐ ' + L.msg.rating + ': ' + state.rating + '/5',
-    '⚠️ ' + L.msg.issues + ':',
-    state.tags.size ? tags : L.msg.none,
-    '💬 ' + L.msg.comment + ': ' + comment
-  ];
-  return 'https://wa.me/' + CONFIG.whatsappNumber + '?text=' + encodeURIComponent(lines.join('\n'));
-}
-
-document.getElementById('waBtn').addEventListener('click', () => {
-  window.open(buildWhatsAppUrl(), '_blank', 'noopener');
-});
-
-function applyLang(lang) {
-  state.lang = lang;
-  const L = t();
-  document.documentElement.lang = L.lang;
-  document.documentElement.dir = L.dir;
-
-  document.getElementById('restName').textContent = CONFIG.restaurantName[lang];
-  document.getElementById('title').textContent = L.title;
-  document.getElementById('subtitle').textContent = L.subtitle;
-  document.getElementById('waiterLabel').textContent = L.waiterLabel;
-  document.getElementById('waiterPlaceholder').textContent = L.waiterPlaceholder;
-  document.getElementById('posTitle').textContent = L.posTitle;
-  document.getElementById('posText').textContent = L.posText;
-  document.getElementById('mapsLabel').textContent = L.mapsBtn;
-  document.getElementById('mapsBtn').href = CONFIG.googleMapsReviewUrl;
-  document.getElementById('negTitle').textContent = L.negTitle;
-  document.getElementById('negText').textContent = L.negText;
-  document.getElementById('chipsLabel').textContent = L.chipsLabel;
-  document.getElementById('commentLabel').textContent = L.commentLabel;
-  document.getElementById('comment').placeholder = L.commentPh;
-  document.getElementById('waLabel').textContent = L.waBtn;
-  document.getElementById('waHint').textContent = L.waHint;
-  document.getElementById('poweredBy').textContent = L.poweredBy + ' ';
-
-  document.querySelectorAll('#langSwitch button').forEach((b) => {
-    const on = b.dataset.lang === lang;
-    b.classList.toggle('bg-gold-500', on);
-    b.classList.toggle('text-on', on);
-    b.classList.toggle('text-fg/60', !on);
-  });
-
-  renderChips();
-  paintStars();
-}
-
-document.querySelectorAll('#langSwitch button').forEach((b) =>
-  b.addEventListener('click', () => applyLang(b.dataset.lang))
-);
-
-(function init() {
-  applyLang('ar');
-  renderResult(false);
-})();
-</script>
-</body>
-</html>
+    mapsBtn: 'Leave
