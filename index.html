@@ -72,7 +72,7 @@
   .glow-soft   { box-shadow: 0 0 40px rgb(var(--gold-500) / .15); }
   .glow-strong { box-shadow: 0 8px 30px rgb(var(--gold-500) / .35); }
   .card-shadow { box-shadow: 0 10px 30px rgb(0 0 0 / .12); }
-  select:focus, textarea:focus, button:focus-visible { outline: 2px solid rgb(var(--gold-500)); outline-offset: 2px; }
+  input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px solid rgb(var(--gold-500)); outline-offset: 2px; }
   @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
 </head>
@@ -80,16 +80,16 @@
 
 <div class="relative z-10 mx-auto flex min-h-screen w-full max-w-md flex-col px-5 pb-6 pt-[max(1.25rem,env(safe-area-inset-top))]">
 
-  <!-- Top bar: Live Date on the right, language switcher on the left -->
-  <header class="flex items-center justify-between">
-    <div class="inline-flex items-center gap-2 rounded-full border border-gold-500/30 bg-ink-900/70 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-gold-300 backdrop-blur">
-      <span class="h-1.5 w-1.5 rounded-full bg-gold-500 animate-pulse"></span>
-      <span id="liveDate">--/--/----</span>
-    </div>
+  <!-- Top bar -->
+  <header dir="ltr" class="flex items-center justify-between">
     <div id="langSwitch" class="inline-flex rounded-full border border-ink-600 bg-ink-900/80 p-1 text-xs font-semibold" role="group" aria-label="Language">
       <button data-lang="ar" class="rounded-full px-3 py-1.5 transition">دارجة</button>
       <button data-lang="fr" class="rounded-full px-3 py-1.5 transition">FR</button>
       <button data-lang="en" class="rounded-full px-3 py-1.5 transition">EN</button>
+    </div>
+    <div class="inline-flex items-center gap-2 rounded-full border border-gold-500/30 bg-ink-900/70 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-gold-300 backdrop-blur">
+      <span class="h-1.5 w-1.5 rounded-full bg-gold-500 animate-pulse"></span>
+      <span id="liveDate">--/--/----</span>
     </div>
   </header>
 
@@ -112,16 +112,26 @@
     <p id="subtitle" class="mt-2 text-sm text-fg/60"></p>
   </section>
 
-  <!-- Waiter Selection Module -->
+  <!-- Waiter & Table Selection Module -->
   <section class="card-shadow mt-6 rounded-3xl border border-ink-700 bg-ink-900/80 p-4 backdrop-blur fade-up">
-    <label for="waiterSelect" id="waiterLabel" class="block text-xs font-semibold uppercase tracking-wider text-gold-300 mb-2"></label>
-    <select id="waiterSelect" class="w-full rounded-2xl border border-ink-600 bg-ink-800 p-3.5 text-sm text-fg focus:border-gold-500">
-      <option value="" disabled selected id="waiterPlaceholder">اختر النادل...</option>
-      <!-- Add your waiters here -->
-      <option value="Youssef">يوسف (Youssef)</option>
-      <option value="Mehdi">مهدي (Mehdi)</option>
-      <option value="Amine">أمين (Amine)</option>
-    </select>
+    <div class="grid grid-cols-3 gap-3">
+      <!-- Waiter Select (2 columns) -->
+      <div class="col-span-2">
+        <label for="waiterSelect" id="waiterLabel" class="block text-xs font-semibold uppercase tracking-wider text-gold-300 mb-2"></label>
+        <select id="waiterSelect" class="w-full rounded-2xl border border-ink-600 bg-ink-800 p-3.5 text-sm text-fg focus:border-gold-500">
+          <option value="" disabled selected id="waiterPlaceholder">اختر النادل...</option>
+          <option value="Youssef">يوسف (Youssef)</option>
+          <option value="Mehdi">مهدي (Mehdi)</option>
+          <option value="Amine">أمين (Amine)</option>
+        </select>
+      </div>
+      <!-- Table Number (1 column) -->
+      <div class="col-span-1">
+        <label for="tableInput" id="tableLabel" class="block text-xs font-semibold uppercase tracking-wider text-gold-300 mb-2"></label>
+        <input id="tableInput" type="text" readonly
+          class="w-full rounded-2xl border border-ink-600 bg-ink-800/60 p-3.5 text-center text-sm font-bold text-gold-300 cursor-not-allowed" />
+      </div>
+    </div>
   </section>
 
   <!-- Rating card -->
@@ -186,8 +196,9 @@ const I18N = {
     dir: 'rtl', lang: 'ar', locale: 'ar-MA',
     title: 'أهلاً بك! كيف كانت تجربتك معنا؟',
     subtitle: 'غير ضغطة وحدة على النجوم، رأيك يهمنا بزاف.',
-    waiterLabel: 'شكون خدّمك اليوم؟ (اختياري)',
-    waiterPlaceholder: 'اختر اسم النادل...',
+    waiterLabel: 'شكون خدّمك؟',
+    waiterPlaceholder: 'اختر النادل...',
+    tableLabel: 'الطاولة',
     ratings: ['', 'ماشي مزيان بزاف', 'ناقص شوية', 'عادي', 'مزيان', 'ممتاز!'],
     posTitle: 'شكراً بزاف! 🙏',
     posText: 'فرحنا بزاف أنك عجبتك التجربة. واش ممكن تشاركها مع الناس على Google Maps؟ غير دقيقة وحدة وكتفرق معانا.',
@@ -199,10 +210,10 @@ const I18N = {
       kitchen_delay: '👨‍🍳 تأخير الأكل (الكوزينا)',
       food_quality: '🍽️ جودة أو طياب الأكل',
       food_temp: '🥶 الأكل وصل بارد',
+      false_order: '❌ طلب غالط / ناقص',
       service_delay: '🤵 تأخير السيرفيس / النادل',
       staff: '🗣️ تعامل النادل',
       clean: '✨ النظافة',
-      price: '💰 الأسعار',
       noise: '🔊 الضوضاء / الجو'
     },
     commentLabel: 'تعليق (اختياري)',
@@ -212,16 +223,18 @@ const I18N = {
     poweredBy: 'مدعوم من طرف',
     msg: {
       head: 'مرحبا، هذا تقييم زبون:',
+      table: 'رقم الطاولة',
       waiter: 'النادل المسؤول',
-      rating: 'التقييم', issues: 'المشاكل المسجلة', comment: 'التعليق', none: 'بدون', restaurant: 'المطعم'
+      rating: 'التقييم', issues: 'المشاكل المسجلة', comment: 'التعليق', none: 'غير محدد', restaurant: 'المطعم'
     }
   },
   fr: {
     dir: 'ltr', lang: 'fr', locale: 'fr-FR',
     title: 'Bienvenue ! Comment était votre expérience ?',
     subtitle: 'Un simple tap sur les étoiles, votre avis compte beaucoup.',
-    waiterLabel: 'Qui vous a servi ? (Optionnel)',
-    waiterPlaceholder: 'Choisissez un serveur...',
+    waiterLabel: 'Serveur',
+    waiterPlaceholder: 'Choisir...',
+    tableLabel: 'Table N°',
     ratings: ['', 'Très décevant', 'Décevant', 'Correct', 'Très bien', 'Excellent !'],
     posTitle: 'Merci infiniment ! 🙏',
     posText: 'Nous sommes ravis que vous ayez apprécié. Pourriez-vous partager votre avis sur Google Maps ? Cela ne prend qu’une minute et nous aide énormément.',
@@ -233,10 +246,10 @@ const I18N = {
       kitchen_delay: '👨‍🍳 Attente cuisine / Plats lents',
       food_quality: '🍽️ Qualité / Cuisson des plats',
       food_temp: '🥶 Plat servi froid',
+      false_order: '❌ Erreur de commande / Oubli',
       service_delay: '🤵 Retard du serveur',
       staff: '🗣️ Accueil / Attitude serveur',
       clean: '✨ Propreté',
-      price: '💰 Prix',
       noise: '🔊 Bruit / Ambiance'
     },
     commentLabel: 'Commentaire (optionnel)',
@@ -246,17 +259,19 @@ const I18N = {
     poweredBy: 'Propulsé par',
     msg: {
       head: 'Bonjour, voici l’avis d’un client :',
+      table: 'Table N°',
       waiter: 'Serveur',
-      rating: 'Note', issues: 'Problèmes', comment: 'Commentaire', none: 'Aucun', restaurant: 'Restaurant'
+      rating: 'Note', issues: 'Problèmes', comment: 'Commentaire', none: 'Non précisé', restaurant: 'Restaurant'
     }
   },
   en: {
     dir: 'ltr', lang: 'en', locale: 'en-US',
     title: 'Welcome! How was your experience?',
     subtitle: 'Just tap the stars. Your opinion matters a lot to us.',
-    waiterLabel: 'Who served you? (Optional)',
-    waiterPlaceholder: 'Select a waiter...',
-    ratings: ['', 'Very disappointing', 'Disapping', 'Okay', 'Great', 'Excellent!'],
+    waiterLabel: 'Waiter',
+    waiterPlaceholder: 'Select...',
+    tableLabel: 'Table #',
+    ratings: ['', 'Very disappointing', 'Disappointing', 'Okay', 'Great', 'Excellent!'],
     posTitle: 'Thank you so much! 🙏',
     posText: 'We’re delighted you enjoyed your visit. Would you share it on Google Maps? It takes one minute and helps us enormously.',
     mapsBtn: 'Leave a review on Google Maps',
@@ -267,10 +282,10 @@ const I18N = {
       kitchen_delay: '👨‍🍳 Kitchen delay / Slow food',
       food_quality: '🍽️ Food quality / Cooking',
       food_temp: '🥶 Food arrived cold',
+      false_order: '❌ Wrong / Missing order',
       service_delay: '🤵 Waiter service delay',
       staff: '🗣️ Staff / Waiter attitude',
       clean: '✨ Cleanliness',
-      price: '💰 Prices',
       noise: '🔊 Noise / Atmosphere'
     },
     commentLabel: 'Comment (optional)',
@@ -280,8 +295,9 @@ const I18N = {
     poweredBy: 'Powered by',
     msg: {
       head: 'Hello, here is a customer review:',
+      table: 'Table #',
       waiter: 'Waiter',
-      rating: 'Rating', issues: 'Issues', comment: 'Comment', none: 'None', restaurant: 'Restaurant'
+      rating: 'Rating', issues: 'Issues', comment: 'Comment', none: 'Not specified', restaurant: 'Restaurant'
     }
   }
 };
@@ -290,15 +306,21 @@ const CHIP_KEYS = [
   'kitchen_delay',
   'food_quality',
   'food_temp',
+  'false_order',
   'service_delay',
   'staff',
   'clean',
-  'price',
   'noise'
 ];
 
 const state = { lang: 'ar', rating: 0, hover: 0, tags: new Set() };
 const t = () => I18N[state.lang];
+
+/* Get Table Number from URL parameter e.g. ?table=5 */
+function getTableFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('table') || '1';
+}
 
 /* Stars */
 const starsEl = document.getElementById('stars');
@@ -379,10 +401,12 @@ function buildWhatsAppUrl() {
   const tags = [...state.tags].map((k) => '• ' + L.chips[k]).join('\n');
   const comment = document.getElementById('comment').value.trim() || L.msg.none;
   const waiterVal = document.getElementById('waiterSelect').value || L.msg.none;
+  const tableVal = getTableFromUrl();
   const lines = [
     L.msg.head,
     '',
     '🏪 ' + L.msg.restaurant + ': ' + CONFIG.restaurantName[state.lang],
+    '🪑 ' + L.msg.table + ': ' + tableVal,
     '👤 ' + L.msg.waiter + ': ' + waiterVal,
     '⭐ ' + L.msg.rating + ': ' + state.rating + '/5',
     '⚠️ ' + L.msg.issues + ':',
@@ -407,6 +431,8 @@ function applyLang(lang) {
   document.getElementById('subtitle').textContent = L.subtitle;
   document.getElementById('waiterLabel').textContent = L.waiterLabel;
   document.getElementById('waiterPlaceholder').textContent = L.waiterPlaceholder;
+  document.getElementById('tableLabel').textContent = L.tableLabel;
+  document.getElementById('tableInput').value = getTableFromUrl();
   document.getElementById('posTitle').textContent = L.posTitle;
   document.getElementById('posText').textContent = L.posText;
   document.getElementById('mapsLabel').textContent = L.mapsBtn;
