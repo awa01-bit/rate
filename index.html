@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#0b0b0d" />
-<title>Ikatna – Smart Menu & Health Info</title>
+<title>Ikatna – Smart Menu & Reviews</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -72,12 +72,12 @@
   .chip[aria-pressed="true"] { background: rgb(var(--gold-500) / .16); border-color: rgb(var(--gold-500)); color: rgb(var(--gold-300)); }
   .shimmer { background: linear-gradient(110deg, rgb(var(--gold-500)) 0%, rgb(var(--shine)) 45%, rgb(var(--gold-500)) 90%); }
   .glow-strong { box-shadow: 0 8px 30px rgb(var(--gold-500) / .35); }
-  .card-shadow { box-shadow: 0 10px 30px rgb(0 0 0 / .2); }
+  .card-shadow { box-shadow: 0 10px 30px rgb(0 0 0 / .25); }
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
 </head>
-<body class="min-h-screen antialiased pb-24">
+<body class="min-h-screen antialiased pb-28">
 
 <div class="relative z-10 mx-auto flex min-h-screen w-full max-w-md flex-col px-5 pt-[max(1.25rem,env(safe-area-inset-top))]">
 
@@ -120,13 +120,13 @@
     </button>
   </nav>
 
-  <!-- ==================== SECTION 1: DIGITAL MENU ==================== -->
+  <!-- ==================== SECTION 1: DIGITAL MENU WITH CATEGORIES & IMAGES ==================== -->
   <main id="viewMenu" class="mt-5 fade-up">
-    <!-- Category Filter -->
-    <div id="categoryPills" class="no-scrollbar flex gap-2 overflow-x-auto pb-2"></div>
+    <!-- Category Filter Pills -->
+    <div id="categoryPills" class="no-scrollbar flex gap-2 overflow-x-auto pb-3 sticky top-0 z-20 bg-ink-950/80 backdrop-blur py-1"></div>
 
-    <!-- Menu Items Container -->
-    <div id="menuList" class="mt-3 space-y-3"></div>
+    <!-- Menu Items Grid / List -->
+    <div id="menuList" class="mt-2 space-y-4"></div>
   </main>
 
   <!-- ==================== SECTION 2: REVIEW ==================== -->
@@ -234,51 +234,39 @@ const CONFIG = {
   currency: 'MAD'
 };
 
-/* Sample Menu Data with Ingredients, Macros, Diabetes & Cholesterol Info */
+/* Menu Data with Real High-Res Images, Ingredients, Macros, Diabetes & Cholesterol info */
 const MENU_ITEMS = [
   {
     id: 1, cat: 'mains', price: 85, kcal: 620, protein: 48,
     diabetesSafe: true, lowCholesterol: true,
+    image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=600&q=80',
     name: { ar: 'صدر دجاج مشوي مع الأرز', fr: 'Blanc de poulet grillé & riz', en: 'Grilled Chicken Breast & Rice' },
     desc: { ar: 'صدر دجاج متبل بالأعشاب مع خضر سوتيه', fr: 'Poulet mariné aux herbes et légumes sautés', en: 'Herb-marinated chicken with sautéed veggies' },
-    ingredients: { 
-      ar: 'صدر دجاج، أرز بسماتي، زيت الزيتون، بروكلي، جزر، ثوم، أعشاب منسمة', 
-      fr: 'Poulet, riz basmati, huile d’olive, brocoli, carottes, ail, herbes', 
-      en: 'Chicken breast, basmati rice, olive oil, broccoli, carrots, garlic, herbs' 
-    }
+    ingredients: { ar: 'صدر دجاج، أرز بسماتي، زيت الزيتون، بروكلي، جزر، ثوم', fr: 'Poulet, riz basmati, huile d’olive, brocoli, carottes', en: 'Chicken breast, basmati rice, olive oil, broccoli, carrots' }
   },
   {
     id: 2, cat: 'mains', price: 110, kcal: 740, protein: 56,
     diabetesSafe: true, lowCholesterol: false,
+    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80',
     name: { ar: 'فيليه بقر مشوي (Steak)', fr: 'Filet de bœuf grillé', en: 'Grilled Beef Tenderloin' },
     desc: { ar: 'قطعة لحم طرية مع صوص الفلفل الأسود', fr: 'Viande tendre avec sauce au poivre noir', en: 'Tender steak with black pepper sauce' },
-    ingredients: { 
-      ar: 'لحم بقري أحمر، بطاطس مشوية، كريمة خفيفة، فلفل أسود، زبدة', 
-      fr: 'Bœuf, pommes de terre rôties, crème légère, poivre noir, beurre', 
-      en: 'Beef tenderloin, roasted potatoes, light cream, black pepper, butter' 
-    }
+    ingredients: { ar: 'لحم بقري أحمر، بطاطس مشوية، كريمة خفيفة، فلفل أسود', fr: 'Bœuf, pommes de terre rôties, crème légère, poivre', en: 'Beef tenderloin, roasted potatoes, light cream, pepper' }
   },
   {
     id: 3, cat: 'salads', price: 55, kcal: 380, protein: 28,
     diabetesSafe: true, lowCholesterol: true,
+    image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=80',
     name: { ar: 'سلطة سيزر بالدجاج', fr: 'Salade César au poulet', en: 'Chicken Caesar Salad' },
     desc: { ar: 'خس طازج، دجاج مشوي، جبن بارميزان', fr: 'Laitue fraîche, poulet grillé, parmesan', en: 'Fresh lettuce, grilled chicken, parmesan' },
-    ingredients: { 
-      ar: 'خس روماني، شرائح دجاج مشوي، جبن بارميزان قليل الدسم، خبز محمص', 
-      fr: 'Laitue romaine, poulet grillé, parmesan allégé, croûtons', 
-      en: 'Romaine lettuce, grilled chicken, light parmesan, croutons' 
-    }
+    ingredients: { ar: 'خس روماني، شرائح دجاج مشوي، بارميزان قليل الدسم', fr: 'Laitue romaine, poulet, parmesan allégé', en: 'Romaine lettuce, grilled chicken, light parmesan' }
   },
   {
     id: 4, cat: 'drinks', price: 25, kcal: 140, protein: 2,
     diabetesSafe: false, lowCholesterol: true,
+    image: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80',
     name: { ar: 'عصير أفوكادو بالمكسرات', fr: 'Jus d’avocat aux fruits secs', en: 'Avocado & Nuts Smoothie' },
     desc: { ar: 'أفوكادو طازج، حليب، لوز وعسل طبيعي', fr: 'Avocat frais, lait, amandes et miel', en: 'Fresh avocado, milk, almonds & natural honey' },
-    ingredients: { 
-      ar: 'أفوكادو طبيعي، حليب خالي الدسم، لوز، جوز، عسل حر', 
-      fr: 'Avocat frais, lait écrémé, amandes, noix, miel naturel', 
-      en: 'Fresh avocado, skim milk, almonds, walnuts, natural honey' 
-    }
+    ingredients: { ar: 'أفوكادو طبيعي، حليب خالي الدسم، لوز، جوز، عسل حر', fr: 'Avocat, lait écrémé, amandes, noix, miel', en: 'Avocado, skim milk, almonds, walnuts, honey' }
   }
 ];
 
@@ -286,11 +274,11 @@ const I18N = {
   ar: {
     dir: 'rtl', lang: 'ar', locale: 'ar-MA',
     tabMenu: 'المنيو والطلب', tabReview: 'تقييم الخدمة',
-    cats: { all: 'الكل', mains: 'أطباق رئيسية', salads: 'سلطات', drinks: 'مشروبات' },
-    kcal: 'سعرة', protein: 'بروتين', add: 'أضف',
+    cats: { all: '😋 الكل', mains: '🥩 أطباق رئيسية', salads: '🥗 سلطات', drinks: '🥤 مشروبات' },
+    kcal: 'سعرة', protein: 'بروتين', add: 'أضف للطلب',
     ingredientsLabel: 'المكونات:',
     diabetesYes: '✅ مناسب للسكري', diabetesNo: '⚠️ غير مناسب للسكري',
-    cholesterolYes: '💙 منخفض الكلسترول', cholesterolNo: '⚠️ يحتوي على دهون مرتفعة',
+    cholesterolYes: '💙 منخفض الكلسترول', cholesterolNo: '⚠️ دهون مرتفعة',
     showQr: 'إظهار QR للنادل',
     modalTitle: 'طلب الطاولة', modalHint: 'ورّي هاد الكود للنادل باش يسكانيه بتلفونو', modalTotal: 'المجموع:',
     title: 'كيف كانت تجربتك معنا؟', subtitle: 'رأيك يهمنا باش نحسنو الخدمة ديما.',
@@ -311,7 +299,7 @@ const I18N = {
   fr: {
     dir: 'ltr', lang: 'fr', locale: 'fr-FR',
     tabMenu: 'Menu & Commande', tabReview: 'Avis & Service',
-    cats: { all: 'Tout', mains: 'Plats', salads: 'Salades', drinks: 'Boissons' },
+    cats: { all: '😋 Tout', mains: '🥩 Plats', salads: '🥗 Salades', drinks: '🥤 Boissons' },
     kcal: 'kcal', protein: 'Protéines', add: 'Ajouter',
     ingredientsLabel: 'Ingrédients :',
     diabetesYes: '✅ Adapté au diabète', diabetesNo: '⚠️ À éviter (Diabète)',
@@ -336,7 +324,7 @@ const I18N = {
   en: {
     dir: 'ltr', lang: 'en', locale: 'en-US',
     tabMenu: 'Menu & Order', tabReview: 'Rate Service',
-    cats: { all: 'All', mains: 'Mains', salads: 'Salads', drinks: 'Drinks' },
+    cats: { all: '😋 All', mains: '🥩 Mains', salads: '🥗 Salads', drinks: '🥤 Drinks' },
     kcal: 'kcal', protein: 'Protein', add: 'Add',
     ingredientsLabel: 'Ingredients:',
     diabetesYes: '✅ Diabetes Friendly', diabetesNo: '⚠️ High Glycemic',
@@ -378,7 +366,7 @@ function switchTab(tab) {
   state.activeTab = tab;
   const isMenu = tab === 'menu';
   document.getElementById('viewMenu').classList.toggle('hidden', !isMenu);
-  document.getElementById('viewReview').classList.toggle('hidden', isMenu);
+  document.getElementById('viewReview').classList.toggle('hidden', !isMenu ? false : true);
 
   const btnMenu = document.getElementById('tabMenu');
   const btnRev = document.getElementById('tabReview');
@@ -395,7 +383,7 @@ function renderCategories() {
     const active = state.activeCat === key;
     const b = document.createElement('button');
     b.type = 'button';
-    b.className = `whitespace-nowrap rounded-full border px-4 py-2 text-xs font-bold transition ${active ? 'border-gold-500 bg-gold-500/20 text-gold-300' : 'border-ink-700 bg-ink-900 text-fg/60'}`;
+    b.className = `whitespace-nowrap rounded-full border px-4 py-2 text-xs font-bold transition ${active ? 'border-gold-500 bg-gold-500/20 text-gold-300' : 'border-ink-700 bg-ink-900/90 text-fg/70 shadow-sm'}`;
     b.textContent = label;
     b.onclick = () => { state.activeCat = key; renderCategories(); renderMenu(); };
     wrap.appendChild(b);
@@ -411,37 +399,41 @@ function renderMenu() {
   items.forEach(item => {
     const qty = state.cart[item.id] || 0;
     const card = document.createElement('div');
-    card.className = 'card-shadow rounded-3xl border border-ink-700 bg-ink-900/85 p-4 backdrop-blur';
+    card.className = 'card-shadow overflow-hidden rounded-3xl border border-ink-700 bg-ink-900/90 backdrop-blur';
     card.innerHTML = `
-      <div class="flex items-start justify-between gap-3">
-        <div class="flex-1">
-          <h3 class="text-base font-bold text-fg">${item.name[state.lang]}</h3>
-          <p class="mt-1 text-xs leading-relaxed text-fg/60">${item.desc[state.lang]}</p>
-          
-          <!-- Ingredients -->
-          <div class="mt-2 text-[11px] text-fg/75 bg-ink-800/60 rounded-xl p-2 border border-ink-700">
-            <strong class="text-gold-300">${L.ingredientsLabel}</strong> ${item.ingredients[state.lang]}
-          </div>
-
-          <!-- Nutrition & Health Badges -->
-          <div class="mt-2.5 flex flex-wrap gap-1.5 text-[10px] font-semibold">
-            <span class="rounded-lg bg-ink-800 px-2.5 py-1 text-gold-300">⚡ ${item.kcal} ${L.kcal}</span>
-            <span class="rounded-lg bg-ink-800 px-2.5 py-1 text-emerald-400">🥩 ${item.protein}g ${L.protein}</span>
-            <span class="rounded-lg px-2.5 py-1 ${item.diabetesSafe ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30' : 'bg-rose-500/15 text-rose-300 border border-rose-500/30'}">${item.diabetesSafe ? L.diabetesYes : L.diabetesNo}</span>
-            <span class="rounded-lg px-2.5 py-1 ${item.lowCholesterol ? 'bg-sky-500/15 text-sky-300 border border-sky-500/30' : 'bg-rose-500/15 text-rose-300 border border-rose-500/30'}">${item.lowCholesterol ? L.cholesterolYes : L.cholesterolNo}</span>
-          </div>
+      <div class="relative h-40 w-full overflow-hidden bg-ink-800">
+        <img src="${item.image}" alt="${item.name.en}" class="h-full w-full object-cover transition duration-500 hover:scale-105" />
+        <div class="absolute inset-0 bg-gradient-to-t from-ink-950 via-transparent to-transparent opacity-80"></div>
+        <span class="absolute bottom-3 start-3 rounded-xl bg-ink-950/80 px-3 py-1 text-xs font-extrabold text-gold-300 backdrop-blur border border-gold-500/30">
+          ${item.price} ${CONFIG.currency}
+        </span>
+      </div>
+      <div class="p-4">
+        <h3 class="text-base font-bold text-fg">${item.name[state.lang]}</h3>
+        <p class="mt-1 text-xs leading-relaxed text-fg/60">${item.desc[state.lang]}</p>
+        
+        <div class="mt-2 text-[11px] text-fg/75 bg-ink-800/60 rounded-xl p-2 border border-ink-700/60">
+          <strong class="text-gold-300">${L.ingredientsLabel}</strong> ${item.ingredients[state.lang]}
         </div>
-        <div class="flex flex-col items-end justify-between self-stretch">
-          <span class="text-sm font-extrabold text-gold-300">${item.price} ${CONFIG.currency}</span>
+
+        <div class="mt-2.5 flex flex-wrap gap-1.5 text-[10px] font-semibold">
+          <span class="rounded-lg bg-ink-800 px-2 py-1 text-gold-300">⚡ ${item.kcal} ${L.kcal}</span>
+          <span class="rounded-lg bg-ink-800 px-2 py-1 text-emerald-400">🥩 ${item.protein}g ${L.protein}</span>
+          <span class="rounded-lg px-2 py-1 ${item.diabetesSafe ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30' : 'bg-rose-500/15 text-rose-300 border border-rose-500/30'}">${item.diabetesSafe ? L.diabetesYes : L.diabetesNo}</span>
+          <span class="rounded-lg px-2 py-1 ${item.lowCholesterol ? 'bg-sky-500/15 text-sky-300 border border-sky-500/30' : 'bg-rose-500/15 text-rose-300 border border-rose-500/30'}">${item.lowCholesterol ? L.cholesterolYes : L.cholesterolNo}</span>
+        </div>
+
+        <div class="mt-4 flex items-center justify-between border-t border-ink-800 pt-3">
+          <span class="text-xs font-bold text-gold-300">${item.name.en}</span>
           ${qty === 0 ? `
-            <button onclick="updateQty(${item.id}, 1)" class="mt-3 rounded-xl border border-gold-500/50 bg-gold-500/15 px-3.5 py-1.5 text-xs font-bold text-gold-300 active:scale-95">
+            <button onclick="updateQty(${item.id}, 1)" class="rounded-xl border border-gold-500/60 bg-gold-500/20 px-4 py-2 text-xs font-bold text-gold-300 active:scale-95 shadow">
               + ${L.add}
             </button>
           ` : `
-            <div class="mt-3 flex items-center gap-2 rounded-xl border border-gold-500 bg-ink-800 px-2 py-1">
-              <button onclick="updateQty(${item.id}, -1)" class="px-1.5 text-sm font-bold text-gold-300">-</button>
-              <span class="text-xs font-extrabold text-fg">${qty}</span>
-              <button onclick="updateQty(${item.id}, 1)" class="px-1.5 text-sm font-bold text-gold-300">+</button>
+            <div class="flex items-center gap-3 rounded-xl border border-gold-500 bg-ink-800 px-3 py-1.5">
+              <button onclick="updateQty(${item.id}, -1)" class="text-sm font-bold text-gold-300">-</button>
+              <span class="text-sm font-extrabold text-fg">${qty}</span>
+              <button onclick="updateQty(${item.id}, 1)" class="text-sm font-bold text-gold-300">+</button>
             </div>
           `}
         </div>
