@@ -1,27 +1,26 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" data-theme="noir">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#0b0b0d" />
-<title>Ikatna – Smart Menu & Reviews</title>
+<title>Ikatna – Menu & Reviews</title>
+
+<!-- Fonts: Playfair Display (headings), Inter (Latin text), Cairo (Arabic), Bitcount Single (Ikatna wordmark) -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Bitcount+Single:wght@100..900&display=swap" rel="stylesheet" />
-<!-- QR Code Generator Library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bitcount+Single:wght@100..900&family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+
+<!-- Tailwind CSS (CDN) and qrcode.js (CDN) – no build step, works on GitHub Pages -->
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-  const c = (v) => `rgb(var(--${v}) / <alpha-value>)`;
   tailwind.config = {
     theme: {
       extend: {
         colors: {
-          ink:  { 950: c('ink-950'), 900: c('ink-900'), 800: c('ink-800'), 700: c('ink-700'), 600: c('ink-600') },
-          gold: { 300: c('gold-300'), 400: c('gold-400'), 500: c('gold-500'), 600: c('gold-600') },
-          fg: c('fg'),
-          on: c('on')
+          ink:  { 950: '#0b0b0d', 900: '#121216', 800: '#1a1a20', 700: '#25252d', 600: '#34343e' },
+          gold: { 300: '#f1d98a', 400: '#e6c35c', 500: '#d4af37', 600: '#b8932a' }
         },
         fontFamily: {
           display: ['"Playfair Display"', 'Cairo', 'serif'],
@@ -31,589 +30,908 @@
     }
   };
 </script>
+
 <style>
-  :root, [data-theme="noir"] {
-    --ink-950: 11 11 13;   
-    --ink-900: 18 18 22;   
-    --ink-800: 26 26 32;   
-    --ink-700: 37 37 45;   
-    --ink-600: 52 52 62;   
-    --gold-300: 241 217 138; 
-    --gold-400: 230 195 92;
-    --gold-500: 212 175 55;  
-    --gold-600: 184 147 42;
-    --shine: 241 217 138;    
-    --fg: 255 255 255;       
-    --on: 11 11 13;          
-    --star-off: 90 90 102;
-    --glow-a: .18; --glow-b: .08;
+  /* ---------- Base ---------- */
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', 'Cairo', system-ui, sans-serif; background: #0b0b0d; }
+  html[lang="ar"] body { font-family: 'Cairo', 'Inter', system-ui, sans-serif; }
+  .no-scrollbar { scrollbar-width: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+
+  /* Soft golden aurora behind everything */
+  .aurora {
+    background:
+      radial-gradient(60% 38% at 50% -5%, rgba(212,175,55,.20), transparent 70%),
+      radial-gradient(45% 30% at 100% 60%, rgba(212,175,55,.07), transparent 70%),
+      radial-gradient(45% 30% at 0% 90%, rgba(212,175,55,.06), transparent 70%),
+      #0b0b0d;
   }
 
-  body {
-    font-family: 'Inter', 'Cairo', system-ui, sans-serif;
-    background:
-      radial-gradient(60% 40% at 50% 0%, rgb(var(--gold-500) / var(--glow-a)), transparent 70%),
-      radial-gradient(40% 30% at 100% 100%, rgb(var(--gold-500) / var(--glow-b)), transparent 70%),
-      rgb(var(--ink-950));
-    color: rgb(var(--fg));
+  /* ---------- Frosted glass ---------- */
+  .glass {
+    background: rgba(255,255,255,.045);
+    border: 1px solid rgba(255,255,255,.09);
+    -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
   }
-  html[lang="ar"] body { font-family: 'Cairo', 'Inter', system-ui, sans-serif; }
+  .glass-strong {
+    background: rgba(18,18,22,.82);
+    border: 1px solid rgba(212,175,55,.28);
+    -webkit-backdrop-filter: blur(22px);
+            backdrop-filter: blur(22px);
+  }
+  .nav-glass {
+    background: rgba(11,11,13,.78);
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    -webkit-backdrop-filter: blur(18px);
+            backdrop-filter: blur(18px);
+  }
+
+  /* ---------- Gold ---------- */
+  .gold-text {
+    background: linear-gradient(110deg, #b8932a 0%, #f1d98a 40%, #d4af37 60%, #f1d98a 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .btn-gold {
+    background: linear-gradient(110deg, #d4af37 0%, #f1d98a 45%, #d4af37 90%);
+    color: #0b0b0d; font-weight: 800;
+    box-shadow: 0 8px 26px rgba(212,175,55,.28);
+    transition: transform .15s ease, box-shadow .2s ease, opacity .2s;
+  }
+  .btn-gold:active { transform: scale(.97); }
+  .btn-gold:hover  { box-shadow: 0 10px 32px rgba(212,175,55,.42); }
+
+  /* ---------- Wordmark ---------- */
   .brand-font { font-family: 'Bitcount Single', 'Inter', monospace; font-weight: 600; letter-spacing: .12em; }
 
-  .star { transition: transform .15s ease, filter .2s ease; -webkit-tap-highlight-color: transparent; }
+  /* ---------- Focus ---------- */
+  button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible {
+    outline: 2px solid #d4af37; outline-offset: 2px;
+  }
+
+  /* ---------- Language switch / tabs / pills ---------- */
+  .lang-on { background: #d4af37; color: #0b0b0d; }
+  .tab-on  { background: linear-gradient(110deg,#d4af37,#f1d98a); color: #0b0b0d; box-shadow: 0 6px 20px rgba(212,175,55,.25); }
+  .pill { border: 1px solid rgba(255,255,255,.12); color: rgba(255,255,255,.72); background: rgba(255,255,255,.04); transition: all .18s ease; }
+  .pill[aria-pressed="true"] { background: rgba(212,175,55,.16); border-color: #d4af37; color: #f1d98a; }
+
+  /* ---------- Dish cards ---------- */
+  .dish { transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease; }
+  .dish:hover { transform: translateY(-3px); border-color: rgba(212,175,55,.35); box-shadow: 0 18px 40px rgba(0,0,0,.45); }
+  .badge { display: inline-flex; align-items: center; gap: .3rem; border-radius: 9999px; padding: .2rem .6rem; font-size: .72rem; font-weight: 600;
+           border: 1px solid rgba(255,255,255,.12); color: rgba(255,255,255,.8); background: rgba(255,255,255,.05); white-space: nowrap; }
+  .badge-ok    { border-color: rgba(52,211,153,.45);  color: #6ee7b7; background: rgba(52,211,153,.10); }
+  .badge-heart { border-color: rgba(251,113,133,.45); color: #fda4af; background: rgba(251,113,133,.10); }
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display: none; }
+  details[open] .chev { transform: rotate(180deg); }
+  .chev { transition: transform .2s ease; }
+
+  /* ---------- Stars ---------- */
+  .star { transition: transform .15s ease; -webkit-tap-highlight-color: transparent; }
   .star:active { transform: scale(.85); }
-  .star svg { fill: transparent; stroke: rgb(var(--star-off)); transition: fill .2s, stroke .2s; }
-  .star.on svg { fill: rgb(var(--gold-500)); stroke: rgb(var(--gold-500)); filter: drop-shadow(0 0 8px rgb(var(--gold-500) / .55)); }
+  .star svg { fill: transparent; stroke: #5a5a66; transition: fill .2s, stroke .2s; }
+  .star.on svg { fill: #d4af37; stroke: #d4af37; filter: drop-shadow(0 0 8px rgba(212,175,55,.55)); }
+
+  /* ---------- Chips ---------- */
+  .chip { border: 1px solid #34343e; background: #1a1a20; color: rgba(255,255,255,.8); transition: all .15s ease; -webkit-tap-highlight-color: transparent; }
+  .chip[aria-pressed="true"] { background: rgba(212,175,55,.16); border-color: #d4af37; color: #f1d98a; }
+
+  /* ---------- Animations ---------- */
   .pop { animation: pop .35s cubic-bezier(.2,1.4,.4,1); }
   @keyframes pop { from { transform: scale(.6); } to { transform: scale(1); } }
-  .fade-up { animation: fadeUp .35s ease both; }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-  .chip { transition: all .15s ease; -webkit-tap-highlight-color: transparent; }
-  .chip[aria-pressed="true"] { background: rgb(var(--gold-500) / .16); border-color: rgb(var(--gold-500)); color: rgb(var(--gold-300)); }
-  .shimmer { background: linear-gradient(110deg, rgb(var(--gold-500)) 0%, rgb(var(--shine)) 45%, rgb(var(--gold-500)) 90%); }
-  .glow-strong { box-shadow: 0 8px 30px rgb(var(--gold-500) / .35); }
-  .card-shadow { box-shadow: 0 10px 30px rgb(0 0 0 / .25); }
-  .no-scrollbar::-webkit-scrollbar { display: none; }
-  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .fade-up { animation: fadeUp .45s ease both; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  /* QR output */
+  #qrBox img, #qrBox canvas { max-width: 100%; height: auto; margin: 0 auto; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation: none !important; transition: none !important; }
+  }
 </style>
 </head>
-<body class="min-h-screen antialiased pb-28">
 
-<div class="relative z-10 mx-auto flex min-h-screen w-full max-w-md flex-col px-5 pt-[max(1.25rem,env(safe-area-inset-top))]">
+<body class="min-h-screen bg-ink-950 text-white antialiased">
+<div class="aurora fixed inset-0 -z-10" aria-hidden="true"></div>
 
-  <!-- Top bar -->
-  <header dir="ltr" class="flex items-center justify-between">
-    <div id="langSwitch" class="inline-flex rounded-full border border-ink-600 bg-ink-900/80 p-1 text-xs font-semibold">
-      <button data-lang="ar" class="rounded-full px-3 py-1.5 transition">دارجة</button>
-      <button data-lang="fr" class="rounded-full px-3 py-1.5 transition">FR</button>
-      <button data-lang="en" class="rounded-full px-3 py-1.5 transition">EN</button>
+<!-- ======================================================= HEADER -->
+<header class="mx-auto flex max-w-6xl items-center justify-between px-5 pb-1 pt-[max(1rem,env(safe-area-inset-top))]">
+  <!-- Ikatna wordmark: I, A, T in white, rest in gold -->
+  <span class="brand-font text-[12px] text-gold-400" dir="ltr" aria-label="Ikatna"><span class="text-white">I</span>k<span class="text-white">at</span>na</span>
+
+  <div id="langSwitch" class="inline-flex rounded-full border border-white/10 bg-white/5 p-1 text-xs font-semibold" role="group" aria-label="Language">
+    <button data-lang="ar" class="rounded-full px-3 py-1.5 transition">عربي</button>
+    <button data-lang="fr" class="rounded-full px-3 py-1.5 transition">FR</button>
+    <button data-lang="en" class="rounded-full px-3 py-1.5 transition">EN</button>
+  </div>
+</header>
+
+<!-- ======================================================= HERO -->
+<section class="mx-auto max-w-6xl px-5 pb-5 pt-5 text-center fade-up">
+  <p data-i18n="welcome" class="text-xs font-semibold uppercase tracking-[.3em] text-gold-300/80"></p>
+  <h1 id="restName" class="gold-text mt-2 font-display text-4xl font-extrabold leading-tight sm:text-5xl"></h1>
+  <p data-i18n="tagline" class="mx-auto mt-2 max-w-md text-sm text-white/60"></p>
+
+  <!-- Table number (read from ?table=, validated, written with textContent only) -->
+  <div class="glass mt-5 inline-flex items-center gap-3 rounded-full px-5 py-2.5">
+    <span class="flex h-8 w-8 items-center justify-center rounded-full bg-gold-500/15 text-gold-400">
+      <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10h18M5 10v10M19 10v10M2 6h20"/></svg>
+    </span>
+    <span data-i18n="table" class="text-xs font-semibold uppercase tracking-widest text-white/60"></span>
+    <span id="tableNum" class="font-display text-2xl font-bold text-gold-300" dir="ltr">—</span>
+  </div>
+  <p id="tableWarn" class="mx-auto mt-3 hidden max-w-sm text-xs text-amber-300/90"></p>
+</section>
+
+<!-- ======================================================= STICKY NAV: tabs + category pills -->
+<div class="nav-glass sticky top-0 z-30">
+  <div class="mx-auto max-w-6xl px-5 pb-2 pt-2.5">
+    <div class="glass grid grid-cols-2 gap-1 rounded-full p-1" role="tablist">
+      <button id="tabBtnMenu"   role="tab" aria-selected="true"  aria-controls="panelMenu"   class="rounded-full px-4 py-2.5 text-sm font-bold transition" data-i18n="tabMenu"></button>
+      <button id="tabBtnReview" role="tab" aria-selected="false" aria-controls="panelReview" class="rounded-full px-4 py-2.5 text-sm font-bold transition" data-i18n="tabReview"></button>
     </div>
-    <div class="flex items-center gap-2">
-      <!-- Table Badge -->
-      <div class="inline-flex items-center gap-1.5 rounded-full border border-gold-500/40 bg-gold-500/10 px-3 py-1.5 text-xs font-bold text-gold-300">
-        <span>🪑</span>
-        <span id="headerTable">T-1</span>
-      </div>
-      <!-- Live Date -->
-      <div class="inline-flex items-center gap-1.5 rounded-full border border-ink-700 bg-ink-900/70 px-3 py-1.5 text-xs font-medium text-fg/70">
-        <span id="liveDate">--/--</span>
-      </div>
-    </div>
-  </header>
+    <div id="pills" class="no-scrollbar -mx-5 mt-2.5 flex gap-2 overflow-x-auto px-5 pb-1" role="group"></div>
+  </div>
+</div>
 
-  <!-- Restaurant Name -->
-  <div class="mt-5 text-center">
-    <p id="restName" class="font-display text-xl text-gold-300">Restaurant Name</p>
+<!-- ======================================================= MENU TAB -->
+<main id="panelMenu" role="tabpanel" class="mx-auto max-w-6xl px-5 pb-36 pt-6">
+  <div id="menuRoot"></div>
+  <p data-i18n="nutriNote" class="mx-auto mt-10 max-w-lg text-center text-xs leading-relaxed text-white/40"></p>
+</main>
+
+<!-- ======================================================= REVIEW TAB -->
+<main id="panelReview" role="tabpanel" class="mx-auto hidden max-w-xl px-5 pb-16 pt-6">
+
+  <!-- Shown after a review was sent from this device for this table -->
+  <div id="reviewLocked" class="glass hidden rounded-3xl p-7 text-center">
+    <div class="pop mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-gold-500/15 text-3xl">🙏</div>
+    <h2 data-i18n="lockedTitle" class="text-xl font-bold"></h2>
+    <p data-i18n="lockedText" class="mt-2 text-sm leading-relaxed text-white/65"></p>
   </div>
 
-  <!-- Main Mode Switcher -->
-  <nav class="mt-4 grid grid-cols-2 gap-2 rounded-2xl border border-ink-700 bg-ink-900/90 p-1.5 backdrop-blur">
-    <button id="tabMenu" type="button" onclick="switchTab('menu')"
-      class="flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold transition">
-      <span>🍽️</span>
-      <span id="tabMenuLabel">المنيو والطلب</span>
-    </button>
-    <button id="tabReview" type="button" onclick="switchTab('review')"
-      class="flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold transition">
-      <span>⭐</span>
-      <span id="tabReviewLabel">تقييم الخدمة</span>
-    </button>
-  </nav>
+  <div id="reviewFlow">
+    <div class="glass rounded-3xl p-5">
+      <h2 data-i18n="reviewTitle" class="text-center font-display text-2xl font-bold"></h2>
+      <p data-i18n="reviewSub" class="mt-1 text-center text-sm text-white/60"></p>
 
-  <!-- ==================== SECTION 1: DIGITAL MENU WITH CATEGORIES & IMAGES ==================== -->
-  <main id="viewMenu" class="mt-5 fade-up">
-    <!-- Category Filter Pills -->
-    <div id="categoryPills" class="no-scrollbar flex gap-2 overflow-x-auto pb-3 sticky top-0 z-20 bg-ink-950/80 backdrop-blur py-1"></div>
+      <label for="waiterName" data-i18n="waiterLabel" class="mt-5 block text-xs font-semibold uppercase tracking-wider text-gold-300"></label>
+      <input id="waiterName" type="text" maxlength="40" autocomplete="off"
+             class="mt-2 w-full rounded-2xl border border-ink-600 bg-ink-800 p-3.5 text-sm text-white placeholder:text-white/35 focus:border-gold-500" />
 
-    <!-- Menu Items Grid / List -->
-    <div id="menuList" class="mt-2 space-y-4"></div>
-  </main>
-
-  <!-- ==================== SECTION 2: REVIEW ==================== -->
-  <main id="viewReview" class="mt-5 hidden fade-up">
-    <div class="text-center mb-4">
-      <h1 id="title" class="text-xl font-extrabold"></h1>
-      <p id="subtitle" class="mt-1 text-xs text-fg/60"></p>
+      <div id="stars" class="mt-6 flex justify-center gap-1.5" dir="ltr" role="radiogroup" aria-label="Rating"></div>
+      <p id="ratingLabel" class="mt-3 h-6 text-center text-sm font-semibold text-gold-300"></p>
     </div>
 
-    <!-- Waiter Selection -->
-    <section class="card-shadow rounded-3xl border border-ink-700 bg-ink-900/80 p-4">
-      <label for="waiterSelect" id="waiterLabel" class="block text-xs font-semibold uppercase tracking-wider text-gold-300 mb-2"></label>
-      <select id="waiterSelect" class="w-full rounded-2xl border border-ink-600 bg-ink-800 p-3.5 text-sm text-fg">
-        <option value="" disabled selected id="waiterPlaceholder">اختر النادل...</option>
-        <option value="Youssef">يوسف (Youssef)</option>
-        <option value="Mehdi">مهدي (Mehdi)</option>
-        <option value="Amine">أمين (Amine)</option>
-      </select>
-    </section>
-
-    <!-- Rating card -->
-    <section class="card-shadow mt-4 rounded-3xl border border-ink-700 bg-ink-900/80 p-5">
-      <div id="stars" class="flex justify-center gap-1.5" dir="ltr"></div>
-      <p id="ratingLabel" class="mt-3 h-6 text-center text-sm font-semibold text-gold-300"></p>
-    </section>
-
-    <!-- Positive: Google Maps -->
-    <section id="positive" class="mt-4 hidden rounded-3xl border border-gold-500/30 bg-gradient-to-b from-gold-500/10 to-ink-900/80 p-5 text-center">
-      <div class="pop mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-gold-500/15 text-2xl">🎉</div>
-      <h2 id="posTitle" class="text-lg font-bold"></h2>
-      <p id="posText" class="mt-1.5 text-xs leading-relaxed text-fg/75"></p>
+    <!-- 4–5 stars → Google Maps -->
+    <section id="positive" class="mt-5 hidden rounded-3xl border border-gold-500/30 bg-gradient-to-b from-gold-500/10 to-transparent p-6 text-center">
+      <div class="pop mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-gold-500/15 text-3xl">🎉</div>
+      <h2 data-i18n="posTitle" class="text-xl font-bold"></h2>
+      <p data-i18n="posText" class="mt-2 text-sm leading-relaxed text-white/70"></p>
       <a id="mapsBtn" href="#" target="_blank" rel="noopener noreferrer"
-         class="shimmer glow-strong mt-4 flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-3.5 text-sm font-extrabold text-on">
-        <span id="mapsLabel"></span>
+         class="btn-gold mt-5 flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-4 text-base">
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+        <span data-i18n="mapsBtn"></span>
       </a>
     </section>
 
-    <!-- Negative: Private WhatsApp -->
-    <section id="negative" class="mt-4 hidden rounded-3xl border border-ink-700 bg-ink-900/80 p-5">
-      <h2 id="negTitle" class="text-base font-bold"></h2>
-      <p id="negText" class="mt-1 text-xs text-fg/60"></p>
-      <p id="chipsLabel" class="mt-4 text-xs font-semibold uppercase tracking-wider text-gold-300"></p>
+    <!-- 1–3 stars → private feedback to the manager -->
+    <section id="negative" class="glass mt-5 hidden rounded-3xl p-5">
+      <h2 data-i18n="negTitle" class="text-lg font-bold"></h2>
+      <p data-i18n="negText" class="mt-1 text-sm leading-relaxed text-white/60"></p>
+
+      <p data-i18n="chipsLabel" class="mt-5 text-xs font-semibold uppercase tracking-wider text-gold-300"></p>
       <div id="chips" class="mt-2 flex flex-wrap gap-2"></div>
-      <label id="commentLabel" for="comment" class="mt-4 block text-xs font-semibold uppercase tracking-wider text-gold-300"></label>
-      <textarea id="comment" rows="3" maxlength="600" class="mt-2 w-full resize-none rounded-2xl border border-ink-600 bg-ink-800 p-3 text-sm text-fg"></textarea>
-      <button id="waBtn" type="button" class="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#25D366] px-5 py-3.5 text-sm font-extrabold text-[#0b0b0d]">
-        <span id="waLabel"></span>
+
+      <label for="comment" data-i18n="commentLabel" class="mt-5 block text-xs font-semibold uppercase tracking-wider text-gold-300"></label>
+      <textarea id="comment" rows="4" maxlength="600"
+        class="mt-2 w-full resize-none rounded-2xl border border-ink-600 bg-ink-800 p-3.5 text-sm text-white placeholder:text-white/35 focus:border-gold-500"></textarea>
+
+      <button id="waBtn" type="button"
+        class="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#25D366] px-5 py-4 text-base font-extrabold text-[#0b0b0d] shadow-[0_8px_30px_rgba(37,211,102,.25)] transition active:scale-[.98]">
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor" aria-hidden="true"><path d="M12.04 2a9.9 9.9 0 0 0-8.47 15l-1.5 5.5 5.64-1.48A9.9 9.9 0 1 0 12.04 2zm5.8 14.1c-.25.7-1.45 1.34-2 1.4-.5.06-1.13.09-1.82-.12-.42-.13-.96-.31-1.65-.6-2.9-1.25-4.8-4.17-4.94-4.37-.14-.19-1.18-1.57-1.18-3s.75-2.13 1.02-2.42c.27-.29.58-.36.78-.36h.56c.18 0 .42-.07.65.5.25.58.84 2.02.91 2.17.07.14.12.31.02.5-.1.2-.15.31-.3.48-.14.17-.3.38-.43.51-.14.14-.29.3-.12.58.17.29.75 1.24 1.62 2.01 1.1.98 2.03 1.29 2.32 1.43.29.14.46.12.63-.07.17-.2.72-.84.91-1.13.2-.29.38-.24.65-.14.27.1 1.7.8 2 .95.29.14.48.22.55.34.07.12.07.7-.18 1.4z"/></svg>
+        <span data-i18n="waBtn"></span>
       </button>
+      <p data-i18n="waHint" class="mt-3 text-center text-xs text-white/40"></p>
+
+      <!-- Always let the customer post publicly too (keeps the flow fair and within Google's review rules) -->
+      <a id="publicLink" href="#" target="_blank" rel="noopener noreferrer"
+         data-i18n="publicLink" class="mt-4 block text-center text-xs text-white/50 underline underline-offset-4 hover:text-gold-300"></a>
     </section>
-  </main>
+  </div>
+</main>
 
-  <div class="flex-1"></div>
+<!-- ======================================================= FOOTER -->
+<footer class="mx-auto max-w-6xl px-5 pb-32 pt-4 text-center">
+  <div class="mx-auto mb-3 h-px w-16 bg-gradient-to-r from-transparent via-gold-500/50 to-transparent"></div>
+  <p class="text-xs text-white/40">
+    <span data-i18n="poweredBy"></span>
+    <span class="brand-font text-[12px] text-gold-400" dir="ltr"><span class="text-white">I</span>k<span class="text-white">at</span>na</span>
+  </p>
+</footer>
 
-  <!-- Footer -->
-  <footer class="mt-8 pb-4 text-center">
-    <p class="text-xs text-fg/40">
-      <span id="poweredBy"></span>
-      <span class="brand-font text-[11px] text-gold-300" dir="ltr"><span class="text-fg">I</span>k<span class="text-fg">at</span>na</span>
-    </p>
-  </footer>
+<!-- ======================================================= STICKY CART BAR -->
+<div id="cartBar" class="pointer-events-none fixed inset-x-0 bottom-0 z-40 translate-y-full px-3 pb-[max(.75rem,env(safe-area-inset-bottom))] transition-transform duration-300" aria-hidden="true">
+  <div class="glass-strong mx-auto flex max-w-xl items-center justify-between gap-3 rounded-2xl p-3 shadow-[0_-10px_40px_rgba(0,0,0,.5)]">
+    <div class="min-w-0 ps-2">
+      <p id="cartCount" class="text-xs font-semibold uppercase tracking-wider text-white/60"></p>
+      <p id="cartTotal" class="font-display text-xl font-bold text-gold-300"></p>
+    </div>
+    <button id="qrBtn" type="button" class="btn-gold flex shrink-0 items-center gap-2 rounded-xl px-4 py-3 text-sm">
+      <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h3M20 17v4"/></svg>
+      <span data-i18n="showQr"></span>
+    </button>
+  </div>
 </div>
 
-<!-- Floating Bottom Cart Bar -->
-<div id="cartBar" class="fixed bottom-4 left-0 right-0 z-30 mx-auto hidden max-w-md px-5">
-  <button onclick="openOrderModal()" type="button"
-    class="shimmer glow-strong flex w-full items-center justify-between rounded-2xl px-5 py-4 text-on shadow-2xl transition active:scale-[.98]">
-    <div class="flex items-center gap-2.5">
-      <span id="cartCount" class="flex h-7 w-7 items-center justify-center rounded-full bg-ink-950 text-xs font-extrabold text-gold-300">0</span>
-      <span id="showQrBtnText" class="text-sm font-extrabold">إظهار QR للنادل</span>
-    </div>
-    <span id="cartTotal" class="text-base font-extrabold">0 MAD</span>
-  </button>
-</div>
-
-<!-- QR Order Modal -->
-<div id="qrModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/85 p-5 backdrop-blur-sm">
-  <div class="pop w-full max-w-sm rounded-3xl border border-gold-500/40 bg-ink-900 p-6 text-center shadow-2xl">
-    <div class="flex items-center justify-between border-b border-ink-700 pb-3">
-      <span id="modalTitle" class="text-base font-extrabold text-gold-300">طلب الطاولة #1</span>
-      <button onclick="closeOrderModal()" class="rounded-full bg-ink-800 px-3 py-1 text-xs font-bold text-fg/70">✕</button>
+<!-- ======================================================= QR MODAL -->
+<div id="qrModal" class="fixed inset-0 z-50 hidden items-end justify-center bg-black/75 backdrop-blur-sm sm:items-center" role="dialog" aria-modal="true" aria-labelledby="qrTitle">
+  <div class="glass-strong fade-up max-h-[92vh] w-full max-w-md overflow-y-auto rounded-t-3xl p-6 sm:rounded-3xl">
+    <div class="text-center">
+      <h2 id="qrTitle" data-i18n="qrTitle" class="font-display text-2xl font-bold"></h2>
+      <p class="mt-1 text-sm text-white/60">
+        <span data-i18n="table"></span>
+        <span id="qrTable" class="font-bold text-gold-300" dir="ltr"></span>
+        <span class="mx-1 text-white/30">·</span>
+        <span id="qrRef" class="font-mono text-xs tracking-widest text-white/50" dir="ltr"></span>
+      </p>
     </div>
 
-    <p id="modalHint" class="mt-3 text-xs text-fg/70">ورّي هاد الكود للنادل باش يسكانيه بتلفونو</p>
+    <div class="mx-auto mt-5 w-fit rounded-2xl bg-white p-4 shadow-[0_0_40px_rgba(212,175,55,.25)]">
+      <div id="qrBox" class="flex h-[224px] w-[224px] items-center justify-center" dir="ltr"></div>
+    </div>
+    <p id="qrError" class="mt-3 hidden text-center text-xs text-amber-300"></p>
+    <p data-i18n="qrHint" class="mt-3 text-center text-xs text-white/55"></p>
 
-    <!-- Generated QR Code Container -->
-    <div class="mx-auto mt-4 flex h-56 w-56 items-center justify-center rounded-2xl bg-white p-3 shadow-inner">
-      <div id="qrcode"></div>
+    <ul id="qrList" class="mt-5 space-y-2 border-t border-white/10 pt-4 text-sm"></ul>
+    <div class="mt-3 flex items-center justify-between border-t border-white/10 pt-3">
+      <span data-i18n="total" class="text-sm font-semibold text-white/70"></span>
+      <span id="qrTotal" class="font-display text-xl font-bold text-gold-300"></span>
     </div>
 
-    <!-- Order Summary List -->
-    <div id="orderSummaryList" class="mt-4 max-h-32 overflow-y-auto rounded-2xl bg-ink-800/80 p-3 text-start text-xs space-y-1.5"></div>
-
-    <div class="mt-3 flex items-center justify-between border-t border-ink-700 pt-3 text-sm font-extrabold">
-      <span id="modalTotalLabel">المجموع:</span>
-      <span id="modalTotalValue" class="text-gold-300">0 MAD</span>
-    </div>
+    <button id="qrClose" type="button" data-i18n="close"
+      class="mt-5 w-full rounded-2xl border border-white/15 bg-white/5 px-5 py-3.5 text-sm font-bold transition hover:bg-white/10"></button>
   </div>
 </div>
 
 <script>
-const CONFIG = {
-  restaurantName: { ar: 'مطعم إيكاتنا', fr: 'Restaurant Ikatna', en: 'Ikatna Restaurant' },
-  googleMapsReviewUrl: 'https://search.google.com/local/writereview?placeid=YOUR_PLACE_ID',
-  whatsappNumber: '212600000000',
-  currency: 'MAD'
-};
+(function () {
+  'use strict';
 
-/* Menu Data with Real High-Res Images, Ingredients, Macros, Diabetes & Cholesterol info */
-const MENU_ITEMS = [
-  {
-    id: 1, cat: 'mains', price: 85, kcal: 620, protein: 48,
-    diabetesSafe: true, lowCholesterol: true,
-    image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=600&q=80',
-    name: { ar: 'صدر دجاج مشوي مع الأرز', fr: 'Blanc de poulet grillé & riz', en: 'Grilled Chicken Breast & Rice' },
-    desc: { ar: 'صدر دجاج متبل بالأعشاب مع خضر سوتيه', fr: 'Poulet mariné aux herbes et légumes sautés', en: 'Herb-marinated chicken with sautéed veggies' },
-    ingredients: { ar: 'صدر دجاج، أرز بسماتي، زيت الزيتون، بروكلي، جزر، ثوم', fr: 'Poulet, riz basmati, huile d’olive, brocoli, carottes', en: 'Chicken breast, basmati rice, olive oil, broccoli, carrots' }
-  },
-  {
-    id: 2, cat: 'mains', price: 110, kcal: 740, protein: 56,
-    diabetesSafe: true, lowCholesterol: false,
-    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80',
-    name: { ar: 'فيليه بقر مشوي (Steak)', fr: 'Filet de bœuf grillé', en: 'Grilled Beef Tenderloin' },
-    desc: { ar: 'قطعة لحم طرية مع صوص الفلفل الأسود', fr: 'Viande tendre avec sauce au poivre noir', en: 'Tender steak with black pepper sauce' },
-    ingredients: { ar: 'لحم بقري أحمر، بطاطس مشوية، كريمة خفيفة، فلفل أسود', fr: 'Bœuf, pommes de terre rôties, crème légère, poivre', en: 'Beef tenderloin, roasted potatoes, light cream, pepper' }
-  },
-  {
-    id: 3, cat: 'salads', price: 55, kcal: 380, protein: 28,
-    diabetesSafe: true, lowCholesterol: true,
-    image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=80',
-    name: { ar: 'سلطة سيزر بالدجاج', fr: 'Salade César au poulet', en: 'Chicken Caesar Salad' },
-    desc: { ar: 'خس طازج، دجاج مشوي، جبن بارميزان', fr: 'Laitue fraîche, poulet grillé, parmesan', en: 'Fresh lettuce, grilled chicken, parmesan' },
-    ingredients: { ar: 'خس روماني، شرائح دجاج مشوي، بارميزان قليل الدسم', fr: 'Laitue romaine, poulet, parmesan allégé', en: 'Romaine lettuce, grilled chicken, light parmesan' }
-  },
-  {
-    id: 4, cat: 'drinks', price: 25, kcal: 140, protein: 2,
-    diabetesSafe: false, lowCholesterol: true,
-    image: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80',
-    name: { ar: 'عصير أفوكادو بالمكسرات', fr: 'Jus d’avocat aux fruits secs', en: 'Avocado & Nuts Smoothie' },
-    desc: { ar: 'أفوكادو طازج، حليب، لوز وعسل طبيعي', fr: 'Avocat frais, lait, amandes et miel', en: 'Fresh avocado, milk, almonds & natural honey' },
-    ingredients: { ar: 'أفوكادو طبيعي، حليب خالي الدسم، لوز، جوز، عسل حر', fr: 'Avocat, lait écrémé, amandes, noix, miel', en: 'Avocado, skim milk, almonds, walnuts, honey' }
-  }
-];
-
-const I18N = {
-  ar: {
-    dir: 'rtl', lang: 'ar', locale: 'ar-MA',
-    tabMenu: 'المنيو والطلب', tabReview: 'تقييم الخدمة',
-    cats: { all: '😋 الكل', mains: '🥩 أطباق رئيسية', salads: '🥗 سلطات', drinks: '🥤 مشروبات' },
-    kcal: 'سعرة', protein: 'بروتين', add: 'أضف للطلب',
-    ingredientsLabel: 'المكونات:',
-    diabetesYes: '✅ مناسب للسكري', diabetesNo: '⚠️ غير مناسب للسكري',
-    cholesterolYes: '💙 منخفض الكلسترول', cholesterolNo: '⚠️ دهون مرتفعة',
-    showQr: 'إظهار QR للنادل',
-    modalTitle: 'طلب الطاولة', modalHint: 'ورّي هاد الكود للنادل باش يسكانيه بتلفونو', modalTotal: 'المجموع:',
-    title: 'كيف كانت تجربتك معنا؟', subtitle: 'رأيك يهمنا باش نحسنو الخدمة ديما.',
-    waiterLabel: 'شكون خدّمك؟', waiterPlaceholder: 'اختر النادل...',
-    ratings: ['', 'ماشي مزيان', 'ناقص شوية', 'عادي', 'مزيان', 'ممتاز!'],
-    posTitle: 'شكراً بزاف! 🙏', posText: 'شارك تقييمك على Google Maps:',
-    mapsBtn: 'تقييم على Google Maps',
-    negTitle: 'سمحو لينا، بغينا نصلحو الأمور', negText: 'قولو لينا شنو وقع باش نصلحوه دابا:',
-    chipsLabel: 'فين كان المشكل؟',
-    chips: {
-      kitchen_delay: '👨‍🍳 تأخير الكوزينا', food_quality: '🍽️ جودة الأكل',
-      false_order: '❌ طلب غالط', service_delay: '🤵 تأخير النادل',
-      staff: '🗣️ تعامل النادل', clean: '✨ النظافة'
-    },
-    commentLabel: 'تعليق إضافي', waBtn: 'صيفط للمسؤول عبر واتساب', poweredBy: 'مدعوم من طرف',
-    msg: { head: 'تقييم زبون:', table: 'الطاولة', waiter: 'النادل', rating: 'التقييم', issues: 'المشاكل', comment: 'تعليق', none: 'بدون' }
-  },
-  fr: {
-    dir: 'ltr', lang: 'fr', locale: 'fr-FR',
-    tabMenu: 'Menu & Commande', tabReview: 'Avis & Service',
-    cats: { all: '😋 Tout', mains: '🥩 Plats', salads: '🥗 Salades', drinks: '🥤 Boissons' },
-    kcal: 'kcal', protein: 'Protéines', add: 'Ajouter',
-    ingredientsLabel: 'Ingrédients :',
-    diabetesYes: '✅ Adapté au diabète', diabetesNo: '⚠️ À éviter (Diabète)',
-    cholesterolYes: '💙 Faible en cholestérol', cholesterolNo: '⚠️ Riche en graisses',
-    showQr: 'Afficher QR au serveur',
-    modalTitle: 'Commande Table', modalHint: 'Montrez ce QR code au serveur', modalTotal: 'Total :',
-    title: 'Comment était votre expérience ?', subtitle: 'Votre avis compte beaucoup pour nous.',
-    waiterLabel: 'Serveur', waiterPlaceholder: 'Choisir...',
-    ratings: ['', 'Décevant', 'Moyen', 'Correct', 'Très bien', 'Excellent !'],
-    posTitle: 'Merci infiniment ! 🙏', posText: 'Partagez votre avis sur Google Maps :',
-    mapsBtn: 'Avis sur Google Maps',
-    negTitle: 'Désolé, nous voulons faire mieux', negText: 'Dites-nous ce qui s’est passé :',
-    chipsLabel: 'Quel était le problème ?',
-    chips: {
-      kitchen_delay: '👨‍🍳 Attente cuisine', food_quality: '🍽️ Qualité des plats',
-      false_order: '❌ Erreur commande', service_delay: '🤵 Retard serveur',
-      staff: '🗣️ Attitude serveur', clean: '✨ Propreté'
-    },
-    commentLabel: 'Commentaire', waBtn: 'Envoyer au responsable (WhatsApp)', poweredBy: 'Propulsé par',
-    msg: { head: 'Avis client :', table: 'Table', waiter: 'Serveur', rating: 'Note', issues: 'Problèmes', comment: 'Commentaire', none: 'Aucun' }
-  },
-  en: {
-    dir: 'ltr', lang: 'en', locale: 'en-US',
-    tabMenu: 'Menu & Order', tabReview: 'Rate Service',
-    cats: { all: '😋 All', mains: '🥩 Mains', salads: '🥗 Salads', drinks: '🥤 Drinks' },
-    kcal: 'kcal', protein: 'Protein', add: 'Add',
-    ingredientsLabel: 'Ingredients:',
-    diabetesYes: '✅ Diabetes Friendly', diabetesNo: '⚠️ High Glycemic',
-    cholesterolYes: '💙 Low Cholesterol', cholesterolNo: '⚠️ High Fat',
-    showQr: 'Show QR to Waiter',
-    modalTitle: 'Table Order', modalHint: 'Show this QR code to your waiter', modalTotal: 'Total:',
-    title: 'How was your experience?', subtitle: 'Your feedback helps us improve.',
-    waiterLabel: 'Waiter', waiterPlaceholder: 'Select...',
-    ratings: ['', 'Poor', 'Fair', 'Okay', 'Great', 'Excellent!'],
-    posTitle: 'Thank you! 🙏', posText: 'Would you share your experience on Google Maps?',
-    mapsBtn: 'Review on Google Maps',
-    negTitle: 'Sorry, we want to do better', negText: 'Tell us what went wrong:',
-    chipsLabel: 'What went wrong?',
-    chips: {
-      kitchen_delay: '👨‍🍳 Kitchen delay', food_quality: '🍽️ Food quality',
-      false_order: '❌ Wrong order', service_delay: '🤵 Waiter delay',
-      staff: '🗣️ Staff attitude', clean: '✨ Cleanliness'
-    },
-    commentLabel: 'Comment', waBtn: 'Send to Manager via WhatsApp', poweredBy: 'Powered by',
-    msg: { head: 'Customer Review:', table: 'Table', waiter: 'Waiter', rating: 'Rating', issues: 'Issues', comment: 'Comment', none: 'None' }
-  }
-};
-
-const state = {
-  lang: 'ar',
-  activeTab: 'menu',
-  activeCat: 'all',
-  cart: {},
-  rating: 0,
-  tags: new Set()
-};
-
-const t = () => I18N[state.lang];
-function getTableFromUrl() {
-  return new URLSearchParams(window.location.search).get('table') || '1';
-}
-
-function switchTab(tab) {
-  state.activeTab = tab;
-  const isMenu = tab === 'menu';
-  document.getElementById('viewMenu').classList.toggle('hidden', !isMenu);
-  document.getElementById('viewReview').classList.toggle('hidden', !isMenu ? false : true);
-
-  const btnMenu = document.getElementById('tabMenu');
-  const btnRev = document.getElementById('tabReview');
-  btnMenu.className = `flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold transition ${isMenu ? 'bg-gold-500 text-on shadow-md' : 'text-fg/60'}`;
-  btnRev.className = `flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold transition ${!isMenu ? 'bg-gold-500 text-on shadow-md' : 'text-fg/60'}`;
-
-  updateCartBar();
-}
-
-function renderCategories() {
-  const wrap = document.getElementById('categoryPills');
-  wrap.innerHTML = '';
-  Object.entries(t().cats).forEach(([key, label]) => {
-    const active = state.activeCat === key;
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = `whitespace-nowrap rounded-full border px-4 py-2 text-xs font-bold transition ${active ? 'border-gold-500 bg-gold-500/20 text-gold-300' : 'border-ink-700 bg-ink-900/90 text-fg/70 shadow-sm'}`;
-    b.textContent = label;
-    b.onclick = () => { state.activeCat = key; renderCategories(); renderMenu(); };
-    wrap.appendChild(b);
-  });
-}
-
-function renderMenu() {
-  const list = document.getElementById('menuList');
-  list.innerHTML = '';
-  const items = MENU_ITEMS.filter(i => state.activeCat === 'all' || i.cat === state.activeCat);
-  const L = t();
-
-  items.forEach(item => {
-    const qty = state.cart[item.id] || 0;
-    const card = document.createElement('div');
-    card.className = 'card-shadow overflow-hidden rounded-3xl border border-ink-700 bg-ink-900/90 backdrop-blur';
-    card.innerHTML = `
-      <div class="relative h-40 w-full overflow-hidden bg-ink-800">
-        <img src="${item.image}" alt="${item.name.en}" class="h-full w-full object-cover transition duration-500 hover:scale-105" />
-        <div class="absolute inset-0 bg-gradient-to-t from-ink-950 via-transparent to-transparent opacity-80"></div>
-        <span class="absolute bottom-3 start-3 rounded-xl bg-ink-950/80 px-3 py-1 text-xs font-extrabold text-gold-300 backdrop-blur border border-gold-500/30">
-          ${item.price} ${CONFIG.currency}
-        </span>
-      </div>
-      <div class="p-4">
-        <h3 class="text-base font-bold text-fg">${item.name[state.lang]}</h3>
-        <p class="mt-1 text-xs leading-relaxed text-fg/60">${item.desc[state.lang]}</p>
-        
-        <div class="mt-2 text-[11px] text-fg/75 bg-ink-800/60 rounded-xl p-2 border border-ink-700/60">
-          <strong class="text-gold-300">${L.ingredientsLabel}</strong> ${item.ingredients[state.lang]}
-        </div>
-
-        <div class="mt-2.5 flex flex-wrap gap-1.5 text-[10px] font-semibold">
-          <span class="rounded-lg bg-ink-800 px-2 py-1 text-gold-300">⚡ ${item.kcal} ${L.kcal}</span>
-          <span class="rounded-lg bg-ink-800 px-2 py-1 text-emerald-400">🥩 ${item.protein}g ${L.protein}</span>
-          <span class="rounded-lg px-2 py-1 ${item.diabetesSafe ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30' : 'bg-rose-500/15 text-rose-300 border border-rose-500/30'}">${item.diabetesSafe ? L.diabetesYes : L.diabetesNo}</span>
-          <span class="rounded-lg px-2 py-1 ${item.lowCholesterol ? 'bg-sky-500/15 text-sky-300 border border-sky-500/30' : 'bg-rose-500/15 text-rose-300 border border-rose-500/30'}">${item.lowCholesterol ? L.cholesterolYes : L.cholesterolNo}</span>
-        </div>
-
-        <div class="mt-4 flex items-center justify-between border-t border-ink-800 pt-3">
-          <span class="text-xs font-bold text-gold-300">${item.name.en}</span>
-          ${qty === 0 ? `
-            <button onclick="updateQty(${item.id}, 1)" class="rounded-xl border border-gold-500/60 bg-gold-500/20 px-4 py-2 text-xs font-bold text-gold-300 active:scale-95 shadow">
-              + ${L.add}
-            </button>
-          ` : `
-            <div class="flex items-center gap-3 rounded-xl border border-gold-500 bg-ink-800 px-3 py-1.5">
-              <button onclick="updateQty(${item.id}, -1)" class="text-sm font-bold text-gold-300">-</button>
-              <span class="text-sm font-extrabold text-fg">${qty}</span>
-              <button onclick="updateQty(${item.id}, 1)" class="text-sm font-bold text-gold-300">+</button>
-            </div>
-          `}
-        </div>
-      </div>
-    `;
-    list.appendChild(card);
-  });
-}
-
-function updateQty(id, delta) {
-  const next = (state.cart[id] || 0) + delta;
-  if (next <= 0) delete state.cart[id];
-  else state.cart[id] = next;
-  renderMenu();
-  updateCartBar();
-}
-
-function updateCartBar() {
-  const entries = Object.entries(state.cart);
-  const totalQty = entries.reduce((sum, [, q]) => sum + q, 0);
-  const totalPrice = entries.reduce((sum, [id, q]) => {
-    const item = MENU_ITEMS.find(i => i.id === Number(id));
-    return sum + (item ? item.price * q : 0);
-  }, 0);
-
-  const bar = document.getElementById('cartBar');
-  bar.classList.toggle('hidden', totalQty === 0 || state.activeTab !== 'menu');
-  document.getElementById('cartCount').textContent = totalQty;
-  document.getElementById('cartTotal').textContent = `${totalPrice} ${CONFIG.currency}`;
-}
-
-function openOrderModal() {
-  const table = getTableFromUrl();
-  const entries = Object.entries(state.cart);
-  if (!entries.length) return;
-
-  let total = 0;
-  const qrLines = [`TABLE: ${table}`, `ORDER:`];
-  const summaryHtml = [];
-
-  entries.forEach(([id, qty]) => {
-    const item = MENU_ITEMS.find(i => i.id === Number(id));
-    if (!item) return;
-    const sub = item.price * qty;
-    total += sub;
-    qrLines.push(`${qty}x ${item.name.en} (${sub}${CONFIG.currency})`);
-    summaryHtml.push(`
-      <div class="flex justify-between">
-        <span class="text-fg/90"><strong>${qty}x</strong> ${item.name[state.lang]}</span>
-        <span class="text-gold-300 font-semibold">${sub} ${CONFIG.currency}</span>
-      </div>
-    `);
-  });
-
-  qrLines.push(`TOTAL: ${total} ${CONFIG.currency}`);
-
-  document.getElementById('modalTitle').textContent = `${t().modalTitle} #${table}`;
-  document.getElementById('orderSummaryList').innerHTML = summaryHtml.join('');
-  document.getElementById('modalTotalValue').textContent = `${total} ${CONFIG.currency}`;
-
-  const qrContainer = document.getElementById('qrcode');
-  qrContainer.innerHTML = '';
-  new QRCode(qrContainer, {
-    text: qrLines.join('\n'),
-    width: 190,
-    height: 190,
-    colorDark: '#0b0b0d',
-    colorLight: '#ffffff',
-    correctLevel: QRCode.CorrectLevel.M
-  });
-
-  const modal = document.getElementById('qrModal');
-  modal.classList.remove('hidden');
-  modal.classList.add('flex');
-}
-
-function closeOrderModal() {
-  const modal = document.getElementById('qrModal');
-  modal.classList.add('hidden');
-  modal.classList.remove('flex');
-}
-
-const starsEl = document.getElementById('stars');
-const starSvg = '<svg viewBox="0 0 24 24" class="h-10 w-10" stroke-width="1.6"><path d="M12 2.5l2.9 6.1 6.6.9-4.8 4.6 1.2 6.6L12 17.5l-5.9 3.2 1.2-6.6L2.5 9.5l6.6-.9L12 2.5z"/></svg>';
-for (let i = 1; i <= 5; i++) {
-  const b = document.createElement('button');
-  b.type = 'button';
-  b.className = 'star p-1';
-  b.innerHTML = starSvg;
-  b.onclick = () => {
-    state.rating = i;
-    [...starsEl.children].forEach((el, idx) => el.classList.toggle('on', idx + 1 <= i));
-    document.getElementById('ratingLabel').textContent = t().ratings[i];
-    document.getElementById('positive').classList.toggle('hidden', i < 4);
-    document.getElementById('negative').classList.toggle('hidden', i >= 4);
+  /* =========================================================
+     CONFIG – edit these values for each restaurant
+     ========================================================= */
+  const CONFIG = {
+    restaurantName: { ar: 'اسم المطعم', fr: 'Nom du restaurant', en: 'Restaurant Name' },
+    googleMapsReviewUrl: 'https://search.google.com/local/writereview?placeid=YOUR_PLACE_ID',
+    whatsappNumber: '212600000000',   // manager's number, international format, digits only, no "+"
+    currencyCode: 'MAD',              // currency written inside the QR code (kept ASCII for scanners)
+    reviewLockHours: 12               // one review per table per device within this window
   };
-  starsEl.appendChild(b);
-}
 
-function renderChips() {
-  const wrap = document.getElementById('chips');
-  wrap.innerHTML = '';
-  Object.entries(t().chips).forEach(([k, label]) => {
+  /* =========================================================
+     MENU DATA
+     - Nutrition values are ILLUSTRATIVE ESTIMATES per serving: replace them with your kitchen's real data.
+     - `img` is the Unsplash photo id. If a photo fails to load, a gold placeholder is shown instead.
+     - `qrName` (English) is what the waiter sees in the scanned QR, whatever language the customer uses.
+     ========================================================= */
+  const IMG = (id) => 'https://images.unsplash.com/' + id + '?auto=format&fit=crop&w=800&q=70';
+
+  const MENU = [
+    /* ------------------------------ MAINS ------------------------------ */
+    { id: 'm1', cat: 'mains', price: 220, kcal: 540, protein: 46, diabetic: true, lowChol: false,
+      img: 'photo-1544025162-d76694265947', qrName: 'Prime Beef Fillet',
+      en: { name: 'Prime Beef Fillet', desc: 'Seared 200 g fillet with a peppercorn jus, silky potato purée and glazed baby vegetables.',
+            ing: ['Beef tenderloin', 'Peppercorn', 'Cream', 'Beef stock', 'Potato', 'Butter', 'Carrots', 'Green beans', 'Thyme'] },
+      fr: { name: 'Filet de bœuf prime', desc: 'Filet de 200 g snacké, jus au poivre, purée de pommes de terre soyeuse et petits légumes glacés.',
+            ing: ['Filet de bœuf', 'Poivre', 'Crème', 'Fond de bœuf', 'Pomme de terre', 'Beurre', 'Carottes', 'Haricots verts', 'Thym'] },
+      ar: { name: 'فيليه اللحم البقري الفاخر', desc: 'شريحة فيليه 200 غ مشوية مع صلصة الفلفل وهريس البطاطس الناعم وخضار صغيرة مكرمَلة.',
+            ing: ['فيليه البقر', 'فلفل', 'كريمة', 'مرق اللحم', 'بطاطس', 'زبدة', 'جزر', 'فاصولياء خضراء', 'زعتر'] } },
+
+    { id: 'm2', cat: 'mains', price: 190, kcal: 480, protein: 40, diabetic: true, lowChol: false,
+      img: 'photo-1519708227418-c8fd9a32b7a2', qrName: 'Grilled Atlantic Salmon',
+      en: { name: 'Grilled Atlantic Salmon', desc: 'Char-grilled salmon with lemon-herb butter, saffron quinoa and roasted asparagus.',
+            ing: ['Salmon', 'Lemon', 'Parsley', 'Butter', 'Quinoa', 'Saffron', 'Asparagus', 'Olive oil'] },
+      fr: { name: 'Saumon de l’Atlantique grillé', desc: 'Saumon grillé au beurre citron-herbes, quinoa au safran et asperges rôties.',
+            ing: ['Saumon', 'Citron', 'Persil', 'Beurre', 'Quinoa', 'Safran', 'Asperges', 'Huile d’olive'] },
+      ar: { name: 'سلمون الأطلسي المشوي', desc: 'سلمون مشوي بزبدة الليمون والأعشاب مع كينوا بالزعفران وهليون محمّص.',
+            ing: ['سلمون', 'ليمون', 'بقدونس', 'زبدة', 'كينوا', 'زعفران', 'هليون', 'زيت زيتون'] } },
+
+    { id: 'm3', cat: 'mains', price: 160, kcal: 680, protein: 42, diabetic: false, lowChol: false,
+      img: 'photo-1555939594-58d7cb561ad1', qrName: 'Spiced Lamb Kebabs',
+      en: { name: 'Spiced Lamb Kebabs', desc: 'Hand-minced lamb skewers with ras el hanout, grilled vegetables, warm flatbread and mint yoghurt.',
+            ing: ['Lamb', 'Ras el hanout', 'Onion', 'Parsley', 'Bell pepper', 'Flatbread', 'Yoghurt', 'Mint'] },
+      fr: { name: 'Brochettes d’agneau épicées', desc: 'Brochettes d’agneau hachées main au ras el hanout, légumes grillés, pain tiède et yaourt à la menthe.',
+            ing: ['Agneau', 'Ras el hanout', 'Oignon', 'Persil', 'Poivron', 'Pain plat', 'Yaourt', 'Menthe'] },
+      ar: { name: 'أسياخ لحم الضأن المتبّلة', desc: 'أسياخ من لحم الضأن المفروم يدويًا بالراس الحانوت مع خضار مشوية وخبز دافئ وزبادي بالنعناع.',
+            ing: ['لحم الضأن', 'راس الحانوت', 'بصل', 'بقدونس', 'فلفل رومي', 'خبز', 'زبادي', 'نعناع'] } },
+
+    /* ------------------------------ SALADS ------------------------------ */
+    { id: 's1', cat: 'salads', price: 85, kcal: 380, protein: 14, diabetic: true, lowChol: true,
+      img: 'photo-1546069901-ba9599a7e63c', qrName: 'Quinoa Garden Bowl',
+      en: { name: 'Quinoa Garden Bowl', desc: 'Tricolour quinoa, chickpeas, cucumber, pomegranate and toasted almonds with a lemon–olive oil dressing.',
+            ing: ['Quinoa', 'Chickpeas', 'Cucumber', 'Pomegranate', 'Almonds', 'Mint', 'Lemon', 'Olive oil'] },
+      fr: { name: 'Bol de quinoa du jardin', desc: 'Quinoa tricolore, pois chiches, concombre, grenade et amandes grillées, vinaigrette citron–huile d’olive.',
+            ing: ['Quinoa', 'Pois chiches', 'Concombre', 'Grenade', 'Amandes', 'Menthe', 'Citron', 'Huile d’olive'] },
+      ar: { name: 'وعاء الكينوا بخضار الحديقة', desc: 'كينوا ثلاثية الألوان مع الحمص والخيار والرمان واللوز المحمّص وتتبيلة الليمون وزيت الزيتون.',
+            ing: ['كينوا', 'حمص', 'خيار', 'رمان', 'لوز', 'نعناع', 'ليمون', 'زيت زيتون'] } },
+
+    { id: 's2', cat: 'salads', price: 75, kcal: 230, protein: 6, diabetic: true, lowChol: true,
+      img: 'photo-1512621776951-a57141f2eefd', qrName: 'Mediterranean Salad',
+      en: { name: 'Mediterranean Salad', desc: 'Vine tomatoes, cucumber, olives, red onion and sweet peppers on crisp greens with an oregano dressing.',
+            ing: ['Tomato', 'Cucumber', 'Black olives', 'Red onion', 'Sweet pepper', 'Lettuce', 'Oregano', 'Olive oil'] },
+      fr: { name: 'Salade méditerranéenne', desc: 'Tomates grappe, concombre, olives, oignon rouge et poivrons doux sur salade croquante, vinaigrette à l’origan.',
+            ing: ['Tomate', 'Concombre', 'Olives noires', 'Oignon rouge', 'Poivron doux', 'Laitue', 'Origan', 'Huile d’olive'] },
+      ar: { name: 'سلطة متوسطية', desc: 'طماطم وخيار وزيتون وبصل أحمر وفلفل حلو على خس مقرمش مع تتبيلة الأوريجانو.',
+            ing: ['طماطم', 'خيار', 'زيتون أسود', 'بصل أحمر', 'فلفل حلو', 'خس', 'أوريجانو', 'زيت زيتون'] } },
+
+    { id: 's3', cat: 'salads', price: 90, kcal: 340, protein: 5, diabetic: true, lowChol: true,
+      img: 'photo-1540189549336-e6e99c3679fe', qrName: 'Avocado & Tomato Salad',
+      en: { name: 'Avocado & Tomato Salad', desc: 'Ripe avocado, heirloom tomatoes, fresh basil and sesame, finished with lemon and sea salt.',
+            ing: ['Avocado', 'Tomato', 'Basil', 'Sesame', 'Lemon', 'Olive oil', 'Sea salt'] },
+      fr: { name: 'Salade avocat & tomate', desc: 'Avocat mûr, tomates anciennes, basilic frais et sésame, finition citron et fleur de sel.',
+            ing: ['Avocat', 'Tomate', 'Basilic', 'Sésame', 'Citron', 'Huile d’olive', 'Fleur de sel'] },
+      ar: { name: 'سلطة الأفوكادو والطماطم', desc: 'أفوكادو ناضج وطماطم عتيقة وريحان طازج وسمسم مع الليمون وملح البحر.',
+            ing: ['أفوكادو', 'طماطم', 'ريحان', 'سمسم', 'ليمون', 'زيت زيتون', 'ملح البحر'] } },
+
+    /* ------------------------------ DESSERTS ------------------------------ */
+    { id: 'd1', cat: 'desserts', price: 70, kcal: 520, protein: 8, diabetic: false, lowChol: false,
+      img: 'photo-1578985545062-69928b1d9587', qrName: 'Dark Chocolate Fondant',
+      en: { name: 'Dark Chocolate Fondant', desc: 'Warm molten-centre fondant with Madagascar vanilla cream and a touch of sea salt.',
+            ing: ['Dark chocolate', 'Butter', 'Eggs', 'Sugar', 'Flour', 'Vanilla', 'Cream', 'Sea salt'] },
+      fr: { name: 'Fondant au chocolat noir', desc: 'Fondant tiède au cœur coulant, crème à la vanille de Madagascar et pointe de fleur de sel.',
+            ing: ['Chocolat noir', 'Beurre', 'Œufs', 'Sucre', 'Farine', 'Vanille', 'Crème', 'Fleur de sel'] },
+      ar: { name: 'فوندان الشوكولاتة الداكنة', desc: 'فوندان دافئ بقلب سائل مع كريمة فانيليا مدغشقر ولمسة من ملح البحر.',
+            ing: ['شوكولاتة داكنة', 'زبدة', 'بيض', 'سكر', 'دقيق', 'فانيليا', 'كريمة', 'ملح البحر'] } },
+
+    { id: 'd2', cat: 'desserts', price: 65, kcal: 450, protein: 7, diabetic: false, lowChol: false,
+      img: 'photo-1565958011703-44f9829ba187', qrName: 'Berry Cheesecake',
+      en: { name: 'Berry Cheesecake', desc: 'Creamy baked cheesecake on a buttery biscuit base, topped with a wild-berry coulis.',
+            ing: ['Cream cheese', 'Biscuit', 'Butter', 'Eggs', 'Sugar', 'Wild berries', 'Vanilla'] },
+      fr: { name: 'Cheesecake aux fruits rouges', desc: 'Cheesecake crémeux sur base sablée beurrée, coulis de fruits rouges sauvages.',
+            ing: ['Fromage frais', 'Biscuit', 'Beurre', 'Œufs', 'Sucre', 'Fruits rouges', 'Vanille'] },
+      ar: { name: 'تشيز كيك التوت', desc: 'تشيز كيك كريمي على قاعدة بسكويت بالزبدة مع صلصة التوت البري.',
+            ing: ['جبنة كريمية', 'بسكويت', 'زبدة', 'بيض', 'سكر', 'توت بري', 'فانيليا'] } },
+
+    { id: 'd3', cat: 'desserts', price: 45, kcal: 260, protein: 5, diabetic: false, lowChol: false,
+      img: 'photo-1563805042-7684c019e1cb', qrName: 'Vanilla Bean Gelato',
+      en: { name: 'Vanilla Bean Gelato', desc: 'Two scoops of slow-churned vanilla gelato with roasted pistachios and a honey drizzle.',
+            ing: ['Milk', 'Cream', 'Vanilla bean', 'Sugar', 'Pistachios', 'Honey'] },
+      fr: { name: 'Gelato à la vanille', desc: 'Deux boules de gelato vanille barattée lentement, pistaches torréfiées et filet de miel.',
+            ing: ['Lait', 'Crème', 'Gousse de vanille', 'Sucre', 'Pistaches', 'Miel'] },
+      ar: { name: 'جيلاتو الفانيليا', desc: 'كرتان من جيلاتو الفانيليا مع الفستق المحمّص وخيط من العسل.',
+            ing: ['حليب', 'كريمة', 'فانيليا', 'سكر', 'فستق', 'عسل'] } },
+
+    /* ------------------------------ DRINKS ------------------------------ */
+    { id: 'k1', cat: 'drinks', price: 30, kcal: 110, protein: 2, diabetic: false, lowChol: true,
+      img: 'photo-1613478223719-2ab802602423', qrName: 'Fresh Orange Juice',
+      en: { name: 'Fresh Orange Juice', desc: 'Pressed to order from sun-ripened oranges. No added sugar.',
+            ing: ['Oranges'] },
+      fr: { name: 'Jus d’orange frais', desc: 'Pressé à la commande avec des oranges mûries au soleil. Sans sucre ajouté.',
+            ing: ['Oranges'] },
+      ar: { name: 'عصير البرتقال الطازج', desc: 'معصور عند الطلب من برتقال ناضج تحت الشمس، دون سكر مضاف.',
+            ing: ['برتقال'] } },
+
+    { id: 'k2', cat: 'drinks', price: 25, kcal: 20, protein: 0, diabetic: true, lowChol: true,
+      img: 'photo-1576092768241-dec231879fc3', qrName: 'Moroccan Mint Tea',
+      en: { name: 'Moroccan Mint Tea', desc: 'Gunpowder green tea with fresh spearmint, poured the traditional way. Unsweetened on request.',
+            ing: ['Green tea', 'Fresh mint', 'Water', 'Sugar (optional)'] },
+      fr: { name: 'Thé à la menthe marocain', desc: 'Thé vert gunpowder à la menthe fraîche, servi à la marocaine. Sans sucre sur demande.',
+            ing: ['Thé vert', 'Menthe fraîche', 'Eau', 'Sucre (facultatif)'] },
+      ar: { name: 'الأتاي المغربي بالنعناع', desc: 'شاي أخضر بالنعناع الطازج يُقدَّم على الطريقة المغربية. بدون سكر عند الطلب.',
+            ing: ['شاي أخضر', 'نعناع طازج', 'ماء', 'سكر (اختياري)'] } },
+
+    { id: 'k3', cat: 'drinks', price: 35, kcal: 90, protein: 0, diabetic: false, lowChol: true,
+      img: 'photo-1556679343-c7306c1976bc', qrName: 'Iced Lemon & Mint',
+      en: { name: 'Iced Lemon & Mint', desc: 'Sparkling lemonade with crushed mint and ice, lightly sweetened.',
+            ing: ['Lemon', 'Mint', 'Sparkling water', 'Sugar', 'Ice'] },
+      fr: { name: 'Citronnade glacée à la menthe', desc: 'Limonade pétillante, menthe pilée et glaçons, légèrement sucrée.',
+            ing: ['Citron', 'Menthe', 'Eau gazeuse', 'Sucre', 'Glaçons'] },
+      ar: { name: 'ليموناضة بالنعناع المثلّج', desc: 'ليموناضة فوّارة بالنعناع المهروس والثلج، محلّاة بخفة.',
+            ing: ['ليمون', 'نعناع', 'ماء غازي', 'سكر', 'ثلج'] } }
+  ];
+
+  const CATS = ['mains', 'salads', 'desserts', 'drinks'];
+  const CHIP_KEYS = ['delay', 'wrongOrder', 'temp', 'waiter', 'quality', 'clean', 'price', 'other'];
+
+  /* =========================================================
+     TRANSLATIONS
+     ========================================================= */
+  const I18N = {
+    ar: {
+      dir: 'rtl', lang: 'ar', locale: 'ar-u-nu-latn', cur: 'د.م',
+      welcome: 'مرحباً بكم', tagline: 'تجربة طعام راقية، صُنعت لأجلكم.',
+      table: 'الطاولة', noTable: 'لم يتم التعرّف على رقم الطاولة. يرجى إخبار النادل برقم طاولتك.',
+      tabMenu: 'القائمة', tabReview: 'قيّم خدمتنا',
+      cats: { all: 'الكل', mains: 'الأطباق الرئيسية', salads: 'السلطات', desserts: 'الحلويات', drinks: 'المشروبات' },
+      add: 'أضف', remove: 'إنقاص', increase: 'زيادة', ingredients: 'المكوّنات',
+      kcal: 'سعرة', g: 'غ', protein: 'بروتين', diabetic: 'مناسب لمرضى السكري', lowChol: 'قليل الكوليسترول',
+      nutriNote: 'القيم الغذائية تقديرية لكل حصة. يرجى إخبار النادل بأي حساسية غذائية.',
+      items: (n) => n + (n === 1 ? ' طبق' : ' أطباق'), total: 'المجموع', showQr: 'أظهر الرمز للنادل',
+      qrTitle: 'طلبكم جاهز', qrHint: 'اعرضوا هذا الرمز على النادل لمسحه وتأكيد طلبكم.', qrFail: 'تعذّر إنشاء الرمز. اعرضوا الطلب أدناه على النادل.', close: 'إغلاق',
+      reviewTitle: 'كيف كانت خدمتنا؟', reviewSub: 'اضغطوا على النجوم، رأيكم يهمّنا.',
+      waiterLabel: 'اسم النادل (اختياري)', waiterPh: 'من خدمكم اليوم؟',
+      ratings: ['', 'سيّئ جداً', 'دون المتوسط', 'عادي', 'جيّد', 'ممتاز!'],
+      posTitle: 'شكراً جزيلاً! 🙏', posText: 'يسعدنا أن التجربة أعجبتكم. هل تشاركونها على Google Maps؟ دقيقة واحدة تصنع فرقاً كبيراً لنا.',
+      mapsBtn: 'اترك تقييماً على Google Maps',
+      negTitle: 'نعتذر، ونريد أن نتحسّن', negText: 'أخبرونا بما حدث وسيصل كلامكم مباشرة إلى المدير.',
+      chipsLabel: 'ما المشكلة؟',
+      chips: { delay: 'تأخير المطبخ', wrongOrder: 'طلب خاطئ / غير صحيح', temp: 'حرارة الأكل', waiter: 'تعامل النادل', quality: 'جودة الأكل', clean: 'النظافة', price: 'الأسعار', other: 'أخرى' },
+      commentLabel: 'تعليق (اختياري)', commentPh: 'أخبرونا بالتفصيل...',
+      waBtn: 'أرسل إلى المدير عبر واتساب', waHint: 'سيُفتح واتساب برسالة جاهزة، اضغطوا إرسال فقط.',
+      publicLink: 'أو انشروا رأيكم علناً على Google Maps',
+      lockedTitle: 'شكراً، وصلنا رأيكم', lockedText: 'تم تسجيل تقييم لهذه الطاولة. نقدّر وقتكم كثيراً.',
+      poweredBy: 'بدعم من',
+      msg: { head: 'مرحباً، هذا تقييم زبون:', restaurant: 'المطعم', table: 'الطاولة', rating: 'التقييم', waiter: 'النادل', issues: 'المشاكل', comment: 'التعليق', order: 'الطلب', none: 'بدون' }
+    },
+    fr: {
+      dir: 'ltr', lang: 'fr', locale: 'fr-FR', cur: 'MAD',
+      welcome: 'Bienvenue', tagline: 'Une table d’exception, pensée pour vous.',
+      table: 'Table', noTable: 'Numéro de table non détecté. Merci d’indiquer votre table au serveur.',
+      tabMenu: 'Menu', tabReview: 'Notez-nous',
+      cats: { all: 'Tout', mains: 'Plats', salads: 'Salades', desserts: 'Desserts', drinks: 'Boissons' },
+      add: 'Ajouter', remove: 'Retirer un', increase: 'Ajouter un', ingredients: 'Ingrédients',
+      kcal: 'kcal', g: 'g', protein: 'protéines', diabetic: 'Adapté aux diabétiques', lowChol: 'Faible en cholestérol',
+      nutriNote: 'Valeurs nutritionnelles estimatives par portion. Signalez toute allergie à votre serveur.',
+      items: (n) => n + (n === 1 ? ' article' : ' articles'), total: 'Total', showQr: 'Montrer le QR au serveur',
+      qrTitle: 'Votre commande', qrHint: 'Présentez ce QR code au serveur pour qu’il le scanne et valide votre commande.', qrFail: 'Impossible de générer le QR code. Montrez la commande ci-dessous au serveur.', close: 'Fermer',
+      reviewTitle: 'Comment était notre service ?', reviewSub: 'Touchez les étoiles, votre avis compte.',
+      waiterLabel: 'Nom du serveur (facultatif)', waiterPh: 'Qui s’est occupé de vous ?',
+      ratings: ['', 'Très décevant', 'Décevant', 'Correct', 'Très bien', 'Excellent !'],
+      posTitle: 'Merci infiniment ! 🙏', posText: 'Nous sommes ravis que vous ayez apprécié. Partagez votre avis sur Google Maps : une minute qui nous aide énormément.',
+      mapsBtn: 'Laisser un avis sur Google Maps',
+      negTitle: 'Désolé, nous voulons faire mieux', negText: 'Dites-nous ce qui s’est passé. Votre message sera transmis directement au responsable.',
+      chipsLabel: 'Quel était le problème ?',
+      chips: { delay: 'Retard en cuisine', wrongOrder: 'Commande erronée / fausse', temp: 'Température du plat', waiter: 'Attitude du serveur', quality: 'Qualité des plats', clean: 'Propreté', price: 'Prix', other: 'Autre' },
+      commentLabel: 'Commentaire (facultatif)', commentPh: 'Dites-nous en plus...',
+      waBtn: 'Envoyer au responsable via WhatsApp', waHint: 'WhatsApp s’ouvrira avec un message prêt, il suffit d’appuyer sur envoyer.',
+      publicLink: 'Ou publiez votre avis publiquement sur Google Maps',
+      lockedTitle: 'Merci, nous avons bien reçu votre avis', lockedText: 'Un avis a déjà été enregistré pour cette table. Merci pour votre temps.',
+      poweredBy: 'Propulsé par',
+      msg: { head: 'Bonjour, voici l’avis d’un client :', restaurant: 'Restaurant', table: 'Table', rating: 'Note', waiter: 'Serveur', issues: 'Problèmes', comment: 'Commentaire', order: 'Commande', none: 'Aucun' }
+    },
+    en: {
+      dir: 'ltr', lang: 'en', locale: 'en-US', cur: 'MAD',
+      welcome: 'Welcome to', tagline: 'Fine dining, crafted for you.',
+      table: 'Table', noTable: 'Table number not detected. Please tell your waiter your table.',
+      tabMenu: 'Menu', tabReview: 'Rate Us',
+      cats: { all: 'All', mains: 'Mains', salads: 'Salads', desserts: 'Desserts', drinks: 'Drinks' },
+      add: 'Add', remove: 'Remove one', increase: 'Add one', ingredients: 'Ingredients',
+      kcal: 'kcal', g: 'g', protein: 'protein', diabetic: 'Diabetes-friendly', lowChol: 'Low cholesterol',
+      nutriNote: 'Nutritional values are estimates per serving. Please tell your waiter about any allergies.',
+      items: (n) => n + (n === 1 ? ' item' : ' items'), total: 'Total', showQr: 'Show QR to Waiter',
+      qrTitle: 'Your order', qrHint: 'Show this QR code to your waiter so they can scan it and confirm your order.', qrFail: 'Could not generate the QR code. Please show the order below to your waiter.', close: 'Close',
+      reviewTitle: 'How was our service?', reviewSub: 'Tap the stars, your opinion matters.',
+      waiterLabel: 'Waiter’s name (optional)', waiterPh: 'Who looked after you?',
+      ratings: ['', 'Very disappointing', 'Disappointing', 'Okay', 'Great', 'Excellent!'],
+      posTitle: 'Thank you so much! 🙏', posText: 'We’re delighted you enjoyed your visit. Would you share it on Google Maps? One minute helps us enormously.',
+      mapsBtn: 'Leave a review on Google Maps',
+      negTitle: 'Sorry, we want to do better', negText: 'Tell us what went wrong. Your message goes straight to the manager.',
+      chipsLabel: 'What went wrong?',
+      chips: { delay: 'Kitchen delay', wrongOrder: 'Wrong or false order', temp: 'Food temperature', waiter: 'Waiter attitude', quality: 'Food quality', clean: 'Cleanliness', price: 'Prices', other: 'Other' },
+      commentLabel: 'Comment (optional)', commentPh: 'Tell us more...',
+      waBtn: 'Send to Manager via WhatsApp', waHint: 'WhatsApp will open with a ready message, just hit send.',
+      publicLink: 'Or post your review publicly on Google Maps',
+      lockedTitle: 'Thank you, we received your feedback', lockedText: 'A review has already been recorded for this table. We appreciate your time.',
+      poweredBy: 'Powered by',
+      msg: { head: 'Hello, here is a customer review:', restaurant: 'Restaurant', table: 'Table', rating: 'Rating', waiter: 'Waiter', issues: 'Issues', comment: 'Comment', order: 'Order', none: 'None' }
+    }
+  };
+
+  /* =========================================================
+     HELPERS
+     ========================================================= */
+  const $ = (id) => document.getElementById(id);
+  const t = () => I18N[state.lang];
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const fmt = (n) => new Intl.NumberFormat(t().locale).format(n);
+  const money = (n) => fmt(n) + ' ' + t().cur;
+  const byId = Object.fromEntries(MENU.map((d) => [d.id, d]));
+
+  const ICON_FORK = '<svg viewBox="0 0 24 24" class="h-14 w-14" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v8a2 2 0 0 0 2 2v8M5 3v5M9 3v5M17 3c-2 2-3 5-3 8h3v10"/></svg>';
+
+  /* ---------- Table number: read from ?table=, validated, never injected as HTML ---------- */
+  function readTable() {
+    try {
+      const raw = new URLSearchParams(location.search).get('table');
+      if (!raw) return null;
+      const v = raw.trim();
+      return /^[A-Za-z0-9-]{1,6}$/.test(v) ? v.toUpperCase() : null;   // 1–6 letters/digits/dashes only
+    } catch (e) { return null; }
+  }
+  const TABLE = readTable();
+
+  /* =========================================================
+     STATE
+     ========================================================= */
+  const state = { lang: 'ar', tab: 'menu', cat: 'all', rating: 0, hover: 0, tags: new Set() };
+  const cart = new Map();                           // dish id -> quantity
+  let lastFocus = null;
+  let qrRef = '';
+
+  /* ---------- Cart persistence (per table, this tab only) ---------- */
+  const CART_KEY = 'ikatna_cart_' + (TABLE || 'x');
+  function saveCart() { try { sessionStorage.setItem(CART_KEY, JSON.stringify([...cart])); } catch (e) {} }
+  function loadCart() {
+    try {
+      const data = JSON.parse(sessionStorage.getItem(CART_KEY) || '[]');
+      data.forEach(([id, q]) => { if (byId[id] && Number.isInteger(q) && q > 0 && q < 100) cart.set(id, q); });
+    } catch (e) {}
+  }
+  const cartCount = () => [...cart.values()].reduce((a, b) => a + b, 0);
+  const cartTotal = () => [...cart].reduce((sum, [id, q]) => sum + byId[id].price * q, 0);
+
+  /* =========================================================
+     STATIC TEXT / LANGUAGE
+     ========================================================= */
+  function applyStaticText() {
+    const L = t();
+    document.querySelectorAll('[data-i18n]').forEach((el) => { const v = L[el.dataset.i18n]; if (typeof v === 'string') el.textContent = v; });
+    $('restName').textContent = CONFIG.restaurantName[state.lang];
+    $('waiterName').placeholder = L.waiterPh;
+    $('comment').placeholder = L.commentPh;
+    $('mapsBtn').href = CONFIG.googleMapsReviewUrl;
+    $('publicLink').href = CONFIG.googleMapsReviewUrl;
+    $('tableNum').textContent = TABLE || '—';        // textContent only: safe even with hostile URLs
+    const warn = $('tableWarn');
+    warn.textContent = TABLE ? '' : L.noTable;
+    warn.classList.toggle('hidden', !!TABLE);
+  }
+
+  function applyLang(lang) {
+    state.lang = lang;
+    const L = t();
+    document.documentElement.lang = L.lang;
+    document.documentElement.dir = L.dir;
+    document.querySelectorAll('#langSwitch button').forEach((b) => {
+      const on = b.dataset.lang === lang;
+      b.classList.toggle('lang-on', on);
+      b.classList.toggle('text-white/60', !on);
+      b.setAttribute('aria-pressed', String(on));
+    });
+    applyStaticText();
+    renderPills();
+    renderMenu();
+    renderCartBar();
+    renderChips();
+    paintStars();
+    if (!$('qrModal').classList.contains('hidden')) fillQrModal(false);
+    try { localStorage.setItem('ikatna_lang', lang); } catch (e) {}
+  }
+
+  /* =========================================================
+     TABS
+     ========================================================= */
+  function setTab(tab) {
+    state.tab = tab;
+    const isMenu = tab === 'menu';
+    $('panelMenu').classList.toggle('hidden', !isMenu);
+    $('panelReview').classList.toggle('hidden', isMenu);
+    $('pills').classList.toggle('hidden', !isMenu);
+    $('tabBtnMenu').setAttribute('aria-selected', String(isMenu));
+    $('tabBtnReview').setAttribute('aria-selected', String(!isMenu));
+    $('tabBtnMenu').classList.toggle('tab-on', isMenu);
+    $('tabBtnReview').classList.toggle('tab-on', !isMenu);
+    $('tabBtnMenu').classList.toggle('text-white/70', !isMenu);
+    $('tabBtnReview').classList.toggle('text-white/70', isMenu);
+    renderCartBar();
+    if (!isMenu) renderReviewState();
+  }
+
+  /* =========================================================
+     MENU – category pills + dish cards
+     ========================================================= */
+  function renderPills() {
+    const wrap = $('pills');
+    wrap.innerHTML = '';
+    ['all', ...CATS].forEach((c) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'pill shrink-0 rounded-full px-4 py-2 text-sm font-semibold';
+      b.textContent = t().cats[c];
+      b.setAttribute('aria-pressed', String(state.cat === c));
+      b.addEventListener('click', () => { state.cat = c; renderPills(); renderMenu(); });
+      wrap.appendChild(b);
+    });
+  }
+
+  function controlsHtml(id) {
+    const u = t();
+    const q = cart.get(id) || 0;
+    if (!q) {
+      return '<button type="button" data-act="add" data-id="' + id + '" class="btn-gold rounded-full px-5 py-2 text-sm">+ ' + esc(u.add) + '</button>';
+    }
+    return '<div class="inline-flex items-center gap-1 rounded-full border border-gold-500/40 bg-gold-500/10 p-1">' +
+      '<button type="button" data-act="dec" data-id="' + id + '" aria-label="' + esc(u.remove) + '" class="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-lg font-bold transition hover:bg-white/20">−</button>' +
+      '<span class="min-w-[2rem] text-center text-base font-bold text-gold-300" aria-live="polite">' + fmt(q) + '</span>' +
+      '<button type="button" data-act="inc" data-id="' + id + '" aria-label="' + esc(u.increase) + '" class="btn-gold flex h-8 w-8 items-center justify-center rounded-full text-lg">+</button>' +
+      '</div>';
+  }
+
+  function cardHtml(d) {
+    const L = d[state.lang], u = t();
+    const badges =
+      '<span class="badge">🔥 ' + fmt(d.kcal) + ' ' + esc(u.kcal) + '</span>' +
+      '<span class="badge">💪 ' + fmt(d.protein) + ' ' + esc(u.g) + ' ' + esc(u.protein) + '</span>' +
+      (d.diabetic ? '<span class="badge badge-ok">✓ ' + esc(u.diabetic) + '</span>' : '') +
+      (d.lowChol ? '<span class="badge badge-heart">♥ ' + esc(u.lowChol) + '</span>' : '');
+    return '' +
+    '<article class="dish glass group flex flex-col overflow-hidden rounded-3xl" data-card="' + d.id + '">' +
+      '<div class="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-ink-800 to-ink-900">' +
+        '<div class="absolute inset-0 flex items-center justify-center text-gold-500/30">' + ICON_FORK + '</div>' +
+        '<img src="' + esc(IMG(d.img)) + '" alt="' + esc(L.name) + '" loading="lazy" decoding="async" referrerpolicy="no-referrer" ' +
+          'class="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" onerror="this.remove()" />' +
+        '<div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 to-transparent"></div>' +
+        '<span class="glass absolute end-3 top-3 rounded-full px-3 py-1 text-sm font-bold text-gold-300">' + esc(money(d.price)) + '</span>' +
+      '</div>' +
+      '<div class="flex flex-1 flex-col p-4">' +
+        '<h3 class="font-display text-xl font-bold leading-snug">' + esc(L.name) + '</h3>' +
+        '<p class="mt-1 text-sm leading-relaxed text-white/65">' + esc(L.desc) + '</p>' +
+        '<div class="mt-3 flex flex-wrap gap-1.5">' + badges + '</div>' +
+        '<details class="mt-3">' +
+          '<summary class="flex items-center justify-between rounded-xl bg-white/5 px-3 py-2 text-xs font-semibold uppercase tracking-wider text-gold-300">' +
+            '<span>' + esc(u.ingredients) + '</span>' +
+            '<svg class="chev h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>' +
+          '</summary>' +
+          '<p class="px-1 pt-2 text-xs leading-relaxed text-white/60">' + L.ing.map(esc).join(' · ') + '</p>' +
+        '</details>' +
+        '<div class="mt-auto flex justify-end pt-4" data-controls="' + d.id + '">' + controlsHtml(d.id) + '</div>' +
+      '</div>' +
+    '</article>';
+  }
+
+  function renderMenu() {
+    const cats = state.cat === 'all' ? CATS : [state.cat];
+    $('menuRoot').innerHTML = cats.map((c) => {
+      const dishes = MENU.filter((d) => d.cat === c);
+      return '<section class="mb-10"><h2 class="mb-4 flex items-center gap-3 font-display text-2xl font-bold">' +
+        '<span class="gold-text">' + esc(t().cats[c]) + '</span><span class="h-px flex-1 bg-gradient-to-r from-gold-500/40 to-transparent"></span></h2>' +
+        '<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">' + dishes.map(cardHtml).join('') + '</div></section>';
+    }).join('');
+  }
+
+  /* One delegated listener for all + / − / Add buttons */
+  $('menuRoot').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-act]');
+    if (!btn) return;
+    const id = btn.dataset.id;
+    if (!byId[id]) return;
+    const q = cart.get(id) || 0;
+    const next = btn.dataset.act === 'dec' ? q - 1 : q + 1;
+    if (next <= 0) cart.delete(id); else cart.set(id, Math.min(next, 20));
+    saveCart();
+    updateCardControls(id);
+    renderCartBar();
+  });
+
+  function updateCardControls(id) {
+    const box = document.querySelector('[data-controls="' + id + '"]');
+    if (box) box.innerHTML = controlsHtml(id);
+  }
+
+  /* =========================================================
+     CART BAR
+     ========================================================= */
+  function renderCartBar() {
+    const n = cartCount();
+    const show = n > 0 && state.tab === 'menu';
+    const bar = $('cartBar');
+    bar.classList.toggle('translate-y-full', !show);
+    bar.classList.toggle('pointer-events-none', !show);
+    bar.setAttribute('aria-hidden', String(!show));
+    $('cartCount').textContent = t().items(n);
+    $('cartTotal').textContent = money(cartTotal());
+  }
+
+  /* =========================================================
+     QR MODAL – scannable order summary for the waiter
+     ========================================================= */
+  function newRef() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let r = '';
+    const rnd = (window.crypto && crypto.getRandomValues) ? crypto.getRandomValues(new Uint8Array(4)) : [1, 2, 3, 4].map(() => Math.floor(Math.random() * 256));
+    for (let i = 0; i < 4; i++) r += chars[rnd[i] % chars.length];
+    return r;
+  }
+
+  /* Clean, ASCII-only text so any QR scanner reads it correctly, regardless of the customer's language */
+  function buildOrderText() {
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, '0'), mm = String(now.getMinutes()).padStart(2, '0');
+    const lines = ['IKATNA ORDER', 'TABLE: ' + (TABLE || 'UNKNOWN'), 'REF: ' + qrRef + ' ' + hh + ':' + mm, '------'];
+    cart.forEach((q, id) => lines.push(q + 'x ' + byId[id].qrName));
+    lines.push('------', 'ITEMS: ' + cartCount(), 'TOTAL: ' + cartTotal() + ' ' + CONFIG.currencyCode);
+    return lines.join('\n');
+  }
+
+  function fillQrModal(regenerate) {
+    const u = t();
+    $('qrTable').textContent = TABLE || '—';
+    $('qrRef').textContent = '#' + qrRef;
+    $('qrList').innerHTML = [...cart].map(([id, q]) =>
+      '<li class="flex items-start justify-between gap-3"><span class="text-white/85">' + fmt(q) + '× ' + esc(byId[id][state.lang].name) +
+      '</span><span class="shrink-0 text-white/60">' + esc(money(byId[id].price * q)) + '</span></li>').join('');
+    $('qrTotal').textContent = money(cartTotal());
+    if (!regenerate) return;
+
+    const box = $('qrBox'), err = $('qrError');
+    box.innerHTML = '';
+    err.classList.add('hidden');
+    const text = buildOrderText();
+    try {
+      if (typeof QRCode === 'undefined') throw new Error('qrcode.js not loaded');
+      new QRCode(box, {
+        text: text, width: 224, height: 224,
+        colorDark: '#0b0b0d', colorLight: '#ffffff',
+        correctLevel: text.length > 900 ? QRCode.CorrectLevel.L : QRCode.CorrectLevel.M
+      });
+    } catch (e) {
+      err.textContent = u.qrFail;
+      err.classList.remove('hidden');
+    }
+  }
+
+  function openQr() {
+    if (!cartCount()) return;
+    lastFocus = document.activeElement;
+    qrRef = newRef();
+    const m = $('qrModal');
+    m.classList.remove('hidden');
+    m.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+    fillQrModal(true);
+    $('qrClose').focus();
+  }
+
+  function closeQr() {
+    const m = $('qrModal');
+    m.classList.add('hidden');
+    m.classList.remove('flex');
+    document.body.style.overflow = '';
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  $('qrBtn').addEventListener('click', openQr);
+  $('qrClose').addEventListener('click', closeQr);
+  $('qrModal').addEventListener('click', (e) => { if (e.target === $('qrModal')) closeQr(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('qrModal').classList.contains('hidden')) closeQr(); });
+
+  /* =========================================================
+     REVIEW – stars, Google Maps / private feedback
+     ========================================================= */
+  const starsEl = $('stars');
+  const starSvg = '<svg viewBox="0 0 24 24" class="h-11 w-11 sm:h-12 sm:w-12" stroke-width="1.6" stroke-linejoin="round"><path d="M12 2.5l2.9 6.1 6.6.9-4.8 4.6 1.2 6.6L12 17.5l-5.9 3.2 1.2-6.6L2.5 9.5l6.6-.9L12 2.5z"/></svg>';
+  for (let i = 1; i <= 5; i++) {
     const b = document.createElement('button');
     b.type = 'button';
-    b.className = 'chip rounded-full border border-ink-600 bg-ink-800 px-3 py-1.5 text-xs font-semibold text-fg/80';
-    b.textContent = label;
-    b.setAttribute('aria-pressed', String(state.tags.has(k)));
-    b.onclick = () => {
-      state.tags.has(k) ? state.tags.delete(k) : state.tags.add(k);
+    b.className = 'star p-1';
+    b.setAttribute('role', 'radio');
+    b.setAttribute('aria-checked', 'false');
+    b.innerHTML = starSvg;
+    b.addEventListener('click', () => setRating(i));
+    b.addEventListener('mouseenter', () => { state.hover = i; paintStars(); });
+    b.addEventListener('mouseleave', () => { state.hover = 0; paintStars(); });
+    starsEl.appendChild(b);
+  }
+
+  function paintStars() {
+    const active = state.hover || state.rating;
+    [...starsEl.children].forEach((b, idx) => {
+      const v = idx + 1;
+      b.classList.toggle('on', v <= active);
+      b.setAttribute('aria-checked', String(v === state.rating));
+      b.setAttribute('aria-label', v + ' / 5');
+    });
+    $('ratingLabel').textContent = active ? t().ratings[active] : '';
+  }
+
+  function setRating(n) {
+    state.rating = n;
+    paintStars();
+    const btn = starsEl.children[n - 1];
+    btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop');
+    renderReviewState(true);
+  }
+
+  /* One review per table per device within CONFIG.reviewLockHours (light, client-side only) */
+  const LOCK_KEY = 'ikatna_review_' + (TABLE || 'x');
+  function isLocked() {
+    try {
+      const ts = Number(localStorage.getItem(LOCK_KEY));
+      return !!ts && Date.now() - ts < CONFIG.reviewLockHours * 3600 * 1000;
+    } catch (e) { return false; }
+  }
+  function lockReview() { try { localStorage.setItem(LOCK_KEY, String(Date.now())); } catch (e) {} }
+
+  function renderReviewState(animate) {
+    const locked = isLocked();
+    $('reviewLocked').classList.toggle('hidden', !locked);
+    $('reviewFlow').classList.toggle('hidden', locked);
+    if (locked) return;
+    const r = state.rating;
+    const pos = $('positive'), neg = $('negative');
+    pos.classList.toggle('hidden', !(r >= 4));
+    neg.classList.toggle('hidden', !(r >= 1 && r <= 3));
+    if (animate) {
+      const shown = r >= 4 ? pos : (r >= 1 ? neg : null);
+      if (shown) {
+        shown.classList.remove('fade-up'); void shown.offsetWidth; shown.classList.add('fade-up');
+        setTimeout(() => shown.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80);
+      }
+    }
+  }
+
+  function renderChips() {
+    const wrap = $('chips');
+    wrap.innerHTML = '';
+    CHIP_KEYS.forEach((k) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'chip rounded-full px-4 py-2.5 text-sm font-semibold';
+      b.textContent = t().chips[k];
       b.setAttribute('aria-pressed', String(state.tags.has(k)));
-    };
-    wrap.appendChild(b);
+      b.addEventListener('click', () => {
+        state.tags.has(k) ? state.tags.delete(k) : state.tags.add(k);
+        b.setAttribute('aria-pressed', String(state.tags.has(k)));
+      });
+      wrap.appendChild(b);
+    });
+  }
+
+  /* ---------- WhatsApp: pre-filled message to the manager ---------- */
+  function buildWhatsAppUrl() {
+    const L = t(), M = L.msg;
+    const issues = [...state.tags].map((k) => '• ' + L.chips[k]).join('\n') || M.none;
+    const waiter = $('waiterName').value.trim().slice(0, 40) || M.none;
+    const comment = $('comment').value.trim() || M.none;
+    const lines = [
+      M.head, '',
+      '🏪 ' + M.restaurant + ': ' + CONFIG.restaurantName[state.lang],
+      '🪑 ' + M.table + ': ' + (TABLE || M.none),
+      '⭐ ' + M.rating + ': ' + state.rating + '/5',
+      '🧑‍🍳 ' + M.waiter + ': ' + waiter,
+      '⚠️ ' + M.issues + ':', issues,
+      '💬 ' + M.comment + ': ' + comment
+    ];
+    if (cartCount()) {                       // lets the manager check "wrong order" complaints against the real order
+      lines.push('🧾 ' + M.order + ':');
+      cart.forEach((q, id) => lines.push('  ' + q + 'x ' + byId[id].qrName));
+    }
+    return 'https://wa.me/' + CONFIG.whatsappNumber + '?text=' + encodeURIComponent(lines.join('\n'));
+  }
+
+  $('waBtn').addEventListener('click', () => {
+    window.open(buildWhatsAppUrl(), '_blank', 'noopener');
+    lockReview();
+    setTimeout(() => renderReviewState(false), 400);
   });
-}
-
-document.getElementById('waBtn').onclick = () => {
-  const L = t();
-  const tags = [...state.tags].map(k => '• ' + L.chips[k]).join('\n') || L.msg.none;
-  const waiter = document.getElementById('waiterSelect').value || L.msg.none;
-  const comment = document.getElementById('comment').value.trim() || L.msg.none;
-  const lines = [
-    L.msg.head,
-    `🪑 ${L.msg.table}: ${getTableFromUrl()}`,
-    `👤 ${L.msg.waiter}: ${waiter}`,
-    `⭐ ${L.msg.rating}: ${state.rating}/5`,
-    `⚠️ ${L.msg.issues}:\n${tags}`,
-    `💬 ${L.msg.comment}: ${comment}`
-  ];
-  window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
-};
-
-function applyLang(lang) {
-  state.lang = lang;
-  const L = t();
-  document.documentElement.lang = L.lang;
-  document.documentElement.dir = L.dir;
-
-  document.getElementById('restName').textContent = CONFIG.restaurantName[lang];
-  document.getElementById('headerTable').textContent = `T-${getTableFromUrl()}`;
-  document.getElementById('liveDate').textContent = new Date().toLocaleDateString(L.locale, { day: 'numeric', month: 'short' });
-
-  document.getElementById('tabMenuLabel').textContent = L.tabMenu;
-  document.getElementById('tabReviewLabel').textContent = L.tabReview;
-  document.getElementById('showQrBtnText').textContent = L.showQr;
-  document.getElementById('modalHint').textContent = L.modalHint;
-  document.getElementById('modalTotalLabel').textContent = L.modalTotal;
-
-  document.getElementById('title').textContent = L.title;
-  document.getElementById('subtitle').textContent = L.subtitle;
-  document.getElementById('waiterLabel').textContent = L.waiterLabel;
-  document.getElementById('waiterPlaceholder').textContent = L.waiterPlaceholder;
-  document.getElementById('posTitle').textContent = L.posTitle;
-  document.getElementById('posText').textContent = L.posText;
-  document.getElementById('mapsLabel').textContent = L.mapsBtn;
-  document.getElementById('mapsBtn').href = CONFIG.googleMapsReviewUrl;
-  document.getElementById('negTitle').textContent = L.negTitle;
-  document.getElementById('negText').textContent = L.negText;
-  document.getElementById('chipsLabel').textContent = L.chipsLabel;
-  document.getElementById('commentLabel').textContent = L.commentLabel;
-  document.getElementById('waLabel').textContent = L.waBtn;
-  document.getElementById('poweredBy').textContent = L.poweredBy + ' ';
-
-  document.querySelectorAll('#langSwitch button').forEach(b => {
-    const on = b.dataset.lang === lang;
-    b.classList.toggle('bg-gold-500', on);
-    b.classList.toggle('text-on', on);
-    b.classList.toggle('text-fg/60', !on);
+  $('mapsBtn').addEventListener('click', () => {
+    lockReview();
+    setTimeout(() => renderReviewState(false), 400);
   });
 
-  renderCategories();
-  renderMenu();
-  renderChips();
-  updateCartBar();
-}
+  /* =========================================================
+     EVENTS + INIT
+     ========================================================= */
+  document.querySelectorAll('#langSwitch button').forEach((b) => b.addEventListener('click', () => applyLang(b.dataset.lang)));
+  $('tabBtnMenu').addEventListener('click', () => setTab('menu'));
+  $('tabBtnReview').addEventListener('click', () => setTab('review'));
 
-document.querySelectorAll('#langSwitch button').forEach(b => b.onclick = () => applyLang(b.dataset.lang));
-
-applyLang('ar');
-switchTab('menu');
+  (function init() {
+    let lang = null;
+    try { lang = localStorage.getItem('ikatna_lang'); } catch (e) {}
+    if (!I18N[lang]) {
+      const nav = (navigator.language || '').slice(0, 2).toLowerCase();
+      lang = I18N[nav] ? nav : 'ar';
+    }
+    loadCart();
+    setTab('menu');
+    applyLang(lang);
+  })();
+})();
 </script>
 </body>
 </html>
