@@ -4,11 +4,13 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#0b0b0d" />
-<title>Ikatna – Restaurant & Waiter Reviews</title>
+<title>Ikatna – Smart Menu & Health Info</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Bitcount+Single:wght@100..900&display=swap" rel="stylesheet" />
+<!-- QR Code Generator Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
   const c = (v) => `rgb(var(--${v}) / <alpha-value>)`;
@@ -64,361 +66,513 @@
   .star.on svg { fill: rgb(var(--gold-500)); stroke: rgb(var(--gold-500)); filter: drop-shadow(0 0 8px rgb(var(--gold-500) / .55)); }
   .pop { animation: pop .35s cubic-bezier(.2,1.4,.4,1); }
   @keyframes pop { from { transform: scale(.6); } to { transform: scale(1); } }
-  .fade-up { animation: fadeUp .45s ease both; }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  .fade-up { animation: fadeUp .35s ease both; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
   .chip { transition: all .15s ease; -webkit-tap-highlight-color: transparent; }
   .chip[aria-pressed="true"] { background: rgb(var(--gold-500) / .16); border-color: rgb(var(--gold-500)); color: rgb(var(--gold-300)); }
   .shimmer { background: linear-gradient(110deg, rgb(var(--gold-500)) 0%, rgb(var(--shine)) 45%, rgb(var(--gold-500)) 90%); }
-  .glow-soft   { box-shadow: 0 0 40px rgb(var(--gold-500) / .15); }
   .glow-strong { box-shadow: 0 8px 30px rgb(var(--gold-500) / .35); }
-  .card-shadow { box-shadow: 0 10px 30px rgb(0 0 0 / .12); }
-  input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px solid rgb(var(--gold-500)); outline-offset: 2px; }
-  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+  .card-shadow { box-shadow: 0 10px 30px rgb(0 0 0 / .2); }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
 </head>
-<body class="min-h-screen antialiased">
+<body class="min-h-screen antialiased pb-24">
 
-<div class="relative z-10 mx-auto flex min-h-screen w-full max-w-md flex-col px-5 pb-6 pt-[max(1.25rem,env(safe-area-inset-top))]">
+<div class="relative z-10 mx-auto flex min-h-screen w-full max-w-md flex-col px-5 pt-[max(1.25rem,env(safe-area-inset-top))]">
 
   <!-- Top bar -->
   <header dir="ltr" class="flex items-center justify-between">
-    <div id="langSwitch" class="inline-flex rounded-full border border-ink-600 bg-ink-900/80 p-1 text-xs font-semibold" role="group" aria-label="Language">
+    <div id="langSwitch" class="inline-flex rounded-full border border-ink-600 bg-ink-900/80 p-1 text-xs font-semibold">
       <button data-lang="ar" class="rounded-full px-3 py-1.5 transition">دارجة</button>
       <button data-lang="fr" class="rounded-full px-3 py-1.5 transition">FR</button>
       <button data-lang="en" class="rounded-full px-3 py-1.5 transition">EN</button>
     </div>
-    <div class="inline-flex items-center gap-2 rounded-full border border-gold-500/30 bg-ink-900/70 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-gold-300 backdrop-blur">
-      <span class="h-1.5 w-1.5 rounded-full bg-gold-500 animate-pulse"></span>
-      <span id="liveDate">--/--/----</span>
+    <div class="flex items-center gap-2">
+      <!-- Table Badge -->
+      <div class="inline-flex items-center gap-1.5 rounded-full border border-gold-500/40 bg-gold-500/10 px-3 py-1.5 text-xs font-bold text-gold-300">
+        <span>🪑</span>
+        <span id="headerTable">T-1</span>
+      </div>
+      <!-- Live Date -->
+      <div class="inline-flex items-center gap-1.5 rounded-full border border-ink-700 bg-ink-900/70 px-3 py-1.5 text-xs font-medium text-fg/70">
+        <span id="liveDate">--/--</span>
+      </div>
     </div>
   </header>
 
-  <!-- Branding -->
-  <section class="mt-8 text-center fade-up">
-    <div class="glow-soft mx-auto flex h-24 w-24 items-center justify-center rounded-2xl border border-gold-500/40 bg-gradient-to-br from-ink-800 to-ink-900">
-      <svg viewBox="0 0 64 64" class="h-14 w-14" aria-hidden="true">
-        <g transform="rotate(-28 32 32)" class="fill-gold-400">
-          <ellipse cx="32" cy="14" rx="7.5" ry="10.5"/>
-          <path d="M29.5 23C30.5 28 30.8 30 30.8 34V54a1.2 1.2 0 0 0 2.4 0V34C33.2 30 33.5 28 34.5 23Z"/>
-        </g>
-        <g transform="rotate(28 32 32)" class="fill-gold-300">
-          <path d="M29 5C35.5 8 37 20 35.5 34H29Z"/>
-          <rect x="29" y="35" width="6.5" height="21" rx="2.6"/>
-        </g>
-      </svg>
-    </div>
-    <p id="restName" class="mt-4 font-display text-lg text-gold-300">Restaurant Name</p>
-    <h1 id="title" class="mt-2 text-2xl font-extrabold leading-snug sm:text-3xl"></h1>
-    <p id="subtitle" class="mt-2 text-sm text-fg/60"></p>
-  </section>
+  <!-- Restaurant Name -->
+  <div class="mt-5 text-center">
+    <p id="restName" class="font-display text-xl text-gold-300">Restaurant Name</p>
+  </div>
 
-  <!-- Waiter & Table Selection Module -->
-  <section class="card-shadow mt-6 rounded-3xl border border-ink-700 bg-ink-900/80 p-4 backdrop-blur fade-up">
-    <div class="grid grid-cols-3 gap-3">
-      <!-- Waiter Select (2 columns) -->
-      <div class="col-span-2">
-        <label for="waiterSelect" id="waiterLabel" class="block text-xs font-semibold uppercase tracking-wider text-gold-300 mb-2"></label>
-        <select id="waiterSelect" class="w-full rounded-2xl border border-ink-600 bg-ink-800 p-3.5 text-sm text-fg focus:border-gold-500">
-          <option value="" disabled selected id="waiterPlaceholder">اختر النادل...</option>
-          <option value="Youssef">يوسف (Youssef)</option>
-          <option value="Mehdi">مهدي (Mehdi)</option>
-          <option value="Amine">أمين (Amine)</option>
-        </select>
-      </div>
-      <!-- Table Number (1 column) -->
-      <div class="col-span-1">
-        <label for="tableInput" id="tableLabel" class="block text-xs font-semibold uppercase tracking-wider text-gold-300 mb-2"></label>
-        <input id="tableInput" type="text" readonly
-          class="w-full rounded-2xl border border-ink-600 bg-ink-800/60 p-3.5 text-center text-sm font-bold text-gold-300 cursor-not-allowed" />
-      </div>
-    </div>
-  </section>
-
-  <!-- Rating card -->
-  <section class="card-shadow mt-5 rounded-3xl border border-ink-700 bg-ink-900/80 p-5 backdrop-blur fade-up">
-    <div id="stars" class="flex justify-center gap-1.5" dir="ltr" role="radiogroup" aria-label="Rating"></div>
-    <p id="ratingLabel" class="mt-3 h-6 text-center text-sm font-semibold text-gold-300"></p>
-  </section>
-
-  <!-- Positive: Google Maps -->
-  <section id="positive" class="mt-5 hidden rounded-3xl border border-gold-500/30 bg-gradient-to-b from-gold-500/10 to-ink-900/80 p-6 text-center">
-    <div class="pop mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-gold-500/15 text-3xl">🎉</div>
-    <h2 id="posTitle" class="text-xl font-bold"></h2>
-    <p id="posText" class="mt-2 text-sm leading-relaxed text-fg/75"></p>
-    <a id="mapsBtn" href="#" target="_blank" rel="noopener noreferrer"
-       class="shimmer glow-strong mt-5 flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-4 text-base font-extrabold text-on transition active:scale-[.98]">
-      <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
-      <span id="mapsLabel"></span>
-    </a>
-  </section>
-
-  <!-- Negative: private feedback -->
-  <section id="negative" class="mt-5 hidden rounded-3xl border border-ink-700 bg-ink-900/80 p-5">
-    <h2 id="negTitle" class="text-lg font-bold"></h2>
-    <p id="negText" class="mt-1 text-sm leading-relaxed text-fg/60"></p>
-
-    <p id="chipsLabel" class="mt-5 text-xs font-semibold uppercase tracking-wider text-gold-300"></p>
-    <div id="chips" class="mt-2 flex flex-wrap gap-2"></div>
-
-    <label id="commentLabel" for="comment" class="mt-5 block text-xs font-semibold uppercase tracking-wider text-gold-300"></label>
-    <textarea id="comment" rows="4" maxlength="600"
-      class="mt-2 w-full resize-none rounded-2xl border border-ink-600 bg-ink-800 p-3.5 text-sm text-fg placeholder:text-fg/40 focus:border-gold-500"></textarea>
-
-    <button id="waBtn" type="button"
-      class="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#25D366] px-5 py-4 text-base font-extrabold text-[#0b0b0d] shadow-[0_8px_30px_rgba(37,211,102,.25)] transition active:scale-[.98]">
-      <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor" aria-hidden="true"><path d="M12.04 2a9.9 9.9 0 0 0-8.47 15l-1.5 5.5 5.64-1.48A9.9 9.9 0 1 0 12.04 2zm5.8 14.1c-.25.7-1.45 1.34-2 1.4-.5.06-1.13.09-1.82-.12-.42-.13-.96-.31-1.65-.6-2.9-1.25-4.8-4.17-4.94-4.37-.14-.19-1.18-1.57-1.18-3s.75-2.13 1.02-2.42c.27-.29.58-.36.78-.36h.56c.18 0 .42-.07.65.5.25.58.84 2.02.91 2.17.07.14.12.31.02.5-.1.2-.15.31-.3.48-.14.17-.3.38-.43.51-.14.14-.29.3-.12.58.17.29.75 1.24 1.62 2.01 1.1.98 2.03 1.29 2.32 1.43.29.14.46.12.63-.07.17-.2.72-.84.91-1.13.2-.29.38-.24.65-.14.27.1 1.7.8 2 .95.29.14.48.22.55.34.07.12.07.7-.18 1.4z"/></svg>
-      <span id="waLabel"></span>
+  <!-- Main Mode Switcher -->
+  <nav class="mt-4 grid grid-cols-2 gap-2 rounded-2xl border border-ink-700 bg-ink-900/90 p-1.5 backdrop-blur">
+    <button id="tabMenu" type="button" onclick="switchTab('menu')"
+      class="flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold transition">
+      <span>🍽️</span>
+      <span id="tabMenuLabel">المنيو والطلب</span>
     </button>
-    <p id="waHint" class="mt-3 text-center text-xs text-fg/45"></p>
-  </section>
+    <button id="tabReview" type="button" onclick="switchTab('review')"
+      class="flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold transition">
+      <span>⭐</span>
+      <span id="tabReviewLabel">تقييم الخدمة</span>
+    </button>
+  </nav>
+
+  <!-- ==================== SECTION 1: DIGITAL MENU ==================== -->
+  <main id="viewMenu" class="mt-5 fade-up">
+    <!-- Category Filter -->
+    <div id="categoryPills" class="no-scrollbar flex gap-2 overflow-x-auto pb-2"></div>
+
+    <!-- Menu Items Container -->
+    <div id="menuList" class="mt-3 space-y-3"></div>
+  </main>
+
+  <!-- ==================== SECTION 2: REVIEW ==================== -->
+  <main id="viewReview" class="mt-5 hidden fade-up">
+    <div class="text-center mb-4">
+      <h1 id="title" class="text-xl font-extrabold"></h1>
+      <p id="subtitle" class="mt-1 text-xs text-fg/60"></p>
+    </div>
+
+    <!-- Waiter Selection -->
+    <section class="card-shadow rounded-3xl border border-ink-700 bg-ink-900/80 p-4">
+      <label for="waiterSelect" id="waiterLabel" class="block text-xs font-semibold uppercase tracking-wider text-gold-300 mb-2"></label>
+      <select id="waiterSelect" class="w-full rounded-2xl border border-ink-600 bg-ink-800 p-3.5 text-sm text-fg">
+        <option value="" disabled selected id="waiterPlaceholder">اختر النادل...</option>
+        <option value="Youssef">يوسف (Youssef)</option>
+        <option value="Mehdi">مهدي (Mehdi)</option>
+        <option value="Amine">أمين (Amine)</option>
+      </select>
+    </section>
+
+    <!-- Rating card -->
+    <section class="card-shadow mt-4 rounded-3xl border border-ink-700 bg-ink-900/80 p-5">
+      <div id="stars" class="flex justify-center gap-1.5" dir="ltr"></div>
+      <p id="ratingLabel" class="mt-3 h-6 text-center text-sm font-semibold text-gold-300"></p>
+    </section>
+
+    <!-- Positive: Google Maps -->
+    <section id="positive" class="mt-4 hidden rounded-3xl border border-gold-500/30 bg-gradient-to-b from-gold-500/10 to-ink-900/80 p-5 text-center">
+      <div class="pop mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-gold-500/15 text-2xl">🎉</div>
+      <h2 id="posTitle" class="text-lg font-bold"></h2>
+      <p id="posText" class="mt-1.5 text-xs leading-relaxed text-fg/75"></p>
+      <a id="mapsBtn" href="#" target="_blank" rel="noopener noreferrer"
+         class="shimmer glow-strong mt-4 flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-3.5 text-sm font-extrabold text-on">
+        <span id="mapsLabel"></span>
+      </a>
+    </section>
+
+    <!-- Negative: Private WhatsApp -->
+    <section id="negative" class="mt-4 hidden rounded-3xl border border-ink-700 bg-ink-900/80 p-5">
+      <h2 id="negTitle" class="text-base font-bold"></h2>
+      <p id="negText" class="mt-1 text-xs text-fg/60"></p>
+      <p id="chipsLabel" class="mt-4 text-xs font-semibold uppercase tracking-wider text-gold-300"></p>
+      <div id="chips" class="mt-2 flex flex-wrap gap-2"></div>
+      <label id="commentLabel" for="comment" class="mt-4 block text-xs font-semibold uppercase tracking-wider text-gold-300"></label>
+      <textarea id="comment" rows="3" maxlength="600" class="mt-2 w-full resize-none rounded-2xl border border-ink-600 bg-ink-800 p-3 text-sm text-fg"></textarea>
+      <button id="waBtn" type="button" class="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#25D366] px-5 py-3.5 text-sm font-extrabold text-[#0b0b0d]">
+        <span id="waLabel"></span>
+      </button>
+    </section>
+  </main>
 
   <div class="flex-1"></div>
 
   <!-- Footer -->
-  <footer class="mt-10 text-center">
-    <div class="mx-auto mb-3 h-px w-16 bg-gradient-to-r from-transparent via-gold-500/50 to-transparent"></div>
-    <p class="text-xs text-fg/45">
+  <footer class="mt-8 pb-4 text-center">
+    <p class="text-xs text-fg/40">
       <span id="poweredBy"></span>
-      <span class="brand-font text-[12px] text-gold-300" dir="ltr"><span class="text-fg">I</span>k<span class="text-fg">at</span>na</span>
+      <span class="brand-font text-[11px] text-gold-300" dir="ltr"><span class="text-fg">I</span>k<span class="text-fg">at</span>na</span>
     </p>
   </footer>
 </div>
 
+<!-- Floating Bottom Cart Bar -->
+<div id="cartBar" class="fixed bottom-4 left-0 right-0 z-30 mx-auto hidden max-w-md px-5">
+  <button onclick="openOrderModal()" type="button"
+    class="shimmer glow-strong flex w-full items-center justify-between rounded-2xl px-5 py-4 text-on shadow-2xl transition active:scale-[.98]">
+    <div class="flex items-center gap-2.5">
+      <span id="cartCount" class="flex h-7 w-7 items-center justify-center rounded-full bg-ink-950 text-xs font-extrabold text-gold-300">0</span>
+      <span id="showQrBtnText" class="text-sm font-extrabold">إظهار QR للنادل</span>
+    </div>
+    <span id="cartTotal" class="text-base font-extrabold">0 MAD</span>
+  </button>
+</div>
+
+<!-- QR Order Modal -->
+<div id="qrModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/85 p-5 backdrop-blur-sm">
+  <div class="pop w-full max-w-sm rounded-3xl border border-gold-500/40 bg-ink-900 p-6 text-center shadow-2xl">
+    <div class="flex items-center justify-between border-b border-ink-700 pb-3">
+      <span id="modalTitle" class="text-base font-extrabold text-gold-300">طلب الطاولة #1</span>
+      <button onclick="closeOrderModal()" class="rounded-full bg-ink-800 px-3 py-1 text-xs font-bold text-fg/70">✕</button>
+    </div>
+
+    <p id="modalHint" class="mt-3 text-xs text-fg/70">ورّي هاد الكود للنادل باش يسكانيه بتلفونو</p>
+
+    <!-- Generated QR Code Container -->
+    <div class="mx-auto mt-4 flex h-56 w-56 items-center justify-center rounded-2xl bg-white p-3 shadow-inner">
+      <div id="qrcode"></div>
+    </div>
+
+    <!-- Order Summary List -->
+    <div id="orderSummaryList" class="mt-4 max-h-32 overflow-y-auto rounded-2xl bg-ink-800/80 p-3 text-start text-xs space-y-1.5"></div>
+
+    <div class="mt-3 flex items-center justify-between border-t border-ink-700 pt-3 text-sm font-extrabold">
+      <span id="modalTotalLabel">المجموع:</span>
+      <span id="modalTotalValue" class="text-gold-300">0 MAD</span>
+    </div>
+  </div>
+</div>
+
 <script>
 const CONFIG = {
-  restaurantName: { ar: 'اسم المطعم', fr: 'Nom du restaurant', en: 'Restaurant Name' },
+  restaurantName: { ar: 'مطعم إيكاتنا', fr: 'Restaurant Ikatna', en: 'Ikatna Restaurant' },
   googleMapsReviewUrl: 'https://search.google.com/local/writereview?placeid=YOUR_PLACE_ID',
-  whatsappNumber: '212600000000'
+  whatsappNumber: '212600000000',
+  currency: 'MAD'
 };
+
+/* Sample Menu Data with Ingredients, Macros, Diabetes & Cholesterol Info */
+const MENU_ITEMS = [
+  {
+    id: 1, cat: 'mains', price: 85, kcal: 620, protein: 48,
+    diabetesSafe: true, lowCholesterol: true,
+    name: { ar: 'صدر دجاج مشوي مع الأرز', fr: 'Blanc de poulet grillé & riz', en: 'Grilled Chicken Breast & Rice' },
+    desc: { ar: 'صدر دجاج متبل بالأعشاب مع خضر سوتيه', fr: 'Poulet mariné aux herbes et légumes sautés', en: 'Herb-marinated chicken with sautéed veggies' },
+    ingredients: { 
+      ar: 'صدر دجاج، أرز بسماتي، زيت الزيتون، بروكلي، جزر، ثوم، أعشاب منسمة', 
+      fr: 'Poulet, riz basmati, huile d’olive, brocoli, carottes, ail, herbes', 
+      en: 'Chicken breast, basmati rice, olive oil, broccoli, carrots, garlic, herbs' 
+    }
+  },
+  {
+    id: 2, cat: 'mains', price: 110, kcal: 740, protein: 56,
+    diabetesSafe: true, lowCholesterol: false,
+    name: { ar: 'فيليه بقر مشوي (Steak)', fr: 'Filet de bœuf grillé', en: 'Grilled Beef Tenderloin' },
+    desc: { ar: 'قطعة لحم طرية مع صوص الفلفل الأسود', fr: 'Viande tendre avec sauce au poivre noir', en: 'Tender steak with black pepper sauce' },
+    ingredients: { 
+      ar: 'لحم بقري أحمر، بطاطس مشوية، كريمة خفيفة، فلفل أسود، زبدة', 
+      fr: 'Bœuf, pommes de terre rôties, crème légère, poivre noir, beurre', 
+      en: 'Beef tenderloin, roasted potatoes, light cream, black pepper, butter' 
+    }
+  },
+  {
+    id: 3, cat: 'salads', price: 55, kcal: 380, protein: 28,
+    diabetesSafe: true, lowCholesterol: true,
+    name: { ar: 'سلطة سيزر بالدجاج', fr: 'Salade César au poulet', en: 'Chicken Caesar Salad' },
+    desc: { ar: 'خس طازج، دجاج مشوي، جبن بارميزان', fr: 'Laitue fraîche, poulet grillé, parmesan', en: 'Fresh lettuce, grilled chicken, parmesan' },
+    ingredients: { 
+      ar: 'خس روماني، شرائح دجاج مشوي، جبن بارميزان قليل الدسم، خبز محمص', 
+      fr: 'Laitue romaine, poulet grillé, parmesan allégé, croûtons', 
+      en: 'Romaine lettuce, grilled chicken, light parmesan, croutons' 
+    }
+  },
+  {
+    id: 4, cat: 'drinks', price: 25, kcal: 140, protein: 2,
+    diabetesSafe: false, lowCholesterol: true,
+    name: { ar: 'عصير أفوكادو بالمكسرات', fr: 'Jus d’avocat aux fruits secs', en: 'Avocado & Nuts Smoothie' },
+    desc: { ar: 'أفوكادو طازج، حليب، لوز وعسل طبيعي', fr: 'Avocat frais, lait, amandes et miel', en: 'Fresh avocado, milk, almonds & natural honey' },
+    ingredients: { 
+      ar: 'أفوكادو طبيعي، حليب خالي الدسم، لوز، جوز، عسل حر', 
+      fr: 'Avocat frais, lait écrémé, amandes, noix, miel naturel', 
+      en: 'Fresh avocado, skim milk, almonds, walnuts, natural honey' 
+    }
+  }
+];
 
 const I18N = {
   ar: {
     dir: 'rtl', lang: 'ar', locale: 'ar-MA',
-    title: 'أهلاً بك! كيف كانت تجربتك معنا؟',
-    subtitle: 'غير ضغطة وحدة على النجوم، رأيك يهمنا بزاف.',
-    waiterLabel: 'شكون خدّمك؟',
-    waiterPlaceholder: 'اختر النادل...',
-    tableLabel: 'الطاولة',
-    ratings: ['', 'ماشي مزيان بزاف', 'ناقص شوية', 'عادي', 'مزيان', 'ممتاز!'],
-    posTitle: 'شكراً بزاف! 🙏',
-    posText: 'فرحنا بزاف أنك عجبتك التجربة. واش ممكن تشاركها مع الناس على Google Maps؟ غير دقيقة وحدة وكتفرق معانا.',
-    mapsBtn: 'خلّي تقييمك على Google Maps',
-    negTitle: 'سمحو لينا، بغينا نصلحو الأمور',
-    negText: 'قولو لينا واش وقع، وغادي توصل رسالتك مباشرة للمسؤول.',
-    chipsLabel: 'فين كان المشكل بالضبط؟',
+    tabMenu: 'المنيو والطلب', tabReview: 'تقييم الخدمة',
+    cats: { all: 'الكل', mains: 'أطباق رئيسية', salads: 'سلطات', drinks: 'مشروبات' },
+    kcal: 'سعرة', protein: 'بروتين', add: 'أضف',
+    ingredientsLabel: 'المكونات:',
+    diabetesYes: '✅ مناسب للسكري', diabetesNo: '⚠️ غير مناسب للسكري',
+    cholesterolYes: '💙 منخفض الكلسترول', cholesterolNo: '⚠️ يحتوي على دهون مرتفعة',
+    showQr: 'إظهار QR للنادل',
+    modalTitle: 'طلب الطاولة', modalHint: 'ورّي هاد الكود للنادل باش يسكانيه بتلفونو', modalTotal: 'المجموع:',
+    title: 'كيف كانت تجربتك معنا؟', subtitle: 'رأيك يهمنا باش نحسنو الخدمة ديما.',
+    waiterLabel: 'شكون خدّمك؟', waiterPlaceholder: 'اختر النادل...',
+    ratings: ['', 'ماشي مزيان', 'ناقص شوية', 'عادي', 'مزيان', 'ممتاز!'],
+    posTitle: 'شكراً بزاف! 🙏', posText: 'شارك تقييمك على Google Maps:',
+    mapsBtn: 'تقييم على Google Maps',
+    negTitle: 'سمحو لينا، بغينا نصلحو الأمور', negText: 'قولو لينا شنو وقع باش نصلحوه دابا:',
+    chipsLabel: 'فين كان المشكل؟',
     chips: {
-      kitchen_delay: '👨‍🍳 تأخير الأكل (الكوزينا)',
-      food_quality: '🍽️ جودة أو طياب الأكل',
-      food_temp: '🥶 الأكل وصل بارد',
-      false_order: '❌ طلب غالط / ناقص',
-      service_delay: '🤵 تأخير السيرفيس / النادل',
-      staff: '🗣️ تعامل النادل',
-      clean: '✨ النظافة',
-      noise: '🔊 الضوضاء / الجو'
+      kitchen_delay: '👨‍🍳 تأخير الكوزينا', food_quality: '🍽️ جودة الأكل',
+      false_order: '❌ طلب غالط', service_delay: '🤵 تأخير النادل',
+      staff: '🗣️ تعامل النادل', clean: '✨ النظافة'
     },
-    commentLabel: 'تعليق (اختياري)',
-    commentPh: 'كتب لينا بالتفصيل شنو وقع...',
-    waBtn: 'صيفط للمسؤول عبر واتساب',
-    waHint: 'غادي يتفتح واتساب برسالة واجدة، غير ضغط على إرسال.',
-    poweredBy: 'مدعوم من طرف',
-    msg: {
-      head: 'مرحبا، هذا تقييم زبون:',
-      table: 'رقم الطاولة',
-      waiter: 'النادل المسؤول',
-      rating: 'التقييم', issues: 'المشاكل المسجلة', comment: 'التعليق', none: 'غير محدد', restaurant: 'المطعم'
-    }
+    commentLabel: 'تعليق إضافي', waBtn: 'صيفط للمسؤول عبر واتساب', poweredBy: 'مدعوم من طرف',
+    msg: { head: 'تقييم زبون:', table: 'الطاولة', waiter: 'النادل', rating: 'التقييم', issues: 'المشاكل', comment: 'تعليق', none: 'بدون' }
   },
   fr: {
     dir: 'ltr', lang: 'fr', locale: 'fr-FR',
-    title: 'Bienvenue ! Comment était votre expérience ?',
-    subtitle: 'Un simple tap sur les étoiles, votre avis compte beaucoup.',
-    waiterLabel: 'Serveur',
-    waiterPlaceholder: 'Choisir...',
-    tableLabel: 'Table N°',
-    ratings: ['', 'Très décevant', 'Décevant', 'Correct', 'Très bien', 'Excellent !'],
-    posTitle: 'Merci infiniment ! 🙏',
-    posText: 'Nous sommes ravis que vous ayez apprécié. Pourriez-vous partager votre avis sur Google Maps ? Cela ne prend qu’une minute et nous aide énormément.',
-    mapsBtn: 'Laisser un avis sur Google Maps',
-    negTitle: 'Désolé, nous voulons faire mieux',
-    negText: 'Dites-nous ce qui s’est passé. Votre message sera transmis directement au responsable.',
+    tabMenu: 'Menu & Commande', tabReview: 'Avis & Service',
+    cats: { all: 'Tout', mains: 'Plats', salads: 'Salades', drinks: 'Boissons' },
+    kcal: 'kcal', protein: 'Protéines', add: 'Ajouter',
+    ingredientsLabel: 'Ingrédients :',
+    diabetesYes: '✅ Adapté au diabète', diabetesNo: '⚠️ À éviter (Diabète)',
+    cholesterolYes: '💙 Faible en cholestérol', cholesterolNo: '⚠️ Riche en graisses',
+    showQr: 'Afficher QR au serveur',
+    modalTitle: 'Commande Table', modalHint: 'Montrez ce QR code au serveur', modalTotal: 'Total :',
+    title: 'Comment était votre expérience ?', subtitle: 'Votre avis compte beaucoup pour nous.',
+    waiterLabel: 'Serveur', waiterPlaceholder: 'Choisir...',
+    ratings: ['', 'Décevant', 'Moyen', 'Correct', 'Très bien', 'Excellent !'],
+    posTitle: 'Merci infiniment ! 🙏', posText: 'Partagez votre avis sur Google Maps :',
+    mapsBtn: 'Avis sur Google Maps',
+    negTitle: 'Désolé, nous voulons faire mieux', negText: 'Dites-nous ce qui s’est passé :',
     chipsLabel: 'Quel était le problème ?',
     chips: {
-      kitchen_delay: '👨‍🍳 Attente cuisine / Plats lents',
-      food_quality: '🍽️ Qualité / Cuisson des plats',
-      food_temp: '🥶 Plat servi froid',
-      false_order: '❌ Erreur de commande / Oubli',
-      service_delay: '🤵 Retard du serveur',
-      staff: '🗣️ Accueil / Attitude serveur',
-      clean: '✨ Propreté',
-      noise: '🔊 Bruit / Ambiance'
+      kitchen_delay: '👨‍🍳 Attente cuisine', food_quality: '🍽️ Qualité des plats',
+      false_order: '❌ Erreur commande', service_delay: '🤵 Retard serveur',
+      staff: '🗣️ Attitude serveur', clean: '✨ Propreté'
     },
-    commentLabel: 'Commentaire (optionnel)',
-    commentPh: 'Dites-nous en plus...',
-    waBtn: 'Envoyer au responsable via WhatsApp',
-    waHint: 'WhatsApp s’ouvrira avec un message prêt, il suffit d’appuyer sur envoyer.',
-    poweredBy: 'Propulsé par',
-    msg: {
-      head: 'Bonjour, voici l’avis d’un client :',
-      table: 'Table N°',
-      waiter: 'Serveur',
-      rating: 'Note', issues: 'Problèmes', comment: 'Commentaire', none: 'Non précisé', restaurant: 'Restaurant'
-    }
+    commentLabel: 'Commentaire', waBtn: 'Envoyer au responsable (WhatsApp)', poweredBy: 'Propulsé par',
+    msg: { head: 'Avis client :', table: 'Table', waiter: 'Serveur', rating: 'Note', issues: 'Problèmes', comment: 'Commentaire', none: 'Aucun' }
   },
   en: {
     dir: 'ltr', lang: 'en', locale: 'en-US',
-    title: 'Welcome! How was your experience?',
-    subtitle: 'Just tap the stars. Your opinion matters a lot to us.',
-    waiterLabel: 'Waiter',
-    waiterPlaceholder: 'Select...',
-    tableLabel: 'Table #',
-    ratings: ['', 'Very disappointing', 'Disappointing', 'Okay', 'Great', 'Excellent!'],
-    posTitle: 'Thank you so much! 🙏',
-    posText: 'We’re delighted you enjoyed your visit. Would you share it on Google Maps? It takes one minute and helps us enormously.',
-    mapsBtn: 'Leave a review on Google Maps',
-    negTitle: 'Sorry, we want to do better',
-    negText: 'Tell us what went wrong. Your message goes straight to the manager.',
+    tabMenu: 'Menu & Order', tabReview: 'Rate Service',
+    cats: { all: 'All', mains: 'Mains', salads: 'Salads', drinks: 'Drinks' },
+    kcal: 'kcal', protein: 'Protein', add: 'Add',
+    ingredientsLabel: 'Ingredients:',
+    diabetesYes: '✅ Diabetes Friendly', diabetesNo: '⚠️ High Glycemic',
+    cholesterolYes: '💙 Low Cholesterol', cholesterolNo: '⚠️ High Fat',
+    showQr: 'Show QR to Waiter',
+    modalTitle: 'Table Order', modalHint: 'Show this QR code to your waiter', modalTotal: 'Total:',
+    title: 'How was your experience?', subtitle: 'Your feedback helps us improve.',
+    waiterLabel: 'Waiter', waiterPlaceholder: 'Select...',
+    ratings: ['', 'Poor', 'Fair', 'Okay', 'Great', 'Excellent!'],
+    posTitle: 'Thank you! 🙏', posText: 'Would you share your experience on Google Maps?',
+    mapsBtn: 'Review on Google Maps',
+    negTitle: 'Sorry, we want to do better', negText: 'Tell us what went wrong:',
     chipsLabel: 'What went wrong?',
     chips: {
-      kitchen_delay: '👨‍🍳 Kitchen delay / Slow food',
-      food_quality: '🍽️ Food quality / Cooking',
-      food_temp: '🥶 Food arrived cold',
-      false_order: '❌ Wrong / Missing order',
-      service_delay: '🤵 Waiter service delay',
-      staff: '🗣️ Staff / Waiter attitude',
-      clean: '✨ Cleanliness',
-      noise: '🔊 Noise / Atmosphere'
+      kitchen_delay: '👨‍🍳 Kitchen delay', food_quality: '🍽️ Food quality',
+      false_order: '❌ Wrong order', service_delay: '🤵 Waiter delay',
+      staff: '🗣️ Staff attitude', clean: '✨ Cleanliness'
     },
-    commentLabel: 'Comment (optional)',
-    commentPh: 'Tell us more...',
-    waBtn: 'Send to Manager via WhatsApp',
-    waHint: 'WhatsApp will open with a ready message, just hit send.',
-    poweredBy: 'Powered by',
-    msg: {
-      head: 'Hello, here is a customer review:',
-      table: 'Table #',
-      waiter: 'Waiter',
-      rating: 'Rating', issues: 'Issues', comment: 'Comment', none: 'Not specified', restaurant: 'Restaurant'
-    }
+    commentLabel: 'Comment', waBtn: 'Send to Manager via WhatsApp', poweredBy: 'Powered by',
+    msg: { head: 'Customer Review:', table: 'Table', waiter: 'Waiter', rating: 'Rating', issues: 'Issues', comment: 'Comment', none: 'None' }
   }
 };
 
-const CHIP_KEYS = [
-  'kitchen_delay',
-  'food_quality',
-  'food_temp',
-  'false_order',
-  'service_delay',
-  'staff',
-  'clean',
-  'noise'
-];
+const state = {
+  lang: 'ar',
+  activeTab: 'menu',
+  activeCat: 'all',
+  cart: {},
+  rating: 0,
+  tags: new Set()
+};
 
-const state = { lang: 'ar', rating: 0, hover: 0, tags: new Set() };
 const t = () => I18N[state.lang];
-
-/* Get Table Number from URL parameter e.g. ?table=5 */
 function getTableFromUrl() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get('table') || '1';
+  return new URLSearchParams(window.location.search).get('table') || '1';
 }
 
-/* Stars */
-const starsEl = document.getElementById('stars');
-const starSvg = '<svg viewBox="0 0 24 24" class="h-11 w-11 sm:h-12 sm:w-12" stroke-width="1.6" stroke-linejoin="round"><path d="M12 2.5l2.9 6.1 6.6.9-4.8 4.6 1.2 6.6L12 17.5l-5.9 3.2 1.2-6.6L2.5 9.5l6.6-.9L12 2.5z"/></svg>';
+function switchTab(tab) {
+  state.activeTab = tab;
+  const isMenu = tab === 'menu';
+  document.getElementById('viewMenu').classList.toggle('hidden', !isMenu);
+  document.getElementById('viewReview').classList.toggle('hidden', isMenu);
 
+  const btnMenu = document.getElementById('tabMenu');
+  const btnRev = document.getElementById('tabReview');
+  btnMenu.className = `flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold transition ${isMenu ? 'bg-gold-500 text-on shadow-md' : 'text-fg/60'}`;
+  btnRev.className = `flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold transition ${!isMenu ? 'bg-gold-500 text-on shadow-md' : 'text-fg/60'}`;
+
+  updateCartBar();
+}
+
+function renderCategories() {
+  const wrap = document.getElementById('categoryPills');
+  wrap.innerHTML = '';
+  Object.entries(t().cats).forEach(([key, label]) => {
+    const active = state.activeCat === key;
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = `whitespace-nowrap rounded-full border px-4 py-2 text-xs font-bold transition ${active ? 'border-gold-500 bg-gold-500/20 text-gold-300' : 'border-ink-700 bg-ink-900 text-fg/60'}`;
+    b.textContent = label;
+    b.onclick = () => { state.activeCat = key; renderCategories(); renderMenu(); };
+    wrap.appendChild(b);
+  });
+}
+
+function renderMenu() {
+  const list = document.getElementById('menuList');
+  list.innerHTML = '';
+  const items = MENU_ITEMS.filter(i => state.activeCat === 'all' || i.cat === state.activeCat);
+  const L = t();
+
+  items.forEach(item => {
+    const qty = state.cart[item.id] || 0;
+    const card = document.createElement('div');
+    card.className = 'card-shadow rounded-3xl border border-ink-700 bg-ink-900/85 p-4 backdrop-blur';
+    card.innerHTML = `
+      <div class="flex items-start justify-between gap-3">
+        <div class="flex-1">
+          <h3 class="text-base font-bold text-fg">${item.name[state.lang]}</h3>
+          <p class="mt-1 text-xs leading-relaxed text-fg/60">${item.desc[state.lang]}</p>
+          
+          <!-- Ingredients -->
+          <div class="mt-2 text-[11px] text-fg/75 bg-ink-800/60 rounded-xl p-2 border border-ink-700">
+            <strong class="text-gold-300">${L.ingredientsLabel}</strong> ${item.ingredients[state.lang]}
+          </div>
+
+          <!-- Nutrition & Health Badges -->
+          <div class="mt-2.5 flex flex-wrap gap-1.5 text-[10px] font-semibold">
+            <span class="rounded-lg bg-ink-800 px-2.5 py-1 text-gold-300">⚡ ${item.kcal} ${L.kcal}</span>
+            <span class="rounded-lg bg-ink-800 px-2.5 py-1 text-emerald-400">🥩 ${item.protein}g ${L.protein}</span>
+            <span class="rounded-lg px-2.5 py-1 ${item.diabetesSafe ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30' : 'bg-rose-500/15 text-rose-300 border border-rose-500/30'}">${item.diabetesSafe ? L.diabetesYes : L.diabetesNo}</span>
+            <span class="rounded-lg px-2.5 py-1 ${item.lowCholesterol ? 'bg-sky-500/15 text-sky-300 border border-sky-500/30' : 'bg-rose-500/15 text-rose-300 border border-rose-500/30'}">${item.lowCholesterol ? L.cholesterolYes : L.cholesterolNo}</span>
+          </div>
+        </div>
+        <div class="flex flex-col items-end justify-between self-stretch">
+          <span class="text-sm font-extrabold text-gold-300">${item.price} ${CONFIG.currency}</span>
+          ${qty === 0 ? `
+            <button onclick="updateQty(${item.id}, 1)" class="mt-3 rounded-xl border border-gold-500/50 bg-gold-500/15 px-3.5 py-1.5 text-xs font-bold text-gold-300 active:scale-95">
+              + ${L.add}
+            </button>
+          ` : `
+            <div class="mt-3 flex items-center gap-2 rounded-xl border border-gold-500 bg-ink-800 px-2 py-1">
+              <button onclick="updateQty(${item.id}, -1)" class="px-1.5 text-sm font-bold text-gold-300">-</button>
+              <span class="text-xs font-extrabold text-fg">${qty}</span>
+              <button onclick="updateQty(${item.id}, 1)" class="px-1.5 text-sm font-bold text-gold-300">+</button>
+            </div>
+          `}
+        </div>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+function updateQty(id, delta) {
+  const next = (state.cart[id] || 0) + delta;
+  if (next <= 0) delete state.cart[id];
+  else state.cart[id] = next;
+  renderMenu();
+  updateCartBar();
+}
+
+function updateCartBar() {
+  const entries = Object.entries(state.cart);
+  const totalQty = entries.reduce((sum, [, q]) => sum + q, 0);
+  const totalPrice = entries.reduce((sum, [id, q]) => {
+    const item = MENU_ITEMS.find(i => i.id === Number(id));
+    return sum + (item ? item.price * q : 0);
+  }, 0);
+
+  const bar = document.getElementById('cartBar');
+  bar.classList.toggle('hidden', totalQty === 0 || state.activeTab !== 'menu');
+  document.getElementById('cartCount').textContent = totalQty;
+  document.getElementById('cartTotal').textContent = `${totalPrice} ${CONFIG.currency}`;
+}
+
+function openOrderModal() {
+  const table = getTableFromUrl();
+  const entries = Object.entries(state.cart);
+  if (!entries.length) return;
+
+  let total = 0;
+  const qrLines = [`TABLE: ${table}`, `ORDER:`];
+  const summaryHtml = [];
+
+  entries.forEach(([id, qty]) => {
+    const item = MENU_ITEMS.find(i => i.id === Number(id));
+    if (!item) return;
+    const sub = item.price * qty;
+    total += sub;
+    qrLines.push(`${qty}x ${item.name.en} (${sub}${CONFIG.currency})`);
+    summaryHtml.push(`
+      <div class="flex justify-between">
+        <span class="text-fg/90"><strong>${qty}x</strong> ${item.name[state.lang]}</span>
+        <span class="text-gold-300 font-semibold">${sub} ${CONFIG.currency}</span>
+      </div>
+    `);
+  });
+
+  qrLines.push(`TOTAL: ${total} ${CONFIG.currency}`);
+
+  document.getElementById('modalTitle').textContent = `${t().modalTitle} #${table}`;
+  document.getElementById('orderSummaryList').innerHTML = summaryHtml.join('');
+  document.getElementById('modalTotalValue').textContent = `${total} ${CONFIG.currency}`;
+
+  const qrContainer = document.getElementById('qrcode');
+  qrContainer.innerHTML = '';
+  new QRCode(qrContainer, {
+    text: qrLines.join('\n'),
+    width: 190,
+    height: 190,
+    colorDark: '#0b0b0d',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.M
+  });
+
+  const modal = document.getElementById('qrModal');
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+}
+
+function closeOrderModal() {
+  const modal = document.getElementById('qrModal');
+  modal.classList.add('hidden');
+  modal.classList.remove('flex');
+}
+
+const starsEl = document.getElementById('stars');
+const starSvg = '<svg viewBox="0 0 24 24" class="h-10 w-10" stroke-width="1.6"><path d="M12 2.5l2.9 6.1 6.6.9-4.8 4.6 1.2 6.6L12 17.5l-5.9 3.2 1.2-6.6L2.5 9.5l6.6-.9L12 2.5z"/></svg>';
 for (let i = 1; i <= 5; i++) {
   const b = document.createElement('button');
   b.type = 'button';
   b.className = 'star p-1';
-  b.dataset.value = i;
   b.innerHTML = starSvg;
-  b.addEventListener('click', () => setRating(i));
-  b.addEventListener('mouseenter', () => { state.hover = i; paintStars(); });
-  b.addEventListener('mouseleave', () => { state.hover = 0; paintStars(); });
+  b.onclick = () => {
+    state.rating = i;
+    [...starsEl.children].forEach((el, idx) => el.classList.toggle('on', idx + 1 <= i));
+    document.getElementById('ratingLabel').textContent = t().ratings[i];
+    document.getElementById('positive').classList.toggle('hidden', i < 4);
+    document.getElementById('negative').classList.toggle('hidden', i >= 4);
+  };
   starsEl.appendChild(b);
-}
-
-function paintStars() {
-  const active = state.hover || state.rating;
-  [...starsEl.children].forEach((b, idx) => {
-    b.classList.toggle('on', (idx + 1) <= active);
-  });
-  document.getElementById('ratingLabel').textContent = active ? t().ratings[active] : '';
-}
-
-function setRating(n) {
-  state.rating = n;
-  paintStars();
-  const btn = starsEl.children[n - 1];
-  btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop');
-  renderResult(true);
-}
-
-function renderResult(animate) {
-  const pos = document.getElementById('positive'), neg = document.getElementById('negative');
-  const r = state.rating;
-  pos.classList.toggle('hidden', !(r >= 4));
-  neg.classList.toggle('hidden', !(r >= 1 && r <= 3));
-  if (animate) {
-    const shown = r >= 4 ? pos : (r >= 1 ? neg : null);
-    if (shown) {
-      shown.classList.remove('fade-up'); void shown.offsetWidth; shown.classList.add('fade-up');
-      setTimeout(() => shown.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80);
-    }
-  }
 }
 
 function renderChips() {
   const wrap = document.getElementById('chips');
   wrap.innerHTML = '';
-  CHIP_KEYS.forEach((k) => {
+  Object.entries(t().chips).forEach(([k, label]) => {
     const b = document.createElement('button');
     b.type = 'button';
-    b.className = 'chip rounded-full border border-ink-600 bg-ink-800 px-3.5 py-2 text-xs sm:text-sm font-semibold text-fg/80';
-    b.textContent = t().chips[k];
+    b.className = 'chip rounded-full border border-ink-600 bg-ink-800 px-3 py-1.5 text-xs font-semibold text-fg/80';
+    b.textContent = label;
     b.setAttribute('aria-pressed', String(state.tags.has(k)));
-    b.addEventListener('click', () => {
+    b.onclick = () => {
       state.tags.has(k) ? state.tags.delete(k) : state.tags.add(k);
       b.setAttribute('aria-pressed', String(state.tags.has(k)));
-    });
+    };
     wrap.appendChild(b);
   });
 }
 
-function updateLiveDate() {
-  const now = new Date();
-  const options = { day: 'numeric', month: 'short', year: 'numeric' };
-  try {
-    const formatted = now.toLocaleDateString(t().locale, options);
-    document.getElementById('liveDate').textContent = formatted;
-  } catch (e) {
-    document.getElementById('liveDate').textContent = now.toLocaleDateString();
-  }
-}
-
-function buildWhatsAppUrl() {
+document.getElementById('waBtn').onclick = () => {
   const L = t();
-  const tags = [...state.tags].map((k) => '• ' + L.chips[k]).join('\n');
+  const tags = [...state.tags].map(k => '• ' + L.chips[k]).join('\n') || L.msg.none;
+  const waiter = document.getElementById('waiterSelect').value || L.msg.none;
   const comment = document.getElementById('comment').value.trim() || L.msg.none;
-  const waiterVal = document.getElementById('waiterSelect').value || L.msg.none;
-  const tableVal = getTableFromUrl();
   const lines = [
     L.msg.head,
-    '',
-    '🏪 ' + L.msg.restaurant + ': ' + CONFIG.restaurantName[state.lang],
-    '🪑 ' + L.msg.table + ': ' + tableVal,
-    '👤 ' + L.msg.waiter + ': ' + waiterVal,
-    '⭐ ' + L.msg.rating + ': ' + state.rating + '/5',
-    '⚠️ ' + L.msg.issues + ':',
-    state.tags.size ? tags : L.msg.none,
-    '💬 ' + L.msg.comment + ': ' + comment
+    `🪑 ${L.msg.table}: ${getTableFromUrl()}`,
+    `👤 ${L.msg.waiter}: ${waiter}`,
+    `⭐ ${L.msg.rating}: ${state.rating}/5`,
+    `⚠️ ${L.msg.issues}:\n${tags}`,
+    `💬 ${L.msg.comment}: ${comment}`
   ];
-  return 'https://wa.me/' + CONFIG.whatsappNumber + '?text=' + encodeURIComponent(lines.join('\n'));
-}
-
-document.getElementById('waBtn').addEventListener('click', () => {
-  window.open(buildWhatsAppUrl(), '_blank', 'noopener');
-});
+  window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
+};
 
 function applyLang(lang) {
   state.lang = lang;
@@ -427,12 +581,19 @@ function applyLang(lang) {
   document.documentElement.dir = L.dir;
 
   document.getElementById('restName').textContent = CONFIG.restaurantName[lang];
+  document.getElementById('headerTable').textContent = `T-${getTableFromUrl()}`;
+  document.getElementById('liveDate').textContent = new Date().toLocaleDateString(L.locale, { day: 'numeric', month: 'short' });
+
+  document.getElementById('tabMenuLabel').textContent = L.tabMenu;
+  document.getElementById('tabReviewLabel').textContent = L.tabReview;
+  document.getElementById('showQrBtnText').textContent = L.showQr;
+  document.getElementById('modalHint').textContent = L.modalHint;
+  document.getElementById('modalTotalLabel').textContent = L.modalTotal;
+
   document.getElementById('title').textContent = L.title;
   document.getElementById('subtitle').textContent = L.subtitle;
   document.getElementById('waiterLabel').textContent = L.waiterLabel;
   document.getElementById('waiterPlaceholder').textContent = L.waiterPlaceholder;
-  document.getElementById('tableLabel').textContent = L.tableLabel;
-  document.getElementById('tableInput').value = getTableFromUrl();
   document.getElementById('posTitle').textContent = L.posTitle;
   document.getElementById('posText').textContent = L.posText;
   document.getElementById('mapsLabel').textContent = L.mapsBtn;
@@ -441,31 +602,26 @@ function applyLang(lang) {
   document.getElementById('negText').textContent = L.negText;
   document.getElementById('chipsLabel').textContent = L.chipsLabel;
   document.getElementById('commentLabel').textContent = L.commentLabel;
-  document.getElementById('comment').placeholder = L.commentPh;
   document.getElementById('waLabel').textContent = L.waBtn;
-  document.getElementById('waHint').textContent = L.waHint;
   document.getElementById('poweredBy').textContent = L.poweredBy + ' ';
 
-  document.querySelectorAll('#langSwitch button').forEach((b) => {
+  document.querySelectorAll('#langSwitch button').forEach(b => {
     const on = b.dataset.lang === lang;
     b.classList.toggle('bg-gold-500', on);
     b.classList.toggle('text-on', on);
     b.classList.toggle('text-fg/60', !on);
   });
 
-  updateLiveDate();
+  renderCategories();
+  renderMenu();
   renderChips();
-  paintStars();
+  updateCartBar();
 }
 
-document.querySelectorAll('#langSwitch button').forEach((b) =>
-  b.addEventListener('click', () => applyLang(b.dataset.lang))
-);
+document.querySelectorAll('#langSwitch button').forEach(b => b.onclick = () => applyLang(b.dataset.lang));
 
-(function init() {
-  applyLang('ar');
-  renderResult(false);
-})();
+applyLang('ar');
+switchTab('menu');
 </script>
 </body>
 </html>
