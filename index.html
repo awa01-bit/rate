@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#0d090a" />
+<meta name="theme-color" content="#f5efe4" />
 <title>Ikatna – Le Palais Gourmand | QR offline</title>
 
 <!-- Fonts -->
@@ -1430,6 +1430,192 @@ module.exports = QRCode;
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
   }
+
+
+  /* IKATNA warm Moroccan palette: brighter, calmer and easier to read */
+  :root {
+    color-scheme: light;
+    --ikatna-ivory: #f7f2e8;
+    --ikatna-paper: #fffdf8;
+    --ikatna-sand: #eee4d3;
+    --ikatna-forest: #285344;
+    --ikatna-forest-deep: #1f4338;
+    --ikatna-terracotta: #b85f49;
+    --ikatna-gold: #bd8734;
+    --ikatna-ink: #293b34;
+    --ikatna-muted: #68776e;
+    --ikatna-line: #e5d7c2;
+  }
+  body {
+    color: var(--ikatna-ink) !important;
+    background-color: var(--ikatna-ivory) !important;
+    background-image:
+      radial-gradient(circle at 8% 8%, rgba(190,126,75,.14), transparent 32%),
+      radial-gradient(circle at 92% 34%, rgba(73,125,94,.12), transparent 34%),
+      repeating-linear-gradient(45deg, rgba(177,139,83,.035) 0 1px, transparent 1px 34px),
+      linear-gradient(145deg, #faf6ee 0%, #f2eadc 100%) !important;
+    background-attachment: fixed;
+  }
+  header {
+    background-color: var(--ikatna-forest) !important;
+    border-color: #c9a66d !important;
+    box-shadow: 0 10px 28px rgba(38,72,57,.18) !important;
+  }
+  header > .absolute.inset-0.bg-gradient-to-t {
+    background-image: linear-gradient(to top, rgba(31,67,56,.94), rgba(40,83,68,.60), rgba(40,83,68,.20)) !important;
+  }
+  header .hero-title-wrap h1 { color: #ffe2a0 !important; }
+  header #heroSub { color: #f4eee1 !important; }
+  .hero-kicker {
+    color: #ffedc6 !important;
+    background: rgba(20,55,44,.58) !important;
+    border-color: rgba(255,225,166,.42) !important;
+  }
+  .sticky.top-0 {
+    background: rgba(248,244,235,.96) !important;
+    border-color: var(--ikatna-line) !important;
+    box-shadow: 0 5px 18px rgba(66,57,42,.08) !important;
+  }
+  .sticky.top-0 .grid {
+    background: #eee6d8 !important;
+    border-color: #dfd0b9 !important;
+  }
+  .tab-on {
+    background: var(--ikatna-forest) !important;
+    color: #fffaf0 !important;
+  }
+  #tabBtnReview:not(.tab-on) { color: #65766b !important; }
+  .pill, .lang-btn {
+    color: #4b5b50 !important;
+    background: #fffdf8 !important;
+    border-color: #ded1bd !important;
+  }
+  .pill[aria-pressed="true"], .lang-btn.active {
+    background: var(--ikatna-forest) !important;
+    color: #fff !important;
+    border-color: var(--ikatna-forest) !important;
+  }
+  .dish-card {
+    color: var(--ikatna-ink) !important;
+    background: linear-gradient(145deg, #fffefa 0%, #f4ecdf 100%) !important;
+    border: 1px solid #e3d7c5 !important;
+    box-shadow: 0 8px 22px rgba(67,55,37,.09), inset 0 1px rgba(255,255,255,.95) !important;
+  }
+  .dish-card:hover {
+    border-color: #c79b5b !important;
+    box-shadow: 0 12px 26px rgba(94,73,42,.13) !important;
+  }
+  .dish-card .text-white { color: #293b34 !important; }
+  .dish-card .text-slate-100,
+  .dish-card .text-slate-300 { color: #59695f !important; }
+  .dish-card .text-slate-400 { color: #758177 !important; }
+  .dish-card .text-amber-300,
+  .dish-card .text-amber-400 { color: #98672b !important; }
+  .dish-card .border-t { border-color: #e4d8c6 !important; }
+  .card-desserts { border-left-color: #c27661 !important; }
+  .card-mains { border-left-color: #c29142 !important; }
+  .card-salads { border-left-color: #6b9477 !important; }
+  .card-drinks { border-left-color: #779cb4 !important; }
+  .dish-photo { border-color: #d8bd8d !important; box-shadow: 0 4px 12px rgba(56,48,36,.12) !important; }
+  .btn-gold-badge {
+    color: #253a30 !important;
+    background: linear-gradient(135deg, #f8df9b 0%, #e8bd68 52%, #c99443 100%) !important;
+    box-shadow: 0 5px 13px rgba(166,119,48,.20) !important;
+  }
+  .btn-gold-badge:hover { filter: brightness(1.035); }
+  #panelMenu > p, footer { color: #748076 !important; }
+  #panelMenu > p .text-slate-400 { color: #748076 !important; }
+
+  /* Feedback and form surfaces */
+  #reviewFlow, #reviewLocked {
+    color: var(--ikatna-ink) !important;
+    background: linear-gradient(145deg, #fffefa, #f3eadc) !important;
+    border: 1px solid #e0d1ba !important;
+    box-shadow: 0 10px 26px rgba(68,56,39,.10) !important;
+  }
+  #reviewFlow h3, #reviewLocked h3 { color: var(--ikatna-forest) !important; }
+  #reviewFlow p, #reviewLocked p { color: var(--ikatna-muted) !important; }
+  #reviewFlow label { color: #92652d !important; }
+  #waiterName, #comment {
+    color: #293b34 !important;
+    background: #fff !important;
+    border-color: #ddcfb9 !important;
+  }
+  #waiterName::placeholder, #comment::placeholder { color: #92988e !important; }
+  #ratingLabel { color: #a36e27 !important; }
+  .star svg { stroke: #ad8a50 !important; }
+  .star.on svg { fill: #d49b38 !important; stroke: #d49b38 !important; }
+  #positive {
+    background: #edf5e9 !important;
+    border-color: #c8dfc1 !important;
+  }
+  #positive h4 { color: #315f43 !important; }
+  #positive p { color: #586d5c !important; }
+  #negative {
+    background: #fbf0e9 !important;
+    border-color: #e7c8b8 !important;
+  }
+  #negative h4 { color: #8d4939 !important; }
+  #negative p { color: #78675f !important; }
+  .chip {
+    color: #526158 !important;
+    background: #fffdf8 !important;
+    border-color: #e0d2be !important;
+  }
+  .chip[aria-pressed="true"] {
+    color: #244c3c !important;
+    background: #e1efe3 !important;
+    border-color: #86ae91 !important;
+  }
+  #waBtn {
+    background: #20b968 !important;
+    color: #fff !important;
+    box-shadow: 0 5px 14px rgba(32,185,104,.20) !important;
+  }
+  #waBtn:hover { background: #169b55 !important; }
+
+  /* Sticky order summary, table prompt and QR dialog */
+  #cartBar > div {
+    color: var(--ikatna-ink) !important;
+    background: rgba(255,253,248,.98) !important;
+    border-color: #d8c294 !important;
+    box-shadow: 0 -8px 26px rgba(54,48,36,.14) !important;
+  }
+  #cartBar .text-white { color: var(--ikatna-forest) !important; }
+  #cartBar .text-amber-300 { color: #94662b !important; }
+  #cartBar .bg-\[\#0d090a\] {
+    background: #f5eee3 !important;
+    border-color: #ded1bd !important;
+  }
+  #cartBar .text-slate-400 { color: #6d7a70 !important; }
+  #tableModal > div, #qrModal .qr-dialog {
+    color: var(--ikatna-ink) !important;
+    background: linear-gradient(145deg, #fffefa, #f2e9dc) !important;
+    border-color: #d9c6a6 !important;
+    box-shadow: 0 18px 50px rgba(25,33,27,.22) !important;
+  }
+  #tableModal h3, #qrModal h3 { color: var(--ikatna-forest) !important; }
+  #tableModal p, #qrModal p { color: #66766d !important; }
+  #tableInput {
+    color: var(--ikatna-ink) !important;
+    background: #fff !important;
+    border-color: #ddcfb9 !important;
+  }
+  #qrModal .text-amber-300 { color: #94662b !important; }
+  #qrModal .text-slate-300 { color: #5e6d64 !important; }
+  #qrModal .border-t { border-color: #e0d2be !important; }
+  #qrClose, #qrCopyBtn {
+    color: #355345 !important;
+    background: #f5eee3 !important;
+    border-color: #d9c6a6 !important;
+  }
+  #qrModal .qr-paper { background: #fff !important; }
+  #qrcode canvas, #qrcode img { background: #fff !important; }
+  #reviewLocked .bg-amber-500\/20 { background: #f5e7c7 !important; }
+  @media (max-width: 380px) {
+    #cartBar > div { gap: .35rem !important; padding-inline: .6rem !important; }
+  }
+
 </style>
 </head>
 
@@ -2034,6 +2220,57 @@ module.exports = QRCode;
     updateCartBar();
   }
 
+  // Open WhatsApp with the customer's low-rating feedback pre-filled.
+  // The customer reviews the message and presses Send in WhatsApp.
+  function sendFeedbackWhatsApp() {
+    if (!state.rating || state.rating > 3) return;
+
+    const number = '212693469827'; // +212 693 469 827 (international format, digits only)
+    const lang = state.lang;
+    const selectedIssues = [...state.chips].map(key => I18N[lang].chips[key]).filter(Boolean);
+    const waiter = document.getElementById('waiterName').value.trim();
+    const comment = document.getElementById('comment').value.trim();
+
+    const labels = {
+      fr: {
+        title: 'Bonjour, voici un retour client pour IKATNA – Le Palais Gourmand.',
+        table: 'Table', rating: 'Évaluation', waiter: 'Serveur', issues: 'Points signalés',
+        comment: 'Commentaire', none: 'Non précisé'
+      },
+      ar: {
+        title: 'مرحباً، إليكم ملاحظة أحد زبائن IKATNA – Le Palais Gourmand.',
+        table: 'رقم الطاولة', rating: 'التقييم', waiter: 'النادل', issues: 'المشاكل المحددة',
+        comment: 'ملاحظة الزبون', none: 'غير محدد'
+      },
+      en: {
+        title: 'Hello, here is customer feedback for IKATNA – Le Palais Gourmand.',
+        table: 'Table', rating: 'Rating', waiter: 'Waiter', issues: 'Reported issues',
+        comment: 'Comment', none: 'Not specified'
+      }
+    }[lang];
+
+    const ratingText = I18N[lang].ratings[state.rating] || `${state.rating}/5`;
+    const message = [
+      labels.title,
+      `${labels.table}: ${state.table || labels.none}`,
+      `${labels.rating}: ${state.rating}/5 (${ratingText})`,
+      `${labels.waiter}: ${waiter || labels.none}`,
+      `${labels.issues}:`,
+      selectedIssues.length ? selectedIssues.map(issue => `• ${issue}`).join('\n') : `• ${labels.none}`,
+      `${labels.comment}: ${comment || labels.none}`
+    ].join('\n');
+
+    const url = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  }
+
   function initReview() {
     const starsEl = document.getElementById('stars');
     if (!starsEl) return;
@@ -2230,6 +2467,7 @@ module.exports = QRCode;
 
     document.getElementById('tabBtnMenu').onclick = () => switchTab('menu');
     document.getElementById('tabBtnReview').onclick = () => switchTab('review');
+    document.getElementById('waBtn').addEventListener('click', sendFeedbackWhatsApp);
     document.getElementById('clearCartBtn').onclick = clearCart;
 
     document.getElementById('tableEditBtn').onclick = () => {
