@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#f5efe4" />
+<meta name="theme-color" content="#efe4d1" />
 <title>Ikatna – Le Palais Gourmand | QR offline</title>
 
 <!-- Fonts -->
@@ -1616,6 +1616,60 @@ module.exports = QRCode;
     #cartBar > div { gap: .35rem !important; padding-inline: .6rem !important; }
   }
 
+
+  /* SOFT CREAM UPDATE: warm ivory instead of bright/pure white */
+  :root {
+    --ikatna-ivory: #efe5d4;
+    --ikatna-paper: #f8efdf;
+    --ikatna-sand: #e7dac4;
+    --ikatna-forest: #2b5546;
+    --ikatna-forest-deep: #214638;
+    --ikatna-terracotta: #b76550;
+    --ikatna-gold: #b9843b;
+    --ikatna-ink: #39352d;
+    --ikatna-muted: #70695e;
+    --ikatna-line: #d9cbb5;
+    --ikatna-cream-text: #f4e9d6;
+  }
+  body {
+    color: var(--ikatna-ink) !important;
+    background-color: var(--ikatna-ivory) !important;
+    background-image:
+      radial-gradient(circle at 8% 8%, rgba(190,126,75,.16), transparent 34%),
+      radial-gradient(circle at 92% 34%, rgba(73,125,94,.13), transparent 36%),
+      repeating-linear-gradient(45deg, rgba(177,139,83,.035) 0 1px, transparent 1px 36px),
+      linear-gradient(145deg, #f5ecdd 0%, #eae0cf 100%) !important;
+  }
+  .text-white { color: var(--ikatna-cream-text) !important; }
+  header .text-white, header #heroSub { color: #f4e8d1 !important; }
+  .sticky.top-0 { background: rgba(242,233,218,.97) !important; }
+  .sticky.top-0 .grid { background: #e9decc !important; }
+  .pill, .lang-btn { background: #f5ecdc !important; color: #4b5147 !important; border-color: #d8c9b1 !important; }
+  .pill[aria-pressed="true"], .lang-btn.active { color: #f4e9d6 !important; }
+  .tab-on { color: #f4e9d6 !important; }
+  .dish-card { background: linear-gradient(145deg, #f8f0e2 0%, #eee3d1 100%) !important; border-color: #dfd0b9 !important; }
+  .dish-card .text-white { color: #393b32 !important; }
+  #reviewFlow, #reviewLocked { background: linear-gradient(145deg, #f8f0e2, #eee3d1) !important; }
+  #waiterName, #comment, #tableInput {
+    background: #f2e8d8 !important;
+    color: #39352d !important;
+    border-color: #d8c9b3 !important;
+  }
+  .chip { background: #f5ecdc !important; }
+  #cartBar > div { background: rgba(246,237,222,.98) !important; }
+  #tableModal > div, #qrModal .qr-dialog {
+    background: linear-gradient(145deg, #f8f0e2, #eadfce) !important;
+  }
+  #tableModal .text-white, #qrModal .text-white { color: #39352d !important; }
+  #qrModal { background-color: rgba(50,40,29,.66) !important; }
+  #qrModal .qr-paper {
+    background: #fbf3e5 !important;
+    border-color: #dfcfb5 !important;
+  }
+  #qrcode canvas, #qrcode img { background: #fff6e7 !important; }
+  #qrClose, #qrCopyBtn { background: #eee3d1 !important; color: #355345 !important; }
+  #waBtn { color: #f7f0e5 !important; }
+
 </style>
 </head>
 
@@ -2355,7 +2409,7 @@ module.exports = QRCode;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) throw new Error('Canvas is not supported by this browser');
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = '#fff6e7';
     ctx.fillRect(0, 0, canvasSize, canvasSize);
     ctx.fillStyle = '#171013';
 
