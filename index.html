@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#0f172a" />
+<meta name="theme-color" content="#0b0f17" />
 <title>Ikatna – Le Palais Gourmand</title>
 
 <!-- Fonts: Playfair Display, Cairo, Inter, Bitcount Single -->
@@ -21,13 +21,12 @@
     theme: {
       extend: {
         colors: {
-          coolgray: {
-            bg: '#0b0f17',
-            surface: '#111827',
-            card: '#1e293b', /* Cool gray card */
-            cardhover: '#334155',
-            border: '#334155',
-            text: '#f8fafc',
+          chem: {
+            bg: '#080d16',
+            surface: '#101726',
+            card: '#162032',
+            border: '#27354f',
+            text: '#f1f5f9',
             muted: '#94a3b8'
           },
           gold: { 300: '#fde047', 400: '#facc15', 500: '#eab308', 600: '#ca8a04' }
@@ -45,11 +44,11 @@
 <style>
   html { scroll-behavior: smooth; }
   body {
-    background-color: #0b0f17 !important;
+    background-color: #080d16 !important;
     background-image: 
-      radial-gradient(circle at 15% 15%, rgba(30, 41, 59, 0.6) 0%, transparent 45%),
-      radial-gradient(circle at 85% 85%, rgba(234, 179, 8, 0.06) 0%, transparent 45%),
-      linear-gradient(135deg, #0b0f17 0%, #111827 100%);
+      radial-gradient(circle at 10% 10%, rgba(30, 58, 138, 0.25) 0%, transparent 40%),
+      radial-gradient(circle at 90% 90%, rgba(15, 118, 110, 0.2) 0%, transparent 40%),
+      linear-gradient(135deg, #080d16 0%, #101726 100%);
     background-attachment: fixed;
     font-family: 'Inter', 'Cairo', sans-serif;
   }
@@ -60,38 +59,40 @@
   .no-scrollbar { scrollbar-width: none; }
   .no-scrollbar::-webkit-scrollbar { display: none; }
 
-  /* Cool gray card design with modern styling */
+  /* Chemistry Theme Colors per section card */
+  .card-desserts { background: linear-gradient(135deg, #182236 0%, #111827 100%); border-left: 4px solid #ec4899; }
+  .card-mains { background: linear-gradient(135deg, #182236 0%, #111827 100%); border-left: 4px solid #eab308; }
+  .card-salads { background: linear-gradient(135deg, #182236 0%, #111827 100%); border-left: 4px solid #10b981; }
+  .card-drinks { background: linear-gradient(135deg, #182236 0%, #111827 100%); border-left: 4px solid #3b82f6; }
+
   .dish-card {
-    background: #1e293b;
-    border: 1px solid #334155;
+    border: 1px solid #27354f;
     border-radius: 1.25rem;
-    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.4);
     transition: transform .15s ease, border-color .15s ease;
   }
-  .dish-card:hover { border-color: #64748b; transform: translateY(-2px); }
+  .dish-card:hover { border-color: #3b82f6; transform: translateY(-2px); }
 
   .btn-gold-badge {
     background: linear-gradient(135deg, #fef08a 0%, #eab308 100%);
-    color: #0f172a;
+    color: #080d16;
     box-shadow: 0 4px 12px rgba(234, 179, 8, 0.25);
     font-weight: 700;
   }
 
-  .pill { background: #111827; color: #94a3b8; border: 1px solid #334155; transition: all .2s; }
-  .pill[aria-pressed="true"] { background: #eab308 !important; color: #0f172a !important; font-weight: 700; border-color: #facc15; }
+  .pill { background: #101726; color: #94a3b8; border: 1px solid #27354f; transition: all .2s; }
+  .pill[aria-pressed="true"] { background: #eab308 !important; color: #080d16 !important; font-weight: 700; border-color: #facc15; }
 
-  .lang-btn { background: #111827; color: #94a3b8; border: 1px solid #334155; }
-  .lang-btn.active { background: #eab308; color: #0f172a; font-weight: 700; border-color: #facc15; }
+  .lang-btn { background: #101726; color: #94a3b8; border: 1px solid #27354f; }
+  .lang-btn.active { background: #eab308; color: #080d16; font-weight: 700; border-color: #facc15; }
 
-  .tab-on { background: #eab308; color: #0f172a; font-weight: 700; }
-
+  .tab-on { background: #eab308; color: #080d16; font-weight: 700; }
   .brand-font { font-family: 'Bitcount Single', 'Inter', monospace; font-weight: 600; letter-spacing: .12em; }
 
-  /* Star rating styling */
   .star svg { fill: transparent; stroke: #94a3b8; transition: fill .2s, stroke .2s; cursor: pointer; }
   .star.on svg { fill: #eab308; stroke: #eab308; filter: drop-shadow(0 0 6px rgba(234, 179, 8, 0.5)); }
 
-  .chip { border: 1px solid #334155; background: #0f172a; color: #cbd5e1; transition: all .15s ease; }
+  .chip { border: 1px solid #27354f; background: #101726; color: #cbd5e1; transition: all .15s ease; }
   .chip[aria-pressed="true"] { background: rgba(234,179,8,0.25); border-color: #eab308; color: #fef08a; }
 
   details > summary { list-style: none; cursor: pointer; }
@@ -104,12 +105,12 @@
 </head>
 
 <body class="min-h-screen text-slate-100 antialiased">
-<div class="fixed inset-x-0 top-0 z-50 h-[3px]" style="background:linear-gradient(90deg,#803427 0%,#eab308 50%,#006233 100%)"></div>
+<div class="fixed inset-x-0 top-0 z-50 h-[3px]" style="background:linear-gradient(90deg,#3b82f6 0%,#eab308 50%,#10b981 100%)"></div>
 
 <!-- TOP HERO BANNER -->
-<header class="relative w-full overflow-hidden bg-[#0f172a] pb-6 pt-3 text-white border-b border-slate-800 shadow-xl">
+<header class="relative w-full overflow-hidden bg-[#101726] pb-6 pt-3 text-white border-b border-[#27354f] shadow-xl">
   <div class="absolute inset-0 opacity-20 mix-blend-overlay bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=1000&q=80')"></div>
-  <div class="absolute inset-0 bg-gradient-to-t from-[#0b0f17] via-[#0f172a]/70 to-transparent"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-[#080d16] via-[#101726]/70 to-transparent"></div>
 
   <div class="relative z-10 mx-auto max-w-md px-4">
     <div class="flex items-center justify-between pt-2">
@@ -118,7 +119,7 @@
         <span class="brand-font text-sm text-amber-400" dir="ltr"><span class="text-white">I</span>k<span class="text-white">at</span>na</span>
       </div>
       <!-- Language Switch (AR, FR, EN) -->
-      <div id="langSwitch" class="inline-flex rounded-full bg-slate-900/90 p-1 backdrop-blur border border-slate-700" role="group">
+      <div id="langSwitch" class="inline-flex rounded-full bg-[#080d16]/90 p-1 backdrop-blur border border-[#27354f]" role="group">
         <button data-lang="ar" class="lang-btn rounded-full px-3 py-1 text-xs transition">عربي</button>
         <button data-lang="fr" class="lang-btn rounded-full px-3 py-1 text-xs transition">FR</button>
         <button data-lang="en" class="lang-btn rounded-full px-3 py-1 text-xs transition">EN</button>
@@ -133,9 +134,9 @@
 </header>
 
 <!-- STICKY NAVIGATION TABS -->
-<div class="sticky top-0 z-30 bg-[#0b0f17]/95 backdrop-blur border-b border-slate-800 shadow-md">
+<div class="sticky top-0 z-30 bg-[#080d16]/95 backdrop-blur border-b border-[#27354f] shadow-md">
   <div class="mx-auto max-w-md px-4 py-2.5">
-    <div class="grid grid-cols-2 gap-1 rounded-full bg-slate-900 p-1 border border-slate-800" role="tablist">
+    <div class="grid grid-cols-2 gap-1 rounded-full bg-[#101726] p-1 border border-[#27354f]" role="tablist">
       <button id="tabBtnMenu" role="tab" aria-selected="true" class="rounded-full px-4 py-2 text-xs font-bold transition tab-on" data-i18n="tabMenu">Menu & Commande</button>
       <button id="tabBtnReview" role="tab" aria-selected="false" class="rounded-full px-4 py-2 text-xs font-bold transition text-slate-400 hover:text-white" data-i18n="tabReview">Avis & Service</button>
     </div>
@@ -154,18 +155,18 @@
 
 <!-- REVIEW TAB PANEL -->
 <main id="panelReview" role="tabpanel" class="mx-auto hidden max-w-md px-4 pb-32 pt-4">
-  <div id="reviewLocked" class="hidden rounded-3xl bg-slate-900 border border-slate-800 p-6 text-center shadow-xl">
+  <div id="reviewLocked" class="hidden rounded-3xl bg-[#101726] border border-[#27354f] p-6 text-center shadow-xl">
     <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/20 text-2xl">🙏</div>
     <h3 data-i18n="lockedTitle" class="text-base font-bold text-amber-300">Avis bien enregistré</h3>
     <p data-i18n="lockedText" class="mt-1 text-xs text-slate-300">Merci, votre retour pour cette table a bien été transmis à la direction.</p>
   </div>
 
-  <div id="reviewFlow" class="rounded-3xl bg-slate-900 border border-slate-800 p-5 shadow-xl">
+  <div id="reviewFlow" class="rounded-3xl bg-[#101726] border border-[#27354f] p-5 shadow-xl">
     <h3 data-i18n="reviewTitle" class="text-center font-display text-lg font-bold text-amber-300">Comment était votre expérience ?</h3>
     <p data-i18n="reviewSub" class="mt-1 text-center text-xs text-slate-400">Votre avis nous aide à vous offrir le meilleur.</p>
     
     <label for="waiterName" data-i18n="waiterLabel" class="mt-4 block text-[11px] font-semibold uppercase tracking-wider text-amber-400">Nom du serveur (optionnel)</label>
-    <input id="waiterName" type="text" maxlength="40" class="mt-1 w-full rounded-xl bg-slate-800 border border-slate-700 p-2.5 text-xs text-white placeholder:text-slate-500 focus:border-amber-400 focus:outline-none" />
+    <input id="waiterName" type="text" maxlength="40" class="mt-1 w-full rounded-xl bg-[#080d16] border border-[#27354f] p-2.5 text-xs text-white placeholder:text-slate-500 focus:border-amber-400 focus:outline-none" />
 
     <div id="stars" class="mt-5 flex justify-center gap-2" dir="ltr"></div>
     <p id="ratingLabel" class="mt-2.5 h-4 text-center text-xs font-semibold text-amber-300"></p>
@@ -182,13 +183,13 @@
     </section>
 
     <!-- Negative Experience Section with extended options -->
-    <section id="negative" class="mt-4 hidden rounded-2xl border border-slate-700 bg-slate-800 p-4">
+    <section id="negative" class="mt-4 hidden rounded-2xl border border-[#27354f] bg-[#080d16] p-4">
       <h4 data-i18n="negTitle" class="text-xs font-bold text-slate-200">Nous sommes désolés pour ce désagrément</h4>
       <p data-i18n="chipsLabel" class="mt-1 text-[11px] text-slate-400">Quel a été le problème ?</p>
       <div id="chips" class="mt-2.5 flex flex-wrap gap-1.5"></div>
       
       <label for="comment" data-i18n="commentLabel" class="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-amber-400">Commentaires (optionnel)</label>
-      <textarea id="comment" rows="2" maxlength="300" class="mt-1 w-full resize-none rounded-xl bg-slate-900 border border-slate-700 p-2 text-xs text-white placeholder:text-slate-500 focus:border-amber-400 focus:outline-none"></textarea>
+      <textarea id="comment" rows="2" maxlength="300" class="mt-1 w-full resize-none rounded-xl bg-[#101726] border border-[#27354f] p-2 text-xs text-white placeholder:text-slate-500 focus:border-amber-400 focus:outline-none"></textarea>
 
       <button id="waBtn" type="button" class="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-2.5 text-xs font-extrabold text-slate-950 shadow-md">
         <span data-i18n="waBtn">Envoyer au responsable via WhatsApp</span>
@@ -207,14 +208,17 @@
 
 <!-- STICKY CART BAR -->
 <div id="cartBar" class="pointer-events-none fixed inset-x-0 bottom-0 z-40 translate-y-full px-3 pb-[max(.6rem,env(safe-area-inset-bottom))] transition-transform duration-300">
-  <div class="mx-auto flex max-w-md items-center justify-between gap-2 rounded-2xl bg-slate-900 px-3.5 py-2.5 shadow-2xl border border-amber-500/40">
+  <div class="mx-auto flex max-w-md items-center justify-between gap-2 rounded-2xl bg-[#101726] px-3.5 py-2.5 shadow-2xl border border-amber-500/40">
     <div class="min-w-0">
-      <p id="cartCount" class="text-[10px] font-bold uppercase tracking-wider text-amber-300 leading-tight">0 article</p>
+      <div class="flex items-center gap-2">
+        <p id="cartCount" class="text-[10px] font-bold uppercase tracking-wider text-amber-300 leading-tight">0 article</p>
+        <button id="clearCartBtn" type="button" data-i18n="clearAll" class="text-[10px] font-semibold text-red-400 hover:text-red-300 underline">Effacer</button>
+      </div>
       <p id="cartTotal" class="font-display text-base font-bold text-white leading-tight">0 DH</p>
     </div>
 
     <div class="flex items-center gap-2">
-      <div class="flex items-center gap-1.5 rounded-xl bg-slate-800 border border-slate-700 px-2.5 py-1">
+      <div class="flex items-center gap-1.5 rounded-xl bg-[#080d16] border border-[#27354f] px-2.5 py-1">
         <span data-i18n="table" class="text-[10px] text-slate-400 font-semibold">Table:</span>
         <span id="tableNum" class="font-bold text-amber-300 text-xs" dir="ltr">—</span>
         <button id="tableEditBtn" type="button" class="text-amber-400 hover:text-white p-0.5">
@@ -230,20 +234,28 @@
   </div>
 </div>
 
-<!-- TABLE MODAL -->
+<!-- TABLE MODAL WITH LANGUAGE SWITCHER -->
 <div id="tableModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-  <div class="w-full max-w-xs rounded-3xl bg-slate-900 border border-slate-700 p-5 text-center text-white shadow-2xl">
+  <div class="w-full max-w-xs rounded-3xl bg-[#101726] border border-[#27354f] p-5 text-center text-white shadow-2xl">
+    <!-- Language Switch inside modal -->
+    <div class="mb-3 flex justify-center">
+      <div id="modalLangSwitch" class="inline-flex rounded-full bg-[#080d16] p-1 border border-[#27354f]" role="group">
+        <button data-lang="ar" class="lang-btn rounded-full px-2.5 py-0.5 text-[10px] transition">عربي</button>
+        <button data-lang="fr" class="lang-btn rounded-full px-2.5 py-0.5 text-[10px] transition">FR</button>
+        <button data-lang="en" class="lang-btn rounded-full px-2.5 py-0.5 text-[10px] transition">EN</button>
+      </div>
+    </div>
     <h3 data-i18n="tableModalTitle" class="font-display text-lg font-bold text-amber-300">Numéro de table</h3>
     <p data-i18n="tableModalSub" class="mt-1 text-xs text-slate-300">Veuillez entrer votre numéro de table.</p>
     <input id="tableInput" type="text" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" dir="ltr"
-           class="mt-3 w-full rounded-xl bg-slate-800 border border-slate-700 p-2.5 text-center font-display text-lg font-bold uppercase tracking-widest text-white placeholder:text-slate-500 focus:border-amber-400 focus:outline-none" placeholder="ex: 05" />
+           class="mt-3 w-full rounded-xl bg-[#080d16] border border-[#27354f] p-2.5 text-center font-display text-lg font-bold uppercase tracking-widest text-white placeholder:text-slate-500 focus:border-amber-400 focus:outline-none" placeholder="ex: 05" />
     <button id="tableOkBtn" type="button" data-i18n="tableOk" class="btn-gold-badge mt-4 w-full rounded-xl py-2.5 text-xs font-bold">Valider</button>
   </div>
 </div>
 
 <!-- QR MODAL -->
 <div id="qrModal" class="fixed inset-0 z-50 hidden items-end justify-center bg-black/80 backdrop-blur-sm sm:items-center p-3" role="dialog">
-  <div class="w-full max-w-sm rounded-3xl bg-slate-900 border border-slate-700 p-5 text-white shadow-2xl">
+  <div class="w-full max-w-sm rounded-3xl bg-[#101726] border border-[#27354f] p-5 text-white shadow-2xl">
     <div class="text-center">
       <h3 data-i18n="qrTitle" class="font-display text-lg font-bold text-amber-300">QR Code de Commande</h3>
       <p class="mt-0.5 text-xs text-slate-300"><span data-i18n="table">Table</span>: <span id="qrTable" class="font-bold text-amber-300" dir="ltr"></span></p>
@@ -253,12 +265,12 @@
       <div id="qrcode" class="flex items-center justify-center"></div>
     </div>
 
-    <ul id="qrList" class="mt-3.5 space-y-1.5 border-t border-slate-800 pt-2.5 text-xs max-h-32 overflow-y-auto text-slate-300"></ul>
-    <div class="mt-2 flex items-center justify-between border-t border-slate-800 pt-2 text-xs font-bold text-amber-300">
+    <ul id="qrList" class="mt-3.5 space-y-1.5 border-t border-[#27354f] pt-2.5 text-xs max-h-32 overflow-y-auto text-slate-300"></ul>
+    <div class="mt-2 flex items-center justify-between border-t border-[#27354f] pt-2 text-xs font-bold text-amber-300">
       <span data-i18n="total">Total :</span>
       <span id="qrTotal">0 DH</span>
     </div>
-    <button id="qrClose" type="button" data-i18n="close" class="mt-4 w-full rounded-xl border border-slate-700 bg-slate-800 py-2.5 text-xs font-bold transition hover:bg-slate-700">Fermer</button>
+    <button id="qrClose" type="button" data-i18n="close" class="mt-4 w-full rounded-xl border border-[#27354f] bg-[#080d16] py-2.5 text-xs font-bold transition hover:bg-[#162032]">Fermer</button>
   </div>
 </div>
 
@@ -268,10 +280,10 @@
 
   const CONFIG = { currencyCode: 'DH', whatsappNumber: '212600000000' };
 
-  // Menu items structured with correct verified images and diabetic friendliness info
+  // Menu items including desserts, mains, salads, and drinks with chemistry thematic colors
   const MENU = [
     { id: 'd1', cat: 'desserts', price: 50, kcal: 410, protein: 7, diabetic: false,
-      img: 'https://images.unsplash.com/photo-1579372786545-d24232daf58c?auto=format&fit=crop&w=500&q=80',
+      img: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=500&q=80',
       nameFr: 'Gâteau de semoule à la fleur d’oranger', nameAr: 'كعكة السميد بماء الزهر', nameEn: 'Orange Blossom Semolina Cake',
       descFr: 'Gâteau moelleux imbibé de sirop de fleur d’oranger et pistaches.',
       descAr: 'كعكة رطبة مسقية بشراب زهر البرتقال والفستق.',
@@ -286,9 +298,9 @@
       descFr: 'Semoule fine et vapeur, viandes tendres et sept légumes de saison.',
       descAr: 'كسكس أصيل باللحوم المختارة وخضار موسمية طازجة.',
       descEn: 'Fine steamed semolina with tender meats and seven seasonal vegetables.',
-      ingFr: ['Semoule de blé', 'Viande d’agneau', 'Poulet', 'Légumes de saison', 'Bouillon aux épices'],
-      ingAr: ['سميد القمح', 'لحم الضأن', 'دجاج', 'خضار موسمية', 'مرق بالبهارات'],
-      ingEn: ['Wheat semolina', 'Lamb', 'Chicken', 'Seasonal vegetables', 'Spiced broth'] },
+      ingFr: ['Semoule de blé', 'Viande d’agneau', 'Poulet', 'Légumes', 'Bouillon'],
+      ingAr: ['سميد القمح', 'لحم الضأن', 'دجاج', 'خضار موسمية', 'مرق'],
+      ingEn: ['Wheat semolina', 'Lamb', 'Chicken', 'Vegetables', 'Broth'] },
 
     { id: 'm2', cat: 'mains', price: 100, kcal: 480, protein: 35, diabetic: true,
       img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=500&q=80',
@@ -296,19 +308,9 @@
       descFr: 'Poulet fermier confit au citron confit, olives et safran.',
       descAr: 'دجاج بلدي مطهو ببطء مع الليمون المخلل والزيتون والزعفران.',
       descEn: 'Farm chicken simmered with preserved lemon, olives and saffron.',
-      ingFr: ['Poulet fermier', 'Citron confit', 'Olives rouges', 'Safran', 'Oignons'],
-      ingAr: ['دجاج بلدي', 'ليمون مخلل', 'زيتون أحمر', 'زعفران', 'بصل'],
-      ingEn: ['Farm chicken', 'Preserved lemon', 'Red olives', 'Saffron', 'Onions'] },
-
-    { id: 'm3', cat: 'mains', price: 110, kcal: 520, protein: 40, diabetic: true,
-      img: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=500&q=80',
-      nameFr: 'Brochettes de bœuf', nameAr: 'أسياخ اللحم', nameEn: 'Beef Skewers',
-      descFr: 'Brochettes de bœuf marinées aux épices douces et grillées au charbon.',
-      descAr: 'قطع لحم بقري متبلة وممشوية على الفحم بأعشاب عطرية.',
-      descEn: 'Marinated beef skewers grilled over charcoal with aromatic herbs.',
-      ingFr: ['Viande de bœuf', 'Épices douces', 'Persil', 'Oignon'],
-      ingAr: ['لحم بقر', 'بهارات خفيفة', 'بقدونس', 'بصل'],
-      ingEn: ['Beef', 'Mild spices', 'Parsley', 'Onion'] },
+      ingFr: ['Poulet', 'Citron confit', 'Olives', 'Safran', 'Oignons'],
+      ingAr: ['دجاج', 'ليمون مخلل', 'زيتون', 'زعفران', 'بصل'],
+      ingEn: ['Chicken', 'Preserved lemon', 'Olives', 'Saffron', 'Onions'] },
 
     { id: 's1', cat: 'salads', price: 40, kcal: 150, protein: 6, diabetic: true,
       img: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=500&q=80',
@@ -326,9 +328,19 @@
       descFr: 'Thé vert traditionnel infusé à la menthe fraîche.',
       descAr: 'شاي أخضر أصيل منعش بأوراق النعناع الطازج.',
       descEn: 'Traditional green tea infused with fresh mint leaves.',
-      ingFr: ['Thé vert gunpowder', 'Menthe fraîche', 'Sucre naturel'],
+      ingFr: ['Thé vert', 'Menthe fraîche', 'Sucre naturel'],
       ingAr: ['شاي أخضر', 'نعناع طازج', 'سكر طبيعي'],
-      ingEn: ['Gunpowder green tea', 'Fresh mint', 'Natural sugar'] }
+      ingEn: ['Green tea', 'Fresh mint', 'Natural sugar'] },
+
+    { id: 'dr2', cat: 'drinks', price: 35, kcal: 160, protein: 3, diabetic: true,
+      img: 'https://images.unsplash.com/photo-1541658016709-82535e94bc69?auto=format&fit=crop&w=500&q=80',
+      nameFr: 'Smoothie Avocat & Amande', nameAr: 'سموثي الأفوكادو واللوز', nameEn: 'Avocado Almond Smoothie',
+      descFr: 'Avocat frais mixé au lait d’amande et miel pur.',
+      descAr: 'أفوكادو طازج ممزوج بحليب اللوز والعسل النقي.',
+      descEn: 'Fresh avocado blended with almond milk and pure honey.',
+      ingFr: ['Avocat', 'Lait d’amande', 'Miel'],
+      ingAr: ['أفوكادو', 'حليب اللوز', 'عسل'],
+      ingEn: ['Avocado', 'Almond milk', 'Honey'] }
   ];
 
   const I18N = {
@@ -346,6 +358,7 @@
       showQr: 'QR Code',
       close: 'Fermer',
       total: 'Total :',
+      clearAll: 'Tout vider',
       qrTitle: 'QR Code de Commande',
       qrHint: 'Montrez ce QR code au serveur',
       reviewTitle: 'Comment était votre expérience ?',
@@ -390,6 +403,7 @@
       showQr: 'عرض QR',
       close: 'إغلاق',
       total: 'المجموع:',
+      clearAll: 'مسح الكل',
       qrTitle: 'كود طلب الطاولة',
       qrHint: 'أظهر هذا الكود للنادل',
       reviewTitle: 'كيف كانت تجربتك معنا؟',
@@ -434,6 +448,7 @@
       showQr: 'QR Code',
       close: 'Close',
       total: 'Total:',
+      clearAll: 'Clear all',
       qrTitle: 'Table Order QR Code',
       qrHint: 'Show this QR code to your waiter',
       reviewTitle: 'How was your experience?',
@@ -498,8 +513,11 @@
 
     document.getElementById('heroSub').textContent = L.heroSub;
 
-    document.querySelectorAll('#langSwitch button').forEach(b => {
-      b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+    // Update all language switch groups (Header & Modal)
+    document.querySelectorAll('#langSwitch, #modalLangSwitch').forEach(group => {
+      group.querySelectorAll('button').forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+      });
     });
 
     renderPills();
@@ -551,7 +569,7 @@
       const qty = state.cart[item.id] || 0;
 
       const card = document.createElement('div');
-      card.className = 'dish-card p-3.5 text-slate-100';
+      card.className = `dish-card card-${item.cat} p-3.5 text-slate-100`;
 
       let actionHtml = '';
       if (qty === 0) {
@@ -563,7 +581,7 @@
         `;
       } else {
         actionHtml = `
-          <div class="flex items-center gap-2 rounded-xl bg-slate-900 text-amber-300 px-2.5 py-1 border border-slate-700">
+          <div class="flex items-center gap-2 rounded-xl bg-[#080d16] text-amber-300 px-2.5 py-1 border border-[#27354f]">
             <button type="button" onclick="window.__ikatna.add('${item.id}', -1)" class="text-sm font-bold px-1">-</button>
             <span class="text-xs font-extrabold" dir="ltr">${qty}</span>
             <button type="button" onclick="window.__ikatna.add('${item.id}', 1)" class="text-sm font-bold px-1">+</button>
@@ -576,7 +594,7 @@
       card.innerHTML = `
         <div class="flex items-start justify-between gap-3">
           <div class="flex items-start gap-3 min-w-0 flex-1">
-            <div class="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-slate-800 shadow-inner">
+            <div class="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-[#080d16] shadow-inner">
               <img src="${item.img}" alt="${name}" loading="lazy" class="h-full w-full object-cover" />
             </div>
             <div class="min-w-0 flex-1">
@@ -598,7 +616,7 @@
         </div>
 
         <!-- Ingredients Details Drawer -->
-        <details class="mt-3 group border-t border-slate-800 pt-2">
+        <details class="mt-3 group border-t border-[#27354f] pt-2">
           <summary class="flex items-center justify-between text-xs font-semibold text-amber-300 py-0.5">
             <span>${L.ingredients}</span>
             <svg viewBox="0 0 24 24" class="chev h-3.5 w-3.5 text-amber-400" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
@@ -606,7 +624,7 @@
           <p class="mt-1 text-[11px] text-slate-300 leading-relaxed ps-1">${ing.join(', ')}</p>
         </details>
 
-        <div class="mt-3 flex items-center justify-end border-t border-slate-800 pt-2.5">
+        <div class="mt-3 flex items-center justify-end border-t border-[#27354f] pt-2.5">
           ${actionHtml}
         </div>
       `;
@@ -647,6 +665,12 @@
     const next = cur + delta;
     if (next <= 0) delete state.cart[id];
     else state.cart[id] = next;
+    renderMenu();
+    updateCartBar();
+  }
+
+  function clearCart() {
+    state.cart = {};
     renderMenu();
     updateCartBar();
   }
@@ -732,18 +756,21 @@
       text: lines.join('\n'),
       width: 150,
       height: 150,
-      colorDark: '#0f172a',
+      colorDark: '#080d16',
       colorLight: '#ffffff',
       correctLevel: QRCode.CorrectLevel.H
     });
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('#langSwitch button').forEach(b => {
+    // Language switch buttons binding (Both header and modal)
+    document.querySelectorAll('#langSwitch button, #modalLangSwitch button').forEach(b => {
       b.onclick = () => applyLanguage(b.getAttribute('data-lang'));
     });
+
     document.getElementById('tabBtnMenu').onclick = () => switchTab('menu');
     document.getElementById('tabBtnReview').onclick = () => switchTab('review');
+    document.getElementById('clearCartBtn').onclick = clearCart;
 
     document.getElementById('tableEditBtn').onclick = () => {
       document.getElementById('tableModal').classList.remove('hidden');
