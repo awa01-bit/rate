@@ -1385,7 +1385,7 @@ module.exports = QRCode;
   details[open] .chev { transform: rotate(180deg); }
   .chev { transition: transform .2s ease; }
 
-  #qrcode img, #qrcode canvas { margin: 0 auto; display: block; border-radius: 0.5rem; image-rendering: pixelated; }
+  #qrcode img, #qrcode canvas { width: 220px !important; height: 220px !important; max-width: 100%; margin: 0 auto; display: block; border-radius: 0.35rem; image-rendering: pixelated; }
 
   /* Moroccan-inspired zellige, warm gold details and softer food cards */
   body {
@@ -1424,6 +1424,9 @@ module.exports = QRCode;
   .btn-gold-badge { background: linear-gradient(135deg, #fff1a8 0%, #facc15 48%, #ca8a04 100%); }
   #qrStatus { min-height: 1rem; }
   #qrModal .qr-paper { background: radial-gradient(circle at 50% 0%, #fffdf5, #fff 65%); }
+  #qrModal { overflow-y: auto; }
+  #qrModal .qr-dialog { max-height: calc(100vh - 1.5rem); max-height: calc(100dvh - 1.5rem); overflow-y: auto; overscroll-behavior: contain; }
+  #qrcode { min-width: 0 !important; min-height: 0 !important; }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
   }
@@ -1575,15 +1578,15 @@ module.exports = QRCode;
 </div>
 
 <!-- QR MODAL -->
-<div id="qrModal" class="fixed inset-0 z-50 hidden items-end justify-center bg-black/85 backdrop-blur-sm sm:items-center p-3" role="dialog">
-  <div class="w-full max-w-sm rounded-3xl bg-[#160e10] border border-[#451a1a] p-5 text-white shadow-2xl">
+<div id="qrModal" class="fixed inset-0 z-50 hidden items-center justify-center overflow-y-auto bg-black/85 backdrop-blur-sm p-3" role="dialog">
+  <div class="qr-dialog w-full max-w-sm max-h-[calc(100dvh-1.5rem)] overflow-y-auto overscroll-contain rounded-3xl bg-[#160e10] border border-[#451a1a] p-4 sm:p-5 text-white shadow-2xl">
     <div class="text-center">
       <h3 data-i18n="qrTitle" class="font-display text-lg font-bold text-amber-300">QR Code de Commande</h3>
       <p class="mt-0.5 text-xs text-slate-300"><span data-i18n="table">Table</span>: <span id="qrTable" class="font-bold text-amber-300" dir="ltr"></span></p>
     </div>
     
-    <div class="qr-paper mx-auto mt-4 w-fit rounded-2xl border border-amber-100 p-4 shadow-[0_12px_35px_rgba(0,0,0,.35)]">
-      <div id="qrcode" class="flex min-h-[240px] min-w-[240px] items-center justify-center"></div>
+    <div class="qr-paper mx-auto mt-3 w-fit max-w-full rounded-2xl border border-amber-100 p-2.5 shadow-[0_12px_35px_rgba(0,0,0,.35)]">
+      <div id="qrcode" class="flex h-[220px] w-[220px] max-w-full items-center justify-center"></div>
     </div>
     <p data-i18n="qrHint" class="mt-2 text-center text-[10px] leading-relaxed text-slate-400">Le serveur peut scanner ce code pour lire votre commande.</p>
     <p id="qrStatus" role="status" aria-live="polite" class="mt-1 text-center text-[10px] text-amber-300"></p>
@@ -2105,7 +2108,7 @@ module.exports = QRCode;
 
     const modules = qr.getModuleCount();
     const quietZone = 4;
-    const canvasSize = 280;
+    const canvasSize = 220;
     const cell = canvasSize / (modules + quietZone * 2);
     const canvas = document.createElement('canvas');
     canvas.width = canvasSize;
