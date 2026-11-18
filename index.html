@@ -1670,6 +1670,59 @@ module.exports = QRCode;
   #qrClose, #qrCopyBtn { background: #eee3d1 !important; color: #355345 !important; }
   #waBtn { color: #f7f0e5 !important; }
 
+
+  /* FINAL BRAND POLISH: clear neutral badge + Moroccan red accents */
+  .diabetic-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: .3rem !important;
+    background: #d7d5d1 !important; /* solid warm grey: no transparency */
+    color: #34332f !important;
+    border: 1px solid #77746e !important;
+    opacity: 1 !important;
+    box-shadow: inset 0 1px rgba(255,255,255,.55), 0 1px 2px rgba(45,40,32,.08) !important;
+    line-height: 1.35 !important;
+    white-space: normal !important;
+  }
+  .diabetic-badge > span:first-child {
+    color: #3d5548 !important;
+    font-size: 11px !important;
+    font-weight: 900 !important;
+  }
+
+  :root { --ikatna-morocco-red: #a8323e; --ikatna-morocco-red-dark: #842631; }
+  /* Subtle red, inspired by the Moroccan flag and traditional craft details */
+  header {
+    border-bottom: 4px solid var(--ikatna-morocco-red) !important;
+    box-shadow: 0 10px 26px rgba(80,42,37,.13) !important;
+  }
+  header .hero-title-wrap::before,
+  header .hero-title-wrap::after {
+    color: var(--ikatna-morocco-red) !important;
+    text-shadow: 0 1px 0 rgba(255,255,255,.28);
+  }
+  .hero-kicker {
+    border-color: rgba(168,50,62,.38) !important;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.18) !important;
+  }
+  .pill[aria-pressed="true"] {
+    background: var(--ikatna-morocco-red) !important;
+    border-color: var(--ikatna-morocco-red-dark) !important;
+    color: #fff8ed !important;
+  }
+  .dish-card {
+    border-top: 2px solid rgba(168,50,62,.38) !important;
+  }
+  .card-mains { border-left-color: var(--ikatna-morocco-red) !important; }
+  .dish-card .font-display.text-amber-300 {
+    color: var(--ikatna-morocco-red-dark) !important;
+  }
+  #reviewFlow h3, #reviewLocked h3 { text-decoration-color: rgba(168,50,62,.35); }
+  #reviewFlow label { color: var(--ikatna-morocco-red-dark) !important; }
+  #negative { border-color: rgba(168,50,62,.32) !important; }
+  #negative h4 { color: var(--ikatna-morocco-red-dark) !important; }
+  #qrModal .qr-dialog { border-top: 3px solid var(--ikatna-morocco-red) !important; }
+
 </style>
 </head>
 
@@ -2196,7 +2249,7 @@ module.exports = QRCode;
         `;
       }
 
-      let diabeticBadge = item.diabetic ? `<span class="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-semibold text-emerald-300">✅ ${L.diabeticOk}</span>` : '';
+      let diabeticBadge = item.diabetic ? `<span class="diabetic-badge inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-bold"><span aria-hidden="true">✓</span><span>${L.diabeticOk}</span></span>` : '';
 
       card.innerHTML = `
         <div class="flex items-start gap-3">
