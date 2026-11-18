@@ -104,7 +104,6 @@
   details[open] .chev { transform: rotate(180deg); }
   .chev { transition: transform .2s ease; }
 
-  /* QR Code Container styling inside modal */
   #qrcode canvas, #qrcode img { margin: 0 auto; border-radius: 0.5rem; display: block; }
 </style>
 </head>
@@ -262,7 +261,6 @@
       <p class="mt-0.5 text-xs text-slate-300"><span data-i18n="table">Table</span>: <span id="qrTable" class="font-bold text-amber-300" dir="ltr"></span></p>
     </div>
     
-    <!-- QR Code wrapper with pure white background for high contrast & visibility -->
     <div class="mx-auto mt-4 w-fit rounded-2xl bg-white p-3.5 shadow-md">
       <div id="qrcode" class="flex items-center justify-center"></div>
     </div>
@@ -574,17 +572,27 @@
       let actionHtml = '';
       if (qty === 0) {
         actionHtml = `
-          <button type="button" onclick="window.__ikatna.add('${item.id}', 1)"
-                  class="btn-gold-badge rounded-xl px-3 py-1.5 text-xs flex items-center gap-1 cursor-pointer">
-            <span>+ ${L.add}</span>
-          </button>
+          <div class="flex items-center gap-2.5">
+            <span class="font-display text-sm font-extrabold text-amber-300 bg-amber-500/20 px-2.5 py-1 rounded-full border border-amber-500/30">
+              ${item.price} ${CONFIG.currencyCode}
+            </span>
+            <button type="button" onclick="window.__ikatna.add('${item.id}', 1)"
+                    class="btn-gold-badge rounded-xl px-3 py-1.5 text-xs flex items-center gap-1 cursor-pointer">
+              <span>+ ${L.add}</span>
+            </button>
+          </div>
         `;
       } else {
         actionHtml = `
-          <div class="flex items-center gap-2 rounded-xl bg-[#0d090a] text-amber-300 px-2.5 py-1 border border-[#334155]">
-            <button type="button" onclick="window.__ikatna.add('${item.id}', -1)" class="text-sm font-bold px-1 cursor-pointer">-</button>
-            <span class="text-xs font-extrabold" dir="ltr">${qty}</span>
-            <button type="button" onclick="window.__ikatna.add('${item.id}', 1)" class="text-sm font-bold px-1 cursor-pointer">+</button>
+          <div class="flex items-center gap-2.5">
+            <span class="font-display text-sm font-extrabold text-amber-300 bg-amber-500/20 px-2.5 py-1 rounded-full border border-amber-500/30">
+              ${item.price * qty} ${CONFIG.currencyCode}
+            </span>
+            <div class="flex items-center gap-2 rounded-xl bg-[#0d090a] text-amber-300 px-2.5 py-1 border border-[#334155]">
+              <button type="button" onclick="window.__ikatna.add('${item.id}', -1)" class="text-sm font-bold px-1 cursor-pointer">-</button>
+              <span class="text-xs font-extrabold" dir="ltr">${qty}</span>
+              <button type="button" onclick="window.__ikatna.add('${item.id}', 1)" class="text-sm font-bold px-1 cursor-pointer">+</button>
+            </div>
           </div>
         `;
       }
@@ -592,26 +600,19 @@
       let diabeticBadge = item.diabetic ? `<span class="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-semibold text-emerald-300">✅ ${L.diabeticOk}</span>` : '';
 
       card.innerHTML = `
-        <div class="flex items-start justify-between gap-3">
-          <div class="flex items-start gap-3 min-w-0 flex-1">
-            <div class="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-[#101722] shadow-inner">
-              <img src="${item.img}" alt="${name}" loading="lazy" class="h-full w-full object-cover" />
-            </div>
-            <div class="min-w-0 flex-1">
-              <h3 class="font-display text-sm font-bold text-white truncate">${name}</h3>
-              <p class="mt-0.5 text-[11px] text-slate-300 line-clamp-2">${desc}</p>
-              <div class="mt-2 flex flex-wrap items-center gap-2 text-[11px] text-slate-300 font-medium">
-                <span>🔥 ${item.kcal} ${L.kcal}</span>
-                <span>•</span>
-                <span>🥩 ${item.protein}${L.protein}</span>
-                ${diabeticBadge}
-              </div>
-            </div>
+        <div class="flex items-start gap-3">
+          <div class="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-[#101722] shadow-inner">
+            <img src="${item.img}" alt="${name}" loading="lazy" class="h-full w-full object-cover" />
           </div>
-          <div class="flex flex-col items-end justify-between gap-3 shrink-0">
-            <span class="font-display text-sm font-extrabold text-amber-300 bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-500/30">
-              ${item.price} ${CONFIG.currencyCode}
-            </span>
+          <div class="min-w-0 flex-1">
+            <h3 class="font-display text-sm font-bold text-white leading-snug">${name}</h3>
+            <p class="mt-0.5 text-[11px] text-slate-300 leading-relaxed">${desc}</p>
+            <div class="mt-2 flex flex-wrap items-center gap-2 text-[11px] text-slate-300 font-medium">
+              <span>🔥 ${item.kcal} ${L.kcal}</span>
+              <span>•</span>
+              <span>🥩 ${item.protein}${L.protein}</span>
+              ${diabeticBadge}
+            </div>
           </div>
         </div>
 
