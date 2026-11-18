@@ -3,25 +3,22 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#180e10" />
+<meta name="theme-color" content="#1f1114" />
 <title>Le Palais Gourmand – Menu & Reviews</title>
 
+<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet" />
 
+<!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
   tailwind.config = {
     theme: {
       extend: {
         colors: {
-          morocco: {
-            terra: '#8e3525',
-            dark: '#180e10',
-            surface: '#29181c',
-            card: '#fcf8f2'
-          },
+          morocco: { dark: '#1f1114', surface: '#2b170c', card: '#fcf8f2' },
           gold: { 300: '#fae198', 400: '#ecc255', 500: '#dfb12e', 600: '#c49618' }
         },
         fontFamily: {
@@ -35,20 +32,14 @@
 
 <style>
   html { scroll-behavior: smooth; }
-  
-  body {
-    background-color: #1f1114 !important;
-    font-family: 'Inter', 'Cairo', sans-serif;
-  }
-
+  body { background-color: #1f1114 !important; font-family: 'Inter', 'Cairo', sans-serif; }
   .no-scrollbar { scrollbar-width: none; }
   .no-scrollbar::-webkit-scrollbar { display: none; }
 
-  /* Exact Card Style matching the screenshot */
   .dish-card {
     background: #fcf8f2;
     border-radius: 1.25rem;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
     transition: transform .15s ease;
   }
   .dish-card:active { transform: scale(0.99); }
@@ -56,36 +47,27 @@
   .btn-gold-badge {
     background: linear-gradient(135deg, #fcebba 0%, #dfb12e 100%);
     color: #2b170c;
-    box-shadow: 0 2px 8px rgba(223,177,46,0.25);
+    box-shadow: 0 2px 8px rgba(223,177,46,0.3);
   }
 
   .pill { background: rgba(255, 255, 255, 0.12); color: #fff; border: 1px solid rgba(255,255,255,0.15); transition: all .2s; }
-  .pill[aria-pressed="true"] {
-    background: #fcf8f2 !important;
-    color: #1f1114 !important;
-    font-weight: 700;
-  }
+  .pill[aria-pressed="true"] { background: #fcf8f2 !important; color: #1f1114 !important; font-weight: 700; }
 
   .lang-btn { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
   .lang-btn.active { background: #fcf8f2; color: #1f1114; font-weight: 700; }
 
-  .star svg { fill: transparent; stroke: #9e8a8d; transition: fill .2s, stroke .2s; }
-  .star.on svg { fill: #dfb12e; stroke: #dfb12e; }
-  
   #qrBox img { max-width: 100%; height: auto; margin: 0 auto; display: block; border-radius: 0.5rem; }
 </style>
 </head>
 
 <body class="min-h-screen text-[#2b170c] antialiased bg-[#1f1114]">
 
-<!-- TOP HERO BANNER (Matching Screenshot Design) -->
+<!-- TOP HERO BANNER -->
 <div class="relative w-full overflow-hidden bg-[#2b170c] pb-5 pt-3 text-white border-b border-[#dfb12e]/30 shadow-xl">
-  <!-- Background decorative image with warm Islamic/Moroccan arch vibe -->
   <div class="absolute inset-0 opacity-40 mix-blend-overlay bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=1000&q=80')"></div>
   <div class="absolute inset-0 bg-gradient-to-t from-[#1f1114] via-[#2b170c]/80 to-transparent"></div>
 
   <div class="relative z-10 mx-auto max-w-md px-4">
-    <!-- Header Controls: Chef Icon & Lang Switch -->
     <div class="flex items-center justify-between pt-2">
       <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#dfb12e]/20 border border-[#dfb12e]/40 text-[#dfb12e]">
         <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 13.8A4.8 4.8 0 0 1 9.2 6a5.5 5.5 0 0 1 10.6 1.5A3.8 3.8 0 0 1 20 15H6z"/><path d="M6 15v5a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-5"/></svg>
@@ -96,7 +78,6 @@
       </div>
     </div>
 
-    <!-- Restaurant Title & Slogan -->
     <div class="mt-3 text-center">
       <h1 class="font-display text-3xl font-bold italic tracking-wide text-[#fae198]" style="text-shadow: 0 2px 8px rgba(0,0,0,0.6);">Restaurant</h1>
       <h2 class="font-display text-2xl font-bold text-white tracking-wider">Le Palais Gourmand</h2>
@@ -113,47 +94,29 @@
   </div>
 </div>
 
-<!-- MAIN CONTENT / MENU -->
+<!-- MENU TAB -->
 <main id="panelMenu" role="tabpanel" class="mx-auto max-w-md px-4 pb-32 pt-4">
   <div id="menuRoot" class="space-y-3.5"></div>
 </main>
 
-<!-- REVIEW TAB -->
-<main id="panelReview" role="tabpanel" class="mx-auto hidden max-w-md px-4 pb-28 pt-4 text-white">
-  <div id="reviewLocked" class="hidden rounded-3xl bg-[#2b170c] p-6 text-center border border-[#dfb12e]/30">
-    <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#dfb12e]/20 text-2xl">🙏</div>
-    <h3 class="text-base font-bold text-[#fae198]">Avis bien enregistré</h3>
-    <p class="mt-1 text-xs text-white/80">Merci, votre retour pour cette table a bien été transmis à la direction.</p>
-  </div>
-  <div id="reviewFlow" class="rounded-3xl bg-[#2b170c] p-5 border border-[#dfb12e]/30 shadow-xl">
-    <h3 class="text-center font-display text-lg font-bold text-[#fae198]">Comment était votre expérience ?</h3>
-    <p class="mt-1 text-center text-xs text-white/80">Votre avis nous aide à vous offrir le meilleur.</p>
-    <label for="waiterName" class="mt-4 block text-[11px] font-semibold uppercase tracking-wider text-[#fae198]">Nom du serveur (optionnel)</label>
-    <input id="waiterName" type="text" maxlength="40" class="mt-1 w-full rounded-xl bg-black/40 border border-white/15 p-2.5 text-xs text-white placeholder:text-white/40 focus:border-[#dfb12e] focus:outline-none" />
-    <div id="stars" class="mt-5 flex justify-center gap-1.5" dir="ltr"></div>
-    <p id="ratingLabel" class="mt-2 h-4 text-center text-xs font-semibold text-[#fae198]"></p>
-  </div>
-</main>
-
-<!-- STICKY CART BAR (Table Number & QR code integration) -->
+<!-- STICKY CART BAR -->
 <div id="cartBar" class="pointer-events-none fixed inset-x-0 bottom-0 z-40 translate-y-full px-3 pb-[max(.6rem,env(safe-area-inset-bottom))] transition-transform duration-300">
   <div class="mx-auto flex max-w-md items-center justify-between gap-2 rounded-2xl bg-[#2b170c] px-3.5 py-2.5 shadow-2xl border border-[#dfb12e]/50">
     <div class="min-w-0">
       <p id="cartCount" class="text-[10px] font-bold uppercase tracking-wider text-[#fae198] leading-tight">0 article</p>
-      <p id="cartTotal" class="font-display text-base font-bold text-white leading-tight">+ 0 DH</p>
+      <p id="cartTotal" class="font-display text-base font-bold text-white leading-tight">0 DH</p>
     </div>
 
     <div class="flex items-center gap-2">
-      <!-- Table number selector right before QR generation -->
-      <div class="flex items-center gap-1 rounded-xl bg-black/50 border border-[#dfb12e]/30 px-2 py-1">
-        <span class="text-[10px] text-white/70 font-semibold" data-i18n="tableLabel">Table:</span>
+      <div class="flex items-center gap-1.5 rounded-xl bg-black/50 border border-[#dfb12e]/30 px-2.5 py-1">
+        <span class="text-[10px] text-white/70 font-semibold">Table:</span>
         <span id="tableNum" class="font-bold text-[#fae198] text-xs" dir="ltr">—</span>
         <button id="tableEditBtn" type="button" class="text-[#ecc255] hover:text-white p-0.5">
           <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
         </button>
       </div>
 
-      <button id="qrBtn" type="button" class="btn-gold-badge flex shrink-0 items-center gap-1 rounded-xl px-3.5 py-2 text-xs font-bold">
+      <button id="qrBtn" type="button" class="btn-gold-badge flex shrink-0 items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold">
         <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h3M20 17v4"/></svg>
         <span>QR Code</span>
       </button>
@@ -161,14 +124,13 @@
   </div>
 </div>
 
-<!-- TABLE PROMPT MODAL -->
+<!-- TABLE MODAL -->
 <div id="tableModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
   <div class="w-full max-w-xs rounded-3xl bg-[#2b170c] border border-[#dfb12e]/40 p-5 text-center text-white shadow-2xl">
     <h3 class="font-display text-lg font-bold text-[#fae198]">Numéro de table</h3>
     <p class="mt-1 text-xs text-white/80">Veuillez entrer votre numéro de table.</p>
     <input id="tableInput" type="text" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" dir="ltr"
            class="mt-3 w-full rounded-xl bg-black/40 border border-[#dfb12e]/40 p-2.5 text-center font-display text-lg font-bold uppercase tracking-widest text-white placeholder:text-white/30 focus:border-[#dfb12e] focus:outline-none" placeholder="ex: 05" />
-    <p id="tableErr" class="mt-2 hidden text-xs text-red-400 font-semibold"></p>
     <button id="tableOkBtn" type="button" class="btn-gold-badge mt-4 w-full rounded-xl py-2.5 text-xs font-bold">Valider</button>
   </div>
 </div>
@@ -196,46 +158,39 @@
 (function () {
   'use strict';
 
-  const CONFIG = { currencyCode: 'DH', whatsappNumber: '212600000000' };
-  const IMG = (id) => 'https://images.unsplash.com/' + id + '?auto=format&fit=crop&w=400&q=70';
+  const CONFIG = { currencyCode: 'DH' };
 
-  // Strict order: Desserts first, then Mains, then Entrees (Salads), then Drinks
+  // Real, verified photos for Moroccan authentic dishes
   const MENU = [
     { id: 'd1', cat: 'desserts', price: 50, kcal: 410, protein: 7,
-      img: 'photo-1551024709-8f23befc6f87',
+      img: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=500&q=80',
       nameFr: 'Gâteau de semoule à la fleur d’oranger', nameAr: 'كعكة السميد بماء الزهر',
       descFr: 'Gâteau moelleux imbibé de sirop de fleur d’oranger et pistaches.', descAr: 'كعكة رطبة مسقية بشراب زهر البرتقال والفستق.' },
     { id: 'm1', cat: 'mains', price: 120, kcal: 720, protein: 32,
-      img: 'photo-1544025162-d76694265947',
+      img: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=500&q=80',
       nameFr: 'Couscous Royal', nameAr: 'كسكس ملكي',
       descFr: 'Semoule fine et vapeur, viandes tendres et sept légumes de saison.', descAr: 'كسكس أصيل باللحوم المختارة وخضار موسمية طازجة.' },
     { id: 'm2', cat: 'mains', price: 100, kcal: 480, protein: 35,
-      img: 'photo-1519708227418-c8fd9a32b7a2',
+      img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=500&q=80',
       nameFr: 'Tajine de poulet au citron', nameAr: 'طاجين الدجاج بالليمون',
       descFr: 'Poulet fermier confit au citron confit, olives et safran.', descAr: 'دجاج بلدي مطهو ببطء مع الليمون المخلل والزيتون والزعفران.' },
     { id: 'm3', cat: 'mains', price: 110, kcal: 520, protein: 40,
-      img: 'photo-1555939594-58d7cb561ad1',
+      img: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=500&q=80',
       nameFr: 'Brochettes de bœuf', nameAr: 'أسياخ اللحم',
       descFr: 'Brochettes de bœuf marinées aux épices douces et grillées au charbon.', descAr: 'قطع لحم بقري متبلة وممشوية على الفحم بأعشاب عطرية.' },
     { id: 's1', cat: 'salads', price: 40, kcal: 150, protein: 6,
-      img: 'photo-1546069901-ba9599a7e63c',
+      img: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=500&q=80',
       nameFr: 'Salade Marocaine', nameAr: 'سلطة مغربية',
       descFr: 'Tomates, concombres et poivrons finement coupés, persil et huile d’olive.', descAr: 'طماطم، خيار وفلفل مقطع بعناية مع البقدونس وزيت الزيتون.' },
     { id: 'dr1', cat: 'drinks', price: 25, kcal: 90, protein: 0,
-      img: 'photo-1556679343-c7306c1976bc',
+      img: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=500&q=80',
       nameFr: 'Thé à la menthe', nameAr: 'شاي مغربي بالنعناع',
       descFr: 'Thé vert traditionnel infusé à la menthe fraîche.', descAr: 'شاي أخضر أصيل منعش بأوراق النعناع الطازج.' }
   ];
 
   const I18N = {
-    fr: {
-      categories: { all: 'Tous', desserts: 'Desserts', mains: 'Plats principaux', salads: 'Entrées', drinks: 'Boissons' },
-      kcal: 'kcal', protein: 'g'
-    },
-    ar: {
-      categories: { all: 'الكل', desserts: 'الحلويات', mains: 'الأطباق الرئيسية', salads: 'المقبلات', drinks: 'المشروبات' },
-      kcal: 'سعرة', protein: 'غ'
-    }
+    fr: { categories: { all: 'Tous', desserts: 'Desserts', mains: 'Plats principaux', salads: 'Entrées', drinks: 'Boissons' }, kcal: 'kcal', protein: 'g' },
+    ar: { categories: { all: 'الكل', desserts: 'الحلويات', mains: 'الأطباق الرئيسية', salads: 'المقبلات', drinks: 'المشروبات' }, kcal: 'سعرة', protein: 'غ' }
   };
 
   const state = { lang: 'fr', cat: 'all', table: '', cart: {} };
@@ -245,18 +200,8 @@
       const saved = localStorage.getItem('ikatna_table');
       if (saved) { state.table = saved; updateTableUI(); return; }
     } catch (_) {}
-    showTableModal();
-  }
-
-  function showTableModal() {
     document.getElementById('tableModal').classList.remove('hidden');
     document.getElementById('tableModal').classList.add('flex');
-    document.getElementById('tableInput').focus();
-  }
-
-  function hideTableModal() {
-    document.getElementById('tableModal').classList.add('hidden');
-    document.getElementById('tableModal').classList.remove('flex');
   }
 
   function updateTableUI() {
@@ -295,11 +240,6 @@
     const list = MENU.filter(item => state.cat === 'all' || item.cat === state.cat);
     const L = I18N[state.lang];
 
-    if (list.length === 0) {
-      root.innerHTML = '<p class="py-12 text-center text-xs text-white/50">Aucun plat trouvé.</p>';
-      return;
-    }
-
     list.forEach(item => {
       const isAr = state.lang === 'ar';
       const name = isAr ? item.nameAr : item.nameFr;
@@ -314,12 +254,12 @@
         actionHtml = `
           <button type="button" onclick="window.__ikatna.add('${item.id}', 1)"
                   class="btn-gold-badge rounded-xl px-3 py-1.5 text-xs font-bold flex items-center gap-1">
-            <span>+ ${item.price} ${CONFIG.currencyCode}</span>
+            <span>+ Ajouter</span>
           </button>
         `;
       } else {
         actionHtml = `
-          <div class="flex items-center gap-1.5 rounded-xl bg-[#2b170c] text-[#fae198] px-2 py-1">
+          <div class="flex items-center gap-2 rounded-xl bg-[#2b170c] text-[#fae198] px-2.5 py-1">
             <button type="button" onclick="window.__ikatna.add('${item.id}', -1)" class="text-sm font-bold px-1">-</button>
             <span class="text-xs font-extrabold" dir="ltr">${qty}</span>
             <button type="button" onclick="window.__ikatna.add('${item.id}', 1)" class="text-sm font-bold px-1">+</button>
@@ -330,7 +270,7 @@
       card.innerHTML = `
         <div class="flex items-center gap-3 min-w-0 flex-1">
           <div class="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-gray-100 shadow-inner">
-            <img src="${IMG(item.img)}" alt="${name}" loading="lazy" class="h-full w-full object-cover" onerror="this.style.display='none';" />
+            <img src="${item.img}" alt="${name}" loading="lazy" class="h-full w-full object-cover" />
           </div>
           <div class="min-w-0 flex-1">
             <h3 class="font-display text-sm font-bold text-[#2b170c] truncate">${name}</h3>
@@ -348,7 +288,6 @@
           </span>
           <div class="flex items-center gap-1">
             ${actionHtml}
-            <span class="text-gray-400 font-light text-base ms-1">></span>
           </div>
         </div>
       `;
@@ -380,7 +319,7 @@
     bar.classList.toggle('translate-y-full', !show);
     if (show) {
       document.getElementById('cartCount').textContent = `${totalQty} article${totalQty > 1 ? 's' : ''}`;
-      document.getElementById('cartTotal').textContent = `+ ${totalPrice} ${CONFIG.currencyCode}`;
+      document.getElementById('cartTotal').textContent = `${totalPrice} ${CONFIG.currencyCode}`;
     }
   }
 
@@ -400,16 +339,16 @@
     document.getElementById('qrModal').classList.add('flex');
 
     const lines = [`IKATNA`, `TABLE: #${state.table || 'ANY'}`, `---`];
-    items.forEach(({ item, qty }) => lines.push(`${qty}x ${state.lang === 'ar' ? item.nameAr : item.nameFr} (+${item.price * qty} ${CONFIG.currencyCode})`));
-    lines.push(`---`, `TOTAL: + ${totalPrice} ${CONFIG.currencyCode}`);
+    items.forEach(({ item, qty }) => lines.push(`${qty}x ${state.lang === 'ar' ? item.nameAr : item.nameFr} (${item.price * qty} ${CONFIG.currencyCode})`));
+    lines.push(`---`, `TOTAL: ${totalPrice} ${CONFIG.currencyCode}`);
 
     document.getElementById('qrList').innerHTML = items.map(({ item, qty, sub }) => `
       <li class="flex justify-between items-center py-0.5">
         <span><strong>${qty}x</strong> ${state.lang === 'ar' ? item.nameAr : item.nameFr}</span>
-        <span class="text-[#fae198] font-bold">+ ${sub} ${CONFIG.currencyCode}</span>
+        <span class="text-[#fae198] font-bold">${sub} ${CONFIG.currencyCode}</span>
       </li>
     `).join('');
-    document.getElementById('qrTotal').textContent = `+ ${totalPrice} ${CONFIG.currencyCode}`;
+    document.getElementById('qrTotal').textContent = `${totalPrice} ${CONFIG.currencyCode}`;
 
     const box = document.getElementById('qrBox');
     box.innerHTML = '';
@@ -422,10 +361,13 @@
     document.querySelectorAll('#langSwitch button').forEach(b => {
       b.onclick = () => applyLanguage(b.getAttribute('data-lang'));
     });
-    document.getElementById('tableEditBtn').onclick = showTableModal;
+    document.getElementById('tableEditBtn').onclick = () => {
+      document.getElementById('tableModal').classList.remove('hidden');
+      document.getElementById('tableModal').classList.add('flex');
+    };
     document.getElementById('tableOkBtn').onclick = () => {
       const val = document.getElementById('tableInput').value.trim();
-      if (val) { state.table = val; localStorage.setItem('ikatna_table', val); updateTableUI(); hideTableModal(); }
+      if (val) { state.table = val; localStorage.setItem('ikatna_table', val); updateTableUI(); document.getElementById('tableModal').classList.add('hidden'); }
     };
     document.getElementById('qrBtn').onclick = openQrModal;
     document.getElementById('qrClose').onclick = () => document.getElementById('qrModal').classList.add('hidden');
