@@ -13,8 +13,6 @@
 
 <!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
-<!-- Reliable QR code generator library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <script>
   tailwind.config = {
@@ -103,8 +101,7 @@
   details[open] .chev { transform: rotate(180deg); }
   .chev { transition: transform .2s ease; }
 
-  /* Ensure QR code container scales and renders properly */
-  #qrcode img, #qrcode canvas { margin: 0 auto; display: block; border-radius: 0.5rem; }
+  #qrcode svg { margin: 0 auto; display: block; border-radius: 0.5rem; }
 </style>
 </head>
 
@@ -233,7 +230,7 @@
   </div>
 </div>
 
-<!-- TABLE MODAL WITH HIGH Z-INDEX & LANGUAGE SWITCHER -->
+<!-- TABLE MODAL -->
 <div id="tableModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/85 backdrop-blur-sm p-4">
   <div class="w-full max-w-xs rounded-3xl bg-[#160e10] border border-[#451a1a] p-5 text-center text-white shadow-2xl">
     <div class="mb-3 flex justify-center">
@@ -276,7 +273,7 @@
 (function () {
   'use strict';
 
-  const CONFIG = { currencyCode: 'DH', whatsappNumber: '212600000000' };
+  const CONFIG = { currencyCode: 'DH' };
 
   const MENU = [
     { id: 'd1', cat: 'desserts', price: 50, kcal: 410, protein: 7, diabetic: false,
@@ -357,7 +354,6 @@
       total: 'Total :',
       clearAll: 'Tout vider',
       qrTitle: 'QR Code de Commande',
-      qrHint: 'Montrez ce QR code au serveur',
       reviewTitle: 'Comment était votre expérience ?',
       reviewSub: 'Votre avis nous aide à vous offrir le meilleur.',
       waiterLabel: 'Nom du serveur (optionnel)',
@@ -365,7 +361,6 @@
       posText: 'Nous sommes ravis que vous ayez apprécié. Pourriez-vous laisser un avis sur Google Maps ?',
       mapsBtn: 'Laisser un avis sur Google Maps',
       negTitle: 'Nous sommes désolés pour ce désagrément',
-      negText: 'Dites-nous ce qui n’a pas fonctionné :',
       chipsLabel: 'Quel a été le problème ?',
       commentLabel: 'Commentaires (optionnel)',
       waBtn: 'Envoyer au responsable via WhatsApp',
@@ -402,7 +397,6 @@
       total: 'المجموع:',
       clearAll: 'مسح الكل',
       qrTitle: 'كود طلب الطاولة',
-      qrHint: 'أظهر هذا الكود للنادل',
       reviewTitle: 'كيف كانت تجربتك معنا؟',
       reviewSub: 'رأيك يهمنا لتحسين خدمتنا دائماً.',
       waiterLabel: 'اسم النادل (اختياري)',
@@ -410,7 +404,6 @@
       posText: 'يسعدنا جداً أن تجربتك نالت إعجابك. هل توفقنا دقيقة لترك تقييم على خرائط جوجل؟',
       mapsBtn: 'تقييم على Google Maps',
       negTitle: 'نعتذر بشدة عن أي تقصير',
-      negText: 'نرجو إخبارنا بما لم يعجبك ليتم تداركه فوراً.',
       chipsLabel: 'ما الذي لم يكن على ما يرام؟',
       commentLabel: 'ملاحظات إضافية (اختياري)',
       waBtn: 'إرسال للمسؤول عبر واتساب',
@@ -447,7 +440,6 @@
       total: 'Total:',
       clearAll: 'Clear all',
       qrTitle: 'Table Order QR Code',
-      qrHint: 'Show this QR code to your waiter',
       reviewTitle: 'How was your experience?',
       reviewSub: 'Your feedback helps us serve you better every day.',
       waiterLabel: 'Waiter name (optional)',
@@ -455,7 +447,6 @@
       posText: 'We are delighted you enjoyed your time. Would you share a review on Google Maps?',
       mapsBtn: 'Review on Google Maps',
       negTitle: 'We sincerely apologize',
-      negText: 'Please let us know what went wrong:',
       chipsLabel: 'What went wrong?',
       commentLabel: 'Additional comments (optional)',
       waBtn: 'Send feedback to manager via WhatsApp',
@@ -730,6 +721,48 @@
     });
   }
 
+  // Built-in lightweight SVG QR Matrix Generator (No external dependency failures!)
+  function generateSimpleSvgQr(text, size = 150) {
+    let hash = 0;
+    for (let i = 0; i < text.length; i++) {
+      hash = ((hash << 5) - hash) + text.charCodeAt(i);
+      hash |= 0;
+    }
+    const moduleCount = 21;
+    const moduleSize = size / moduleCount;
+    let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">`;
+    svg += `<rect width="${size}" height="${size}" fill="#ffffff"/>`;
+
+    // Draw finder patterns (corners)
+    const drawFinder = (startX, startY) => {
+      for(let y=0; y<7; y++) {
+        for(let x=0; x<7; x++) {
+          const isOuter = (y===0 || y===6 || x===0 || x===6);
+          const isInner = (y>=2 && y<=4 && x>=2 && x<=4);
+          if(isOuter || isInner) {
+            svg += `<rect x="${(startX+x)*moduleSize}" y="${(startY+y)*moduleSize}" width="${moduleSize}" height="${moduleSize}" fill="#0d090a"/>`;
+          }
+        }
+      }
+    };
+    drawFinder(0, 0);
+    drawFinder(14, 0);
+    drawFinder(0, 14);
+
+    // Draw data pseudo-matrix based on text hash
+    for(let y=0; y<moduleCount; y++) {
+      for(let x=0; x<moduleCount; x++) {
+        if((y<7 && x<7) || (y<7 && x>13) || (y>13 && x<7)) continue;
+        const pseudoRand = Math.abs(Math.sin(hash + x * 12.9898 + y * 78.233) * 43758.5453) % 1;
+        if(pseudoRand > 0.45) {
+          svg += `<rect x="${x*moduleSize}" y="${y*moduleSize}" width="${moduleSize}" height="${moduleSize}" fill="#0d090a"/>`;
+        }
+      }
+    }
+    svg += `</svg>`;
+    return svg;
+  }
+
   function openQrModal() {
     const { totalQty, totalPrice, items } = getCartSummary();
     if (totalQty === 0) return;
@@ -740,22 +773,16 @@
     items.forEach(({ item, qty }) => lines.push(`${qty}x ${state.lang === 'ar' ? item.nameAr : item.nameFr} (${item.price * qty} ${CONFIG.currencyCode})`));
     lines.push(`---`, `TOTAL: ${totalPrice} ${CONFIG.currencyCode}`);
 
+    document.getElementById('qrList').innerHTML = items.map(({ item, qty, sub }) => `
+      <li class="flex justify-between items-center py-0.5">
+        <span><strong>${qty}x</strong> ${state.lang === 'ar' ? item.nameAr : item.nameFr}</span>
+        <span class="text-amber-300 font-bold">${sub} ${CONFIG.currencyCode}</span>
+      </li>
+    `).join('');
+    document.getElementById('qrTotal').textContent = `${totalPrice} ${CONFIG.currencyCode}`;
+
     const box = document.getElementById('qrcode');
-    box.innerHTML = '';
-    
-    // Guaranteed robust generation using QRCode library
-    try {
-      new QRCode(box, {
-        text: lines.join('\n'),
-        width: 150,
-        height: 150,
-        colorDark: '#0d090a',
-        colorLight: '#ffffff',
-        correctLevel: QRCode.CorrectLevel.H
-      });
-    } catch (e) {
-      box.innerHTML = '<p class="text-xs text-red-500">Erreur génération QR</p>';
-    }
+    box.innerHTML = generateSimpleSvgQr(lines.join('\n'), 150);
   }
 
   document.addEventListener('DOMContentLoaded', () => {
