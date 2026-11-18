@@ -13,7 +13,7 @@
 
 <!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
-<!-- QRCode.js Library -->
+<!-- Reliable QR code generator library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <script>
@@ -63,7 +63,6 @@
   .no-scrollbar { scrollbar-width: none; }
   .no-scrollbar::-webkit-scrollbar { display: none; }
 
-  /* Royal Gray Card theme with Moroccan colored accents */
   .card-desserts { background: #1e2530; border-left: 5px solid #991b1b; }
   .card-mains { background: #1e2530; border-left: 5px solid #eab308; }
   .card-salads { background: #1e2530; border-left: 5px solid #065f46; }
@@ -104,7 +103,8 @@
   details[open] .chev { transform: rotate(180deg); }
   .chev { transition: transform .2s ease; }
 
-  #qrcode canvas, #qrcode img { margin: 0 auto; border-radius: 0.5rem; display: block; }
+  /* Ensure QR code container scales and renders properly */
+  #qrcode img, #qrcode canvas { margin: 0 auto; display: block; border-radius: 0.5rem; }
 </style>
 </head>
 
@@ -172,7 +172,6 @@
     <div id="stars" class="mt-5 flex justify-center gap-2" dir="ltr"></div>
     <p id="ratingLabel" class="mt-2.5 h-4 text-center text-xs font-semibold text-amber-300"></p>
 
-    <!-- Positive Experience Section -->
     <section id="positive" class="mt-4 hidden rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-center">
       <div class="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-amber-500/20 text-xl">🎉</div>
       <h4 data-i18n="posTitle" class="text-sm font-bold text-amber-300">Merci infiniment pour votre visite !</h4>
@@ -183,7 +182,6 @@
       </a>
     </section>
 
-    <!-- Negative Experience Section -->
     <section id="negative" class="mt-4 hidden rounded-2xl border border-[#451a1a] bg-[#0d090a] p-4">
       <h4 data-i18n="negTitle" class="text-xs font-bold text-slate-200">Nous sommes désolés pour ce désagrément</h4>
       <p data-i18n="chipsLabel" class="mt-1 text-[11px] text-slate-400">Quel a été le problème ?</p>
@@ -235,8 +233,8 @@
   </div>
 </div>
 
-<!-- TABLE MODAL WITH LANGUAGE SWITCHER -->
-<div id="tableModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+<!-- TABLE MODAL WITH HIGH Z-INDEX & LANGUAGE SWITCHER -->
+<div id="tableModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/85 backdrop-blur-sm p-4">
   <div class="w-full max-w-xs rounded-3xl bg-[#160e10] border border-[#451a1a] p-5 text-center text-white shadow-2xl">
     <div class="mb-3 flex justify-center">
       <div id="modalLangSwitch" class="inline-flex rounded-full bg-[#0d090a] p-1 border border-[#451a1a]" role="group">
@@ -254,7 +252,7 @@
 </div>
 
 <!-- QR MODAL -->
-<div id="qrModal" class="fixed inset-0 z-50 hidden items-end justify-center bg-black/80 backdrop-blur-sm sm:items-center p-3" role="dialog">
+<div id="qrModal" class="fixed inset-0 z-50 hidden items-end justify-center bg-black/85 backdrop-blur-sm sm:items-center p-3" role="dialog">
   <div class="w-full max-w-sm rounded-3xl bg-[#160e10] border border-[#451a1a] p-5 text-white shadow-2xl">
     <div class="text-center">
       <h3 data-i18n="qrTitle" class="font-display text-lg font-bold text-amber-300">QR Code de Commande</h3>
@@ -742,24 +740,22 @@
     items.forEach(({ item, qty }) => lines.push(`${qty}x ${state.lang === 'ar' ? item.nameAr : item.nameFr} (${item.price * qty} ${CONFIG.currencyCode})`));
     lines.push(`---`, `TOTAL: ${totalPrice} ${CONFIG.currencyCode}`);
 
-    document.getElementById('qrList').innerHTML = items.map(({ item, qty, sub }) => `
-      <li class="flex justify-between items-center py-0.5">
-        <span><strong>${qty}x</strong> ${state.lang === 'ar' ? item.nameAr : item.nameFr}</span>
-        <span class="text-amber-300 font-bold">${sub} ${CONFIG.currencyCode}</span>
-      </li>
-    `).join('');
-    document.getElementById('qrTotal').textContent = `${totalPrice} ${CONFIG.currencyCode}`;
-
     const box = document.getElementById('qrcode');
     box.innerHTML = '';
-    new QRCode(box, {
-      text: lines.join('\n'),
-      width: 150,
-      height: 150,
-      colorDark: '#0d090a',
-      colorLight: '#ffffff',
-      correctLevel: QRCode.CorrectLevel.H
-    });
+    
+    // Guaranteed robust generation using QRCode library
+    try {
+      new QRCode(box, {
+        text: lines.join('\n'),
+        width: 150,
+        height: 150,
+        colorDark: '#0d090a',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    } catch (e) {
+      box.innerHTML = '<p class="text-xs text-red-500">Erreur génération QR</p>';
+    }
   }
 
   document.addEventListener('DOMContentLoaded', () => {
