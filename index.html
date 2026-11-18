@@ -103,7 +103,48 @@
   details[open] .chev { transform: rotate(180deg); }
   .chev { transition: transform .2s ease; }
 
-  #qrcode img, #qrcode canvas { margin: 0 auto; display: block; border-radius: 0.5rem; }
+  #qrcode img, #qrcode canvas { margin: 0 auto; display: block; border-radius: 0.5rem; image-rendering: pixelated; }
+
+  /* Moroccan-inspired zellige, warm gold details and softer food cards */
+  body {
+    background-image:
+      radial-gradient(circle at 10% 15%, rgba(153, 27, 27, 0.24) 0%, transparent 45%),
+      radial-gradient(circle at 90% 85%, rgba(6, 95, 70, 0.22) 0%, transparent 45%),
+      repeating-linear-gradient(45deg, rgba(234,179,8,.035) 0 1px, transparent 1px 28px),
+      repeating-linear-gradient(-45deg, rgba(234,179,8,.025) 0 1px, transparent 1px 28px),
+      linear-gradient(135deg, #0d090a 0%, #1c1012 100%) !important;
+  }
+  header {
+    min-height: 205px;
+    background-image: radial-gradient(ellipse at 50% 115%, rgba(234,179,8,.18), transparent 55%);
+  }
+  .hero-title-wrap { position: relative; padding: .85rem .5rem .35rem; }
+  .hero-title-wrap::before, .hero-title-wrap::after {
+    content: "✦"; position: absolute; top: 50%; transform: translateY(-50%);
+    color: rgba(250,204,21,.62); font-size: 1rem;
+  }
+  .hero-title-wrap::before { left: 1%; }
+  .hero-title-wrap::after { right: 1%; }
+  .hero-kicker {
+    display: inline-flex; align-items: center; gap: .45rem; margin-top: .55rem;
+    border: 1px solid rgba(234,179,8,.35); border-radius: 999px;
+    background: rgba(13,9,10,.62); padding: .32rem .8rem;
+    color: #fde68a; font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+  }
+  .dish-card {
+    background: linear-gradient(145deg, rgba(38,48,64,.98), rgba(24,16,19,.98));
+    border-color: rgba(148,163,184,.22);
+    box-shadow: 0 12px 28px -12px rgba(0,0,0,.8), inset 0 1px rgba(255,255,255,.035);
+  }
+  .dish-card:hover { border-color: rgba(250,204,21,.75); box-shadow: 0 16px 32px -14px rgba(234,179,8,.17); }
+  .dish-photo { border: 1px solid rgba(250,204,21,.28); box-shadow: 0 5px 16px rgba(0,0,0,.38); }
+  .pill { box-shadow: inset 0 1px rgba(255,255,255,.035); }
+  .btn-gold-badge { background: linear-gradient(135deg, #fff1a8 0%, #facc15 48%, #ca8a04 100%); }
+  #qrStatus { min-height: 1rem; }
+  #qrModal .qr-paper { background: radial-gradient(circle at 50% 0%, #fffdf5, #fff 65%); }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+  }
 </style>
 </head>
 
@@ -127,9 +168,10 @@
       </div>
     </div>
 
-    <div class="mt-3 text-center">
+    <div class="mt-3 text-center hero-title-wrap">
       <h1 class="font-display text-3xl font-bold italic tracking-wide text-amber-300 drop-shadow-md">Le Palais Gourmand</h1>
       <p id="heroSub" class="mt-2 text-xs font-medium text-slate-300">Une cuisine authentique aux saveurs marocaines</p>
+      <span class="hero-kicker">✧ <span data-i18n="heroKicker">Tradition &amp; saveurs du Maroc</span> ✧</span>
     </div>
   </div>
 </header>
@@ -258,16 +300,22 @@
       <p class="mt-0.5 text-xs text-slate-300"><span data-i18n="table">Table</span>: <span id="qrTable" class="font-bold text-amber-300" dir="ltr"></span></p>
     </div>
     
-    <div class="mx-auto mt-4 w-fit rounded-2xl bg-white p-3.5 shadow-md">
-      <div id="qrcode" class="flex items-center justify-center"></div>
+    <div class="qr-paper mx-auto mt-4 w-fit rounded-2xl border border-amber-100 p-4 shadow-[0_12px_35px_rgba(0,0,0,.35)]">
+      <div id="qrcode" class="flex min-h-[240px] min-w-[240px] items-center justify-center"></div>
     </div>
+    <p data-i18n="qrHint" class="mt-2 text-center text-[10px] leading-relaxed text-slate-400">Le serveur peut scanner ce code pour lire votre commande.</p>
+    <p id="qrStatus" role="status" aria-live="polite" class="mt-1 text-center text-[10px] text-amber-300"></p>
 
     <ul id="qrList" class="mt-3.5 space-y-1.5 border-t border-[#451a1a] pt-2.5 text-xs max-h-32 overflow-y-auto text-slate-300"></ul>
     <div class="mt-2 flex items-center justify-between border-t border-[#451a1a] pt-2 text-xs font-bold text-amber-300">
       <span data-i18n="total">Total :</span>
       <span id="qrTotal">0 DH</span>
     </div>
-    <button id="qrClose" type="button" data-i18n="close" class="mt-4 w-full rounded-xl border border-[#451a1a] bg-[#0d090a] py-2.5 text-xs font-bold transition hover:bg-[#181013] cursor-pointer">Fermer</button>
+    <div class="mt-4 grid grid-cols-2 gap-2">
+      <button id="qrDownloadBtn" type="button" data-i18n="downloadQr" class="btn-gold-badge rounded-xl px-3 py-2.5 text-xs font-bold">Télécharger QR</button>
+      <button id="qrCopyBtn" type="button" data-i18n="copyOrder" class="rounded-xl border border-amber-500/40 bg-[#0d090a] px-3 py-2.5 text-xs font-bold text-amber-200">Copier la commande</button>
+    </div>
+    <button id="qrClose" type="button" data-i18n="close" class="mt-2 w-full rounded-xl border border-[#451a1a] bg-[#0d090a] py-2.5 text-xs font-bold transition hover:bg-[#181013] cursor-pointer">Fermer</button>
   </div>
 </div>
 
@@ -343,6 +391,14 @@
     fr: {
       dir: 'ltr', lang: 'fr',
       heroSub: 'Une cuisine authentique aux saveurs marocaines',
+      heroKicker: 'Tradition & saveurs du Maroc',
+      qrHint: 'Le serveur peut scanner ce code pour lire votre commande.',
+      downloadQr: 'Télécharger QR',
+      copyOrder: 'Copier la commande',
+      qrLoading: 'Génération du QR code…',
+      qrReady: 'QR code prêt à scanner.',
+      qrError: 'Impossible de générer le QR. Vérifiez votre connexion Internet.',
+      copied: 'Commande copiée.',
       tabMenu: 'Menu & Commande',
       tabReview: 'Avis & Service',
       nutriNote: '💡 Les valeurs nutritionnelles et calories sont des estimations indicatives par portion.',
@@ -386,6 +442,14 @@
     ar: {
       dir: 'rtl', lang: 'ar',
       heroSub: 'مطبخ أصيل بنكهات مغربية',
+      heroKicker: 'أصالة ونكهات مغربية',
+      qrHint: 'يمكن للنادل مسح هذا الرمز لقراءة طلبك.',
+      downloadQr: 'تحميل QR',
+      copyOrder: 'نسخ الطلب',
+      qrLoading: 'جارٍ إنشاء رمز QR…',
+      qrReady: 'رمز QR جاهز للمسح.',
+      qrError: 'تعذر إنشاء الرمز. تحقق من اتصال الإنترنت.',
+      copied: 'تم نسخ الطلب.',
       tabMenu: 'المنيو والطلب',
       tabReview: 'تقييم الخدمة',
       nutriNote: '💡 المعلومات الغذائية والسعرات الحرارية هي تقديرات تقريبية لكل وجبة.',
@@ -429,6 +493,14 @@
     en: {
       dir: 'ltr', lang: 'en',
       heroSub: 'Authentic cuisine with Moroccan flavors',
+      heroKicker: 'Moroccan tradition & flavours',
+      qrHint: 'Your waiter can scan this code to read your order.',
+      downloadQr: 'Download QR',
+      copyOrder: 'Copy order',
+      qrLoading: 'Generating QR code…',
+      qrReady: 'QR code is ready to scan.',
+      qrError: 'Could not generate the QR. Check your internet connection.',
+      copied: 'Order copied.',
       tabMenu: 'Menu & Order',
       tabReview: 'Rate Service',
       nutriNote: '💡 Nutritional values and calories are approximate estimates per serving.',
@@ -471,11 +543,22 @@
     }
   };
 
-  const state = { lang: 'fr', tab: 'menu', cat: 'all', table: '', cart: {}, rating: 0, hoverRating: 0, chips: new Set() };
+  const state = { lang: 'fr', tab: 'menu', cat: 'all', table: '', cart: {}, rating: 0, hoverRating: 0, chips: new Set(), lastOrderPayload: '' };
+  let qrLibraryPromise = null;
   const t = () => I18N[state.lang];
 
   function initTable() {
+    // A unique entry QR can open the menu with ?table=05, ?table=06, etc.
     try {
+      const fromUrl = new URLSearchParams(window.location.search).get('table');
+      const fixedTable = (fromUrl || '').trim().replace(/[^a-zA-Z0-9-]/g, '').slice(0, 6);
+      if (fixedTable) {
+        state.table = fixedTable;
+        try { localStorage.setItem('ikatna_table', fixedTable); } catch (_) {}
+        updateTableUI();
+        document.getElementById('tableModal').classList.add('hidden');
+        return;
+      }
       const saved = localStorage.getItem('ikatna_table');
       if (saved) { state.table = saved; updateTableUI(); return; }
     } catch (_) {}
@@ -537,7 +620,8 @@
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'pill rounded-full px-4 py-1.5 text-xs font-semibold whitespace-nowrap shadow-sm cursor-pointer';
-      btn.textContent = cats[key];
+      const icons = { all: '✦', desserts: '🍰', mains: '🍲', salads: '🥗', drinks: '🍵' };
+      btn.textContent = `${icons[key] || ''} ${cats[key]}`;
       const active = state.cat === key;
       btn.setAttribute('aria-pressed', active ? 'true' : 'false');
       btn.onclick = () => { state.cat = key; renderPills(); renderMenu(); };
@@ -592,7 +676,7 @@
 
       card.innerHTML = `
         <div class="flex items-start gap-3">
-          <div class="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-[#101722] shadow-inner">
+          <div class="dish-photo relative h-24 w-24 shrink-0 overflow-hidden rounded-2xl bg-[#101722] shadow-inner sm:h-28 sm:w-28">
             <img src="${item.img}" alt="${name}" loading="lazy" class="h-full w-full object-cover" />
           </div>
           <div class="min-w-0 flex-1">
@@ -723,40 +807,134 @@
     });
   }
 
-  function openQrModal() {
+  function loadQRCodeLibrary() {
+    if (window.QRCode && window.QRCode.CorrectLevel) return Promise.resolve(window.QRCode);
+    if (qrLibraryPromise) return qrLibraryPromise;
+
+    const sources = [
+      'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js',
+      'https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js'
+    ];
+
+    qrLibraryPromise = new Promise((resolve, reject) => {
+      let index = 0;
+      const tryNext = () => {
+        if (window.QRCode && window.QRCode.CorrectLevel) return resolve(window.QRCode);
+        if (index >= sources.length) return reject(new Error('QR library unavailable'));
+        const script = document.createElement('script');
+        script.src = sources[index++];
+        script.async = true;
+        script.onload = () => window.QRCode ? resolve(window.QRCode) : tryNext();
+        script.onerror = tryNext;
+        document.head.appendChild(script);
+      };
+      tryNext();
+    });
+    return qrLibraryPromise;
+  }
+
+  // qrcode.js stores 8-bit characters. Convert text to UTF-8 bytes first
+  // so Arabic menu names survive scanning correctly.
+  function toQrByteString(value) {
+    const bytes = new TextEncoder().encode('\uFEFF' + value);
+    let binary = '';
+    for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+    return binary;
+  }
+
+  function buildOrderPayload(items, totalPrice) {
+    const lines = [
+      'IKATNA - LE PALAIS GOURMAND',
+      `COMMANDE | TABLE: ${state.table || 'NON PRECISEE'}`,
+      `DATE: ${new Date().toLocaleString('fr-MA')}`,
+      '--------------------------------'
+    ];
+    items.forEach(({ item, qty, sub }) => {
+      const name = state.lang === 'ar' ? item.nameAr : (state.lang === 'en' ? item.nameEn : item.nameFr);
+      lines.push(`${qty} x ${name} = ${sub} DH`);
+    });
+    lines.push('--------------------------------', `TOTAL: ${totalPrice} DH`, 'Merci !');
+    return lines.join('\n');
+  }
+
+  async function openQrModal() {
     const { totalQty, totalPrice, items } = getCartSummary();
     if (totalQty === 0) return;
-    document.getElementById('qrModal').classList.remove('hidden');
-    document.getElementById('qrModal').classList.add('flex');
 
-    const lines = [`IKATNA`, `TABLE: #${state.table || 'ANY'}`, `---`];
-    items.forEach(({ item, qty }) => lines.push(`${qty}x ${state.lang === 'ar' ? item.nameAr : item.nameFr} (${item.price * qty} ${CONFIG.currencyCode})`));
-    lines.push(`---`, `TOTAL: ${totalPrice} ${CONFIG.currencyCode}`);
+    const modal = document.getElementById('qrModal');
+    const box = document.getElementById('qrcode');
+    const status = document.getElementById('qrStatus');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    box.innerHTML = '<span class="text-xs font-semibold text-slate-500">QR</span>';
+    status.textContent = t().qrLoading;
 
-    document.getElementById('qrList').innerHTML = items.map(({ item, qty, sub }) => `
-      <li class="flex justify-between items-center py-0.5">
-        <span><strong>${qty}x</strong> ${state.lang === 'ar' ? item.nameAr : item.nameFr}</span>
-        <span class="text-amber-300 font-bold">${sub} ${CONFIG.currencyCode}</span>
-      </li>
-    `).join('');
+    state.lastOrderPayload = buildOrderPayload(items, totalPrice);
+    document.getElementById('qrList').innerHTML = items.map(({ item, qty, sub }) => {
+      const name = state.lang === 'ar' ? item.nameAr : (state.lang === 'en' ? item.nameEn : item.nameFr);
+      return `<li class="flex justify-between items-center gap-3 py-0.5">
+        <span><strong>${qty}x</strong> ${name}</span>
+        <span class="shrink-0 text-amber-300 font-bold">${sub} ${CONFIG.currencyCode}</span>
+      </li>`;
+    }).join('');
     document.getElementById('qrTotal').textContent = `${totalPrice} ${CONFIG.currencyCode}`;
 
-    const box = document.getElementById('qrcode');
-    box.innerHTML = '';
-    
-    // Using standard qrcode.js library instance
     try {
-      new QRCode(box, {
-        text: lines.join('\n'),
-        width: 140,
-        height: 140,
-        colorDark: '#0d090a',
+      const QRCodeClass = await loadQRCodeLibrary();
+      box.innerHTML = '';
+      new QRCodeClass(box, {
+        text: toQrByteString(state.lastOrderPayload),
+        width: 240,
+        height: 240,
+        colorDark: '#171013',
         colorLight: '#ffffff',
-        correctLevel: QRCode.CorrectLevel.M
+        correctLevel: QRCodeClass.CorrectLevel.M
       });
+      if (!box.querySelector('canvas, img')) throw new Error('QR was not rendered');
+      status.textContent = t().qrReady;
     } catch (err) {
-      box.innerHTML = '<p class="text-xs text-red-400">Erreur QR</p>';
+      console.error('QR generation failed:', err);
+      box.innerHTML = `<div class="max-w-[220px] px-4 text-center text-xs font-semibold text-red-700">${t().qrError}</div>`;
+      status.textContent = '';
     }
+  }
+
+  function downloadQr() {
+    const box = document.getElementById('qrcode');
+    const canvas = box.querySelector('canvas');
+    const img = box.querySelector('img');
+    let dataUrl = '';
+    try {
+      if (canvas) dataUrl = canvas.toDataURL('image/png');
+      else if (img && img.src) dataUrl = img.src;
+    } catch (err) { console.error('QR download failed:', err); }
+    if (!dataUrl) {
+      document.getElementById('qrStatus').textContent = t().qrError;
+      return;
+    }
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = `commande-table-${state.table || 'sans-table'}.png`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  }
+
+  async function copyOrder() {
+    if (!state.lastOrderPayload) return;
+    try {
+      await navigator.clipboard.writeText(state.lastOrderPayload);
+    } catch (_) {
+      const helper = document.createElement('textarea');
+      helper.value = state.lastOrderPayload;
+      helper.style.position = 'fixed';
+      helper.style.opacity = '0';
+      document.body.appendChild(helper);
+      helper.select();
+      document.execCommand('copy');
+      helper.remove();
+    }
+    document.getElementById('qrStatus').textContent = t().copied;
   }
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -773,11 +951,27 @@
       document.getElementById('tableModal').classList.add('flex');
     };
     document.getElementById('tableOkBtn').onclick = () => {
-      const val = document.getElementById('tableInput').value.trim();
-      if (val) { state.table = val; localStorage.setItem('ikatna_table', val); updateTableUI(); document.getElementById('tableModal').classList.add('hidden'); }
+      const val = document.getElementById('tableInput').value.trim().replace(/[^a-zA-Z0-9-]/g, '').slice(0, 6);
+      if (val) {
+        state.table = val;
+        try { localStorage.setItem('ikatna_table', val); } catch (_) {}
+        updateTableUI();
+        document.getElementById('tableModal').classList.add('hidden');
+      } else {
+        document.getElementById('tableInput').focus();
+        document.getElementById('tableInput').placeholder = state.lang === 'ar' ? 'أدخل رقم الطاولة' : (state.lang === 'en' ? 'Enter table number' : 'Saisir le numéro');
+      }
     };
     document.getElementById('qrBtn').onclick = openQrModal;
+    document.getElementById('qrDownloadBtn').onclick = downloadQr;
+    document.getElementById('qrCopyBtn').onclick = copyOrder;
     document.getElementById('qrClose').onclick = () => document.getElementById('qrModal').classList.add('hidden');
+    document.getElementById('qrModal').addEventListener('click', (event) => {
+      if (event.target.id === 'qrModal') document.getElementById('qrModal').classList.add('hidden');
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') document.getElementById('qrModal').classList.add('hidden');
+    });
 
     window.__ikatna = { add: (id, delta) => modifyQty(id, delta) };
 
