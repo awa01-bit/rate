@@ -1,420 +1,302 @@
 <!DOCTYPE html>
-<html lang="fr" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#f7ebe4" />
-<title>Ikatna – Menu & Avis</title>
+<meta name="theme-color" content="#1a1113" />
+<title>Le Palais Gourmand – Menu & Reviews</title>
 
-<!-- Fonts: Playfair Display (titles), Cairo (Arabic), Inter (Latin), Bitcount Single (Ikatna wordmark) -->
+<!-- Fonts: Playfair Display, Cairo, Inter -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Bitcount+Single:wght@100..900&family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&display=swap" rel="stylesheet" />
-<!-- qrcode.js (order QR for the waiter) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet" />
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          morocco: {
+            terra: '#803427',
+            clay: '#471e17',
+            dark: '#1a1113',
+            surface: '#26181b',
+            card: '#332125'
+          },
+          gold: { 300: '#f7e4a8', 400: '#e5c464', 500: '#d4af37', 600: '#b8932a' }
+        },
+        fontFamily: {
+          display: ['"Playfair Display"', 'Cairo', 'serif'],
+          body: ['Inter', 'Cairo', 'system-ui', 'sans-serif']
+        }
+      }
+    }
+  };
+</script>
 
 <style>
-  /* =====================================================================
-     DESIGN TOKENS – cream / dark green / sand gold (Moroccan restaurant)
-     ===================================================================== */
-  :root {
-    --cream: #f7ebe4;  --card: #fcf6f1;  --ink: #1f1a17;  --muted: #6f625a;
-    --green: #123d2e;  --green2: #1d5a43; --sand: #ebc474;  --gold: #b8892f;
-    --terra: #a4492b;  --red: #c1272d;    --line: rgba(80, 50, 30, .13);
-    --shadow: 0 8px 22px rgba(90, 55, 30, .13);
-  }
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html { scroll-behavior: smooth; }
-  body { margin: 0; background: var(--cream); color: var(--ink); -webkit-font-smoothing: antialiased; }
+  
+  body {
+    background-color: #1a1113 !important;
+    background-image: 
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(196, 75, 54, 0.40) 0%, transparent 65%),
+      radial-gradient(circle at 0% 90%, rgba(128, 52, 39, 0.30) 0%, transparent 55%),
+      radial-gradient(circle at 100% 80%, rgba(0, 98, 51, 0.15) 0%, transparent 50%),
+      linear-gradient(180deg, #28171a 0%, #1a1113 50%, #100a0b 100%) !important;
+    background-attachment: fixed;
+  }
 
-  /* font rules */
   html[lang="ar"] body { font-family: 'Cairo', sans-serif; }
   html[lang="fr"] body, html[lang="en"] body { font-family: 'Inter', sans-serif; }
+
   .font-display { font-family: 'Playfair Display', 'Cairo', serif; }
+  .no-scrollbar { scrollbar-width: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
 
-  button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; padding: 0; }
-  button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible { outline: 2px solid var(--green2); outline-offset: 2px; }
-  [hidden] { display: none !important; }
-  .num { direction: ltr; unicode-bidi: isolate; }
+  .glass {
+    background: rgba(51, 33, 37, 0.52);
+    border: 1px solid rgba(247, 228, 168, 0.14);
+    -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+  }
+  .glass-strong {
+    background: rgba(38, 24, 27, 0.90);
+    border: 1px solid rgba(212, 175, 55, 0.38);
+    -webkit-backdrop-filter: blur(26px);
+            backdrop-filter: blur(26px);
+  }
+  .nav-glass {
+    background: rgba(26, 17, 19, 0.85);
+    border-bottom: 1px solid rgba(247, 228, 168, 0.12);
+    -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+  }
 
-  /* soft watercolour page background + faint restaurant icons */
-  .page-bg { position: fixed; inset: 0; z-index: -1; pointer-events: none;
-    background:
-      radial-gradient(60% 40% at 0% 30%,  rgba(236, 196, 160, .45), transparent 70%),
-      radial-gradient(60% 40% at 100% 70%, rgba(222, 170, 150, .35), transparent 70%),
-      radial-gradient(50% 30% at 50% 100%, rgba(18, 61, 46, .08), transparent 70%),
-      var(--cream); }
-  .page-bg svg { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .11; }
+  .gold-text {
+    background: linear-gradient(110deg, #d4af37 0%, #fff1b8 40%, #e5c464 60%, #f7e4a8 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 2px 12px rgba(212,175,55,0.22));
+  }
+  .btn-gold {
+    background: linear-gradient(110deg, #d4af37 0%, #f7e4a8 45%, #d4af37 90%);
+    color: #1a1113; font-weight: 800;
+    box-shadow: 0 4px 15px rgba(212,175,55,0.3);
+    transition: transform .15s ease, box-shadow .2s ease;
+  }
+  .btn-gold:active { transform: scale(.97); }
 
-  .app { max-width: 760px; margin: 0 auto; min-height: 100vh; padding-bottom: 104px; }
+  button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible {
+    outline: 2px solid #d4af37; outline-offset: 2px;
+  }
 
-  /* =====================================================================
-     HERO
-     ===================================================================== */
-  .hero { position: relative; height: 262px; overflow: hidden; background: linear-gradient(135deg, #5c2f19 0%, #2b150c 70%); border-radius: 0 0 26px 26px; }
-  .hero::before { content: ''; position: absolute; inset: 0;
-    background: radial-gradient(40% 45% at 16% 66%, rgba(255, 170, 70, .45), transparent 70%); }
-  .hero-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .85; }   /* optional CONFIG.heroImage */
-  .hero-zellige { position: absolute; right: 0; bottom: 78px; width: 58%; height: 100px; opacity: .9;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 45%); mask-image: linear-gradient(90deg, transparent, #000 45%); }
-  .hero-blob { position: absolute; top: 0; left: 0; width: 100%; height: 178px; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .25)); }
-  .hero-lantern { position: absolute; left: 12px; top: 40px; width: 66px; transform-origin: 50% 0; animation: sway 7s ease-in-out infinite alternate; }
-  @keyframes sway { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
-  .hero-tagine { position: absolute; left: -10px; bottom: 6px; width: 200px; }
-  .hero-title { position: absolute; top: 14px; left: 0; right: 0; text-align: center; padding: 0 92px; }
-  .hero-title .hat { width: 44px; height: 40px; color: var(--ink); }
-  .hero-title .type { font-family: 'Playfair Display', 'Cairo', serif; font-style: italic; font-weight: 700; font-size: 34px; line-height: 1.02; color: var(--ink); margin: 0; }
-  .hero-title .name { font-family: 'Playfair Display', 'Cairo', serif; font-style: italic; font-weight: 700; font-size: 22px; line-height: 1.15; margin: 2px 0 0;
-    background: linear-gradient(100deg, #9a6d1b, #d7a741 55%, #9a6d1b); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  html[lang="ar"] .hero-title .type, html[lang="ar"] .hero-title .name { font-style: normal; }
-  .hero-tag { position: absolute; right: 16px; bottom: 30px; width: 55%; color: #fff; text-align: start; text-shadow: 0 2px 8px rgba(0, 0, 0, .55); }
-  .hero-tag p { margin: 0; font-weight: 700; font-size: 15px; line-height: 1.3; }
-  .hero-tag p + p { margin-top: 4px; font-size: 15px; color: #ffe7b3; }
-  .hero-swoosh { position: absolute; right: 22px; bottom: 12px; width: 52%; height: 14px; }
+  .lang-on { background: #d4af37; color: #1a1113; font-weight: 700; }
+  .tab-on  { background: linear-gradient(110deg,#d4af37,#f7e4a8); color: #1a1113; box-shadow: 0 4px 15px rgba(212,175,55,0.3); }
+  .pill { border: 1px solid rgba(247,228,168,.18); color: rgba(255,255,255,.85); background: rgba(51,33,37,.65); transition: all .18s ease; }
+  .pill[aria-pressed="true"] { background: rgba(212,175,55,.25); border-color: #d4af37; color: #f7e4a8; font-weight: 700; }
 
-  .langsw { position: absolute; top: 14px; right: 14px; display: inline-flex; border: 1.5px solid var(--green); border-radius: 999px; background: rgba(252, 246, 241, .92); padding: 2px; z-index: 3; }
-  .langsw button { padding: 6px 11px; border-radius: 999px; font-size: 12px; font-weight: 700; color: var(--green); }
-  .langsw button[aria-pressed="true"] { background: var(--green); color: #fff; }
+  .dish-card { transition: transform .2s ease, border-color .2s ease; background: rgba(38,24,27,0.75); border: 1px solid rgba(247,228,168,0.12); }
+  .dish-card:hover { border-color: rgba(212,175,55,0.4); transform: translateY(-2px); }
 
-  .table-chip { position: absolute; left: 14px; top: 14px; z-index: 3; display: inline-flex; align-items: center; gap: 6px;
-    background: rgba(252, 246, 241, .92); border: 1.5px solid var(--green); color: var(--green); border-radius: 999px; padding: 5px 10px; font-size: 12px; font-weight: 700; }
-  .table-chip b { font-family: 'Playfair Display', serif; font-size: 15px; }
-  .table-chip svg { width: 13px; height: 13px; }
-  .table-chip.empty { animation: pulse 1.8s ease-in-out infinite; background: var(--sand); }
-  @keyframes pulse { 50% { box-shadow: 0 0 0 6px rgba(235, 196, 116, .45); } }
-
-  /* =====================================================================
-     CATEGORY PILLS (bilingual, two lines)
-     ===================================================================== */
-  .pills { display: flex; gap: 10px; overflow-x: auto; padding: 16px 16px 6px; scrollbar-width: none; scroll-snap-type: x proximity; }
-  .pills::-webkit-scrollbar { display: none; }
-  .pill { flex: 0 0 auto; scroll-snap-align: start; min-width: 74px; padding: 9px 16px; border-radius: 18px; background: #f0dccf; color: var(--ink); text-align: center; line-height: 1.25; transition: background .18s, color .18s; }
-  .pill span { display: block; font-size: 13px; font-weight: 600; }
-  .pill span + span { font-size: 13px; font-weight: 600; opacity: .85; }
-  .pill[aria-pressed="true"] { background: var(--green); color: #fff; box-shadow: 0 6px 16px rgba(18, 61, 46, .3); }
-
-  /* =====================================================================
-     DISH CARDS (horizontal)
-     ===================================================================== */
-  .list { display: grid; gap: 14px; padding: 12px 16px 6px; }
-  @media (min-width: 640px) { .list { grid-template-columns: 1fr 1fr; } }
-  .sec-title { grid-column: 1 / -1; margin: 10px 2px 0; font-family: 'Playfair Display', 'Cairo', serif; font-size: 22px; font-weight: 700; color: var(--green); display: flex; align-items: center; gap: 10px; }
-  .sec-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); opacity: .5; }
-
-  .card { background: var(--card); border-radius: 22px; box-shadow: var(--shadow); border: 1px solid rgba(255, 255, 255, .7); overflow: hidden; }
-  .card-top { display: flex; gap: 12px; padding: 11px; align-items: stretch; }
-  .thumbbox { position: relative; flex: 0 0 112px; height: 104px; border-radius: 16px; overflow: hidden; background: linear-gradient(135deg, #b9582f, #6a2c16); }
-  .thumbbox img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .thumbbox .ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: rgba(255, 233, 200, .75); }
-  .thumbbox .ph svg { width: 54px; height: 54px; }
-  .ctl { position: absolute; left: 0; right: 0; bottom: 6px; display: flex; justify-content: center; }
-  .plus { width: 34px; height: 34px; border-radius: 50%; background: var(--green); color: #fff; font-size: 22px; line-height: 1; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0, 0, 0, .35); border: 2px solid #fff; }
-  .step { display: inline-flex; align-items: center; background: var(--green); color: #fff; border-radius: 999px; padding: 2px; box-shadow: 0 4px 12px rgba(0, 0, 0, .35); border: 2px solid #fff; }
-  .step button { width: 28px; height: 28px; border-radius: 50%; font-size: 18px; line-height: 1; display: flex; align-items: center; justify-content: center; }
-  .step button:active { background: rgba(255, 255, 255, .2); }
-  .step b { min-width: 24px; text-align: center; font-size: 14px; }
-
-  .card-main { flex: 1; min-width: 0; text-align: start; display: flex; flex-direction: column; justify-content: center; gap: 2px; }
-  .n1 { margin: 0; font-size: 17px; font-weight: 700; line-height: 1.2; }
-  .n2 { margin: 0; font-size: 15px; font-weight: 600; line-height: 1.25; color: #2d2723; }
-  .meta { display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 13px; color: var(--muted); white-space: nowrap; }
-  .meta i { width: 1px; height: 14px; background: #b9a99d; }
-  .meta svg { width: 15px; height: 15px; vertical-align: -3px; margin-inline-end: 3px; }
-  .meta .fl { color: #f08a3c; } .meta .dm { color: #8a7d74; }
-
-  .side { flex: 0 0 auto; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; }
-  .chev { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: var(--ink); transition: transform .2s; }
-  .chev svg { width: 18px; height: 18px; }
-  html[dir="rtl"] .chev svg { transform: scaleX(-1); }
-  .card.open .chev { transform: rotate(90deg); }
-  .price { background: var(--sand); color: #2b1c05; font-weight: 800; font-size: 17px; border-radius: 999px; padding: 6px 15px; white-space: nowrap; box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .06); }
-
-  .more { padding: 0 14px 14px; border-top: 1px dashed var(--line); margin: 0 11px; padding-top: 10px; }
-  .more .desc { margin: 0; font-size: 14px; line-height: 1.5; color: #43372f; }
-  .badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-  .badge { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: #efe1d6; color: #5b4a3f; }
-  .badge.ok { background: #d9eddf; color: #1c5a35; } .badge.heart { background: #f6dcdd; color: #9c2b33; }
-  .ing-t { margin: 12px 0 4px; font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); }
-  .ing { margin: 0; font-size: 13px; line-height: 1.55; color: #5b4a3f; }
-  .note { margin: 18px 22px 0; text-align: center; font-size: 12px; line-height: 1.6; color: var(--muted); }
-
-  /* =====================================================================
-     REVIEW
-     ===================================================================== */
-  .panel-pad { padding: 18px 16px 0; max-width: 560px; margin: 0 auto; }
-  .box { background: var(--card); border-radius: 24px; box-shadow: var(--shadow); padding: 20px; border: 1px solid rgba(255, 255, 255, .7); }
-  .box + .box { margin-top: 14px; }
-  .box h2 { margin: 0; font-family: 'Playfair Display', 'Cairo', serif; font-size: 24px; text-align: center; color: var(--green); }
-  .box .sub { margin: 6px 0 0; text-align: center; font-size: 14px; color: var(--muted); }
-  .lbl { display: block; margin: 18px 0 6px; font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); }
-  .field { width: 100%; border: 1.5px solid var(--line); background: #fff; border-radius: 14px; padding: 12px 14px; font: inherit; font-size: 15px; color: var(--ink); }
-  .field:focus { border-color: var(--green2); }
-  textarea.field { resize: none; }
-  .stars { display: flex; justify-content: center; gap: 4px; margin-top: 20px; direction: ltr; }
-  .star { padding: 3px; transition: transform .15s; }
+  .star { transition: transform .15s ease; -webkit-tap-highlight-color: transparent; }
   .star:active { transform: scale(.85); }
-  .star svg { width: 44px; height: 44px; fill: transparent; stroke: #cdbbae; stroke-width: 1.6; stroke-linejoin: round; transition: fill .2s, stroke .2s; }
-  .star.on svg { fill: #e2a92f; stroke: #c98d10; filter: drop-shadow(0 2px 6px rgba(226, 169, 47, .5)); }
-  .rlabel { height: 24px; margin: 8px 0 0; text-align: center; font-weight: 700; color: var(--green); }
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .chip { padding: 9px 14px; border-radius: 999px; background: #f0dccf; font-size: 14px; font-weight: 600; border: 1.5px solid transparent; transition: all .15s; }
-  .chip[aria-pressed="true"] { background: var(--green); color: #fff; }
+  .star svg { fill: transparent; stroke: #9e8a8d; transition: fill .2s, stroke .2s; }
+  .star.on svg { fill: #d4af37; stroke: #d4af37; filter: drop-shadow(0 0 10px rgba(212,175,55,0.6)); }
 
-  .btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; border-radius: 16px; padding: 14px 18px; font-weight: 800; font-size: 16px; transition: transform .15s, opacity .2s; text-decoration: none; }
-  .btn:active { transform: scale(.98); }
-  .btn svg { width: 20px; height: 20px; }
-  .btn.green { background: var(--green); color: #fff; box-shadow: 0 8px 20px rgba(18, 61, 46, .3); }
-  .btn.sand  { background: var(--sand); color: #2b1c05; box-shadow: 0 8px 20px rgba(184, 137, 47, .3); }
-  .btn.wa    { background: #25d366; color: #0b2b16; box-shadow: 0 8px 20px rgba(37, 211, 102, .3); }
-  .btn.ghost { background: #efe1d6; color: var(--ink); }
-  .btn.danger { background: #f8dede; color: #9c2b33; border: 1.5px solid #e8b4b7; }
-  .btn.danger.armed { background: var(--red); color: #fff; border-color: var(--red); }
-  .link { display: block; margin-top: 14px; text-align: center; font-size: 13px; color: var(--muted); text-decoration: underline; text-underline-offset: 4px; }
-  .hint { margin: 10px 0 0; text-align: center; font-size: 12px; color: var(--muted); }
-  .emoji-badge { width: 58px; height: 58px; margin: 0 auto 10px; border-radius: 50%; background: #efe1d6; display: flex; align-items: center; justify-content: center; font-size: 30px; }
-  .pop { animation: pop .35s cubic-bezier(.2, 1.4, .4, 1); }
+  .chip { border: 1px solid #5e3b40; background: #332125; color: rgba(255,255,255,.9); transition: all .15s ease; -webkit-tap-highlight-color: transparent; }
+  .chip[aria-pressed="true"] { background: rgba(212,175,55,.22); border-color: #d4af37; color: #f7e4a8; }
+
+  .pop { animation: pop .35s cubic-bezier(.2,1.4,.4,1); }
   @keyframes pop { from { transform: scale(.6); } to { transform: scale(1); } }
-  .fade-up { animation: fadeUp .4s ease both; }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  .fade-up { animation: fadeUp .45s ease both; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 
-  .foot { margin: 26px 0 0; text-align: center; font-size: 12px; color: var(--muted); }
-  .brand-font { font-family: 'Bitcount Single', 'Inter', monospace; font-weight: 600; letter-spacing: .12em; font-size: 12px; color: var(--gold); direction: ltr; unicode-bidi: isolate; display: inline-block; }
-  .brand-font .w { color: var(--ink); }
-
-  /* =====================================================================
-     BOTTOM NAV
-     ===================================================================== */
-  .bnav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; background: var(--green); border-radius: 24px 24px 0 0; padding: 8px 10px max(10px, env(safe-area-inset-bottom)); box-shadow: 0 -8px 26px rgba(0, 0, 0, .22);
-    display: grid; grid-template-columns: repeat(4, 1fr); max-width: 760px; margin: 0 auto; }
-  .bnav button { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 0; color: rgba(255, 255, 255, .72); font-size: 11px; font-weight: 600; }
-  .bnav svg { width: 25px; height: 25px; }
-  .bnav button[aria-current="page"] { color: var(--sand); }
-  .bnav .badge-n { position: absolute; top: 0; inset-inline-start: calc(50% + 6px); min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--red); color: #fff; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
-
-  /* =====================================================================
-     SHEETS (order + QR, table number)
-     ===================================================================== */
-  .overlay { position: fixed; inset: 0; z-index: 60; display: flex; align-items: flex-end; justify-content: center; background: rgba(25, 14, 8, .6); backdrop-filter: blur(3px); }
-  .sheet { width: 100%; max-width: 480px; max-height: 92vh; overflow-y: auto; background: var(--cream); border-radius: 26px 26px 0 0; padding: 12px 20px max(22px, env(safe-area-inset-bottom)); animation: fadeUp .3s ease both; }
-  @media (min-width: 560px) { .overlay { align-items: center; } .sheet { border-radius: 26px; } }
-  .grab { width: 44px; height: 5px; border-radius: 3px; background: #d6c3b6; margin: 0 auto 14px; }
-  .sheet h2 { margin: 0; text-align: center; font-family: 'Playfair Display', 'Cairo', serif; font-size: 26px; color: var(--green); }
-  .sheet .sub { margin: 4px 0 0; text-align: center; font-size: 14px; color: var(--muted); }
-  .sheet .sub b { color: var(--green); }
-  .empty { text-align: center; padding: 28px 10px; color: var(--muted); font-size: 15px; }
-  .olist { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 10px; }
-  .olist li { display: flex; align-items: center; gap: 10px; background: var(--card); border-radius: 16px; padding: 10px 12px; box-shadow: 0 2px 8px rgba(90, 55, 30, .08); }
-  .olist .nm { flex: 1; min-width: 0; font-weight: 600; font-size: 14px; }
-  .olist .lp { font-weight: 700; font-size: 14px; white-space: nowrap; }
-  .olist .step { box-shadow: none; border: 0; }
-  .total { display: flex; justify-content: space-between; align-items: center; margin: 14px 4px 0; font-weight: 700; }
-  .total b { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--green); }
-  .qrwrap { width: fit-content; margin: 16px auto 0; padding: 14px; background: #fff; border-radius: 20px; box-shadow: var(--shadow); }
-  #qrBox { width: 216px; height: 216px; display: flex; align-items: center; justify-content: center; direction: ltr; }
-  #qrBox img, #qrBox canvas { max-width: 100%; height: auto; }
-  .err { color: #9c2b33; font-size: 13px; text-align: center; margin: 8px 0 0; }
-  .sheet .btn { margin-top: 12px; }
-  .row { display: flex; gap: 8px; }
-  .row .field { text-align: center; font-family: 'Playfair Display', serif; font-weight: 700; font-size: 22px; letter-spacing: .14em; text-transform: uppercase; direction: ltr; }
-  .row .btn { width: auto; margin: 0; padding: 0 22px; }
-
-  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { animation: none !important; transition: none !important; } }
+  #qrBox img { max-width: 100%; height: auto; margin: 0 auto; display: block; border-radius: 0.5rem; }
 </style>
 </head>
 
-<body>
-<!-- soft background: watercolour glows + faint restaurant icons -->
-<div class="page-bg" aria-hidden="true">
-  <svg focusable="false">
-    <defs>
-      <pattern id="ico" width="210" height="210" patternUnits="userSpaceOnUse" patternTransform="rotate(-10)">
-        <g fill="none" stroke="#a9794a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <g transform="translate(16 18)"><path d="M3 36h42M8 36a16 16 0 0 1 32 0M24 20v-4M21 16h6M0 40h48"/></g>
-          <g transform="translate(128 12) rotate(-18 24 24)"><g transform="scale(2)" stroke-width=".75"><path d="M7 3v8a2 2 0 0 0 2 2v8M5 3v5M9 3v5M17 3c-2 2-3 5-3 8h3v10"/></g></g>
-          <g transform="translate(70 78)"><circle cx="24" cy="24" r="19"/><circle cx="24" cy="24" r="11.5"/></g>
-          <g transform="translate(10 128)"><path d="M13 40V30a9 9 0 0 1-4-17 11 11 0 0 1 20-4 10 10 0 0 1 8 18 9 9 0 0 1-2 3v10Z"/><path d="M13 35h26"/></g>
-          <g transform="translate(132 126)"><path d="M13 20h22l-3 24H16Z"/><path d="M11 20h26M14 30h20"/><path d="M24 20c-3-5-2-10 3-13 1 5 0 9-3 13ZM24 20c-5-2-9-1-11-6 5-1 9 1 11 6Z"/></g>
-        </g>
-      </pattern>
-    </defs>
-    <rect width="100%" height="100%" fill="url(#ico)"/>
-  </svg>
-</div>
+<body class="min-h-screen text-white antialiased">
+<div class="fixed inset-x-0 top-0 z-50 h-[3px]" aria-hidden="true" style="background:linear-gradient(90deg,#803427 0%,#d4af37 50%,#006233 100%)"></div>
 
-<div class="app">
-
-  <!-- ================================================== HERO -->
-  <header class="hero">
-    <img id="heroPhoto" class="hero-photo" alt="" hidden />
-
-    <!-- gold zellige band -->
-    <svg class="hero-zellige" viewBox="0 0 220 100" preserveAspectRatio="xMaxYMid slice" aria-hidden="true" focusable="false">
-      <defs>
-        <g id="kh" fill="none" stroke="#e3b24c" stroke-width="1.4" stroke-linejoin="round"><rect x="-13" y="-13" width="26" height="26"/><rect x="-13" y="-13" width="26" height="26" transform="rotate(45)"/><circle r="4.5"/></g>
-        <pattern id="zl" width="52" height="52" patternUnits="userSpaceOnUse"><use href="#kh" x="26" y="26"/><use href="#kh" x="0" y="0"/><use href="#kh" x="52" y="0"/><use href="#kh" x="0" y="52"/><use href="#kh" x="52" y="52"/></pattern>
-      </defs>
-      <rect width="220" height="100" fill="url(#zl)"/>
-    </svg>
-
-    <!-- cream brush blob behind the title -->
-    <svg class="hero-blob" viewBox="0 0 390 178" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-      <path d="M0 0H390V104C372 96 352 112 330 124C300 140 276 150 244 144C212 138 196 118 160 130C126 142 108 168 70 160C40 154 20 136 0 138Z" fill="#f9efe9"/>
-      <path d="M0 0H390V96C366 90 350 104 326 114C298 126 272 132 240 128" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="3"/>
-    </svg>
-
-    <!-- lantern -->
-    <svg class="hero-lantern" viewBox="0 0 60 122" fill="none" aria-hidden="true" focusable="false">
-      <defs><radialGradient id="lgl"><stop offset="0" stop-color="#ffcf6a" stop-opacity=".75"/><stop offset="1" stop-color="#ffcf6a" stop-opacity="0"/></radialGradient></defs>
-      <path d="M30 0V22" stroke="#7a5a2a" stroke-width="1.6"/>
-      <circle cx="30" cy="70" r="40" fill="url(#lgl)"/>
-      <g stroke="#3a2412" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">
-        <circle cx="30" cy="25" r="3.6" fill="#8a6428"/>
-        <path d="M30 29L45 46H15Z" fill="#6a4a22"/>
-        <path d="M17 46H43L47 86H13Z" fill="#ffb347"/>
-        <path d="M23 53H37L39 79H21Z" fill="#fff0b8"/>
-        <path d="M30 53V79M23 66H37" stroke="#8a5a1a" stroke-width="1"/>
-        <path d="M13 86H47L41 97H19Z" fill="#6a4a22"/>
-        <path d="M30 97V106" stroke="#7a5a2a"/><circle cx="30" cy="109" r="3" fill="#8a6428"/>
-      </g>
-    </svg>
-
-    <!-- tagine illustration (swap for your own photo with CONFIG.heroImage) -->
-    <svg class="hero-tagine" viewBox="0 0 200 100" aria-hidden="true" focusable="false">
-      <ellipse cx="100" cy="76" rx="96" ry="22" fill="#9c3f22" stroke="#4d1f0e" stroke-width="2"/>
-      <ellipse cx="100" cy="72" rx="82" ry="16" fill="#6b2a14"/>
-      <g>
-        <circle cx="62" cy="62" r="13" fill="#d8892a"/><circle cx="84" cy="52" r="14" fill="#7a9a35"/><circle cx="108" cy="48" r="15" fill="#c0432a"/>
-        <circle cx="132" cy="54" r="13" fill="#e6c15a"/><circle cx="148" cy="64" r="11" fill="#4f6f2a"/><circle cx="96" cy="64" r="12" fill="#e59b3a"/>
-        <circle cx="120" cy="66" r="11" fill="#a9421f"/><circle cx="76" cy="68" r="10" fill="#e6c15a"/>
-        <circle cx="100" cy="38" r="10" fill="#6f8f33"/><circle cx="118" cy="40" r="8" fill="#d8892a"/>
-      </g>
-    </svg>
-
-    <!-- title -->
-    <div class="hero-title">
-      <svg class="hat" viewBox="0 0 48 44" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M13 42V31a9 9 0 0 1-4-17 11 11 0 0 1 20-4 10 10 0 0 1 8 18 9 9 0 0 1-2 3v11Z"/><path d="M13 36h26"/>
+<!-- HEADER (Matching Screenshot Layout) -->
+<header class="mx-auto flex max-w-2xl items-center justify-between px-5 pb-3 pt-[max(1rem,env(safe-area-inset-top))]">
+  <!-- Chef Hat Icon & Lantern Header Vibe -->
+  <div class="flex items-center gap-3">
+    <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-gold-500/15 border border-gold-500/30 text-gold-300">
+      <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 13.8A4.8 4.8 0 0 1 9.2 6a5.5 5.5 0 0 1 10.6 1.5A3.8 3.8 0 0 1 20 15H6z"/>
+        <path d="M6 15v5a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-5"/>
       </svg>
-      <p class="type" id="restType"></p>
-      <p class="name" id="restName"></p>
     </div>
+  </div>
 
-    <div class="langsw" id="langSwitch" role="group" aria-label="Language">
-      <button data-lang="fr">FR</button><button data-lang="ar">AR</button><button data-lang="en">EN</button>
-    </div>
+  <!-- Language Switch (FR / AR style as in screenshot) -->
+  <div id="langSwitch" class="inline-flex rounded-full border border-white/20 bg-[#332125]/90 p-1 text-xs backdrop-blur shadow-md" role="group" aria-label="Language">
+    <button data-lang="fr" class="rounded-full px-3.5 py-1.5 transition">FR</button>
+    <button data-lang="ar" class="rounded-full px-3.5 py-1.5 transition">AR</button>
+  </div>
+</header>
 
-    <button class="table-chip" id="tableChip" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10h18M5 10v10M19 10v10M2 6h20"/></svg>
-      <span id="chipLbl"></span> <b id="chipNum" class="num">—</b>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+<!-- HERO SECTION -->
+<section class="mx-auto max-w-2xl px-5 pb-4 pt-2 text-center fade-up">
+  <h1 id="restName" class="gold-text font-display text-3xl font-bold italic sm:text-4xl">Le Palais Gourmand</h1>
+  <p class="mt-2 text-xs font-medium text-white/90">Une cuisine authentique aux saveurs marocaines</p>
+  <p class="mt-0.5 text-xs font-semibold text-gold-300/90">مطبخ أصيل بنكهات مغربية</p>
+
+  <!-- Table Number Pill -->
+  <div class="glass mx-auto mt-4 inline-flex items-center gap-3 rounded-full py-1.5 ps-4 pe-2.5">
+    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-gold-500/25 text-gold-300">
+      <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h18M5 10v10M19 10v10M2 6h20"/></svg>
+    </span>
+    <span data-i18n="table" class="text-[11px] font-semibold uppercase tracking-widest text-white/80"></span>
+    <span id="tableNum" class="font-display text-lg font-bold text-gold-300" dir="ltr">—</span>
+    <button id="tableEditBtn" type="button" class="flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-white/85 transition hover:bg-white/20 hover:text-gold-300">
+      <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
     </button>
+  </div>
 
-    <div class="hero-tag"><p id="tag1"></p><p id="tag2"></p></div>
-    <svg class="hero-swoosh" viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true"><path d="M0 9C40 2 90 12 140 6C165 3 185 5 200 7" fill="none" stroke="#e3b24c" stroke-width="2.4" stroke-linecap="round"/></svg>
-  </header>
-
-  <!-- ================================================== MENU -->
-  <main id="panelMenu">
-    <div class="pills" id="pills" role="group"></div>
-    <div class="list" id="menuRoot"></div>
-    <p class="note" id="nutriNote"></p>
-    <p class="foot"><span id="poweredBy"></span> <span class="brand-font"><span class="w">I</span>k<span class="w">at</span>na</span></p>
-  </main>
-
-  <!-- ================================================== REVIEW -->
-  <main id="panelReview" hidden>
-    <div class="panel-pad">
-      <div class="box" id="reviewLocked" hidden style="text-align:center">
-        <div class="emoji-badge pop">🙏</div>
-        <h2 id="lockedTitle"></h2><p class="sub" id="lockedText"></p>
-      </div>
-
-      <div id="reviewFlow">
-        <div class="box">
-          <h2 id="reviewTitle"></h2><p class="sub" id="reviewSub"></p>
-          <label class="lbl" for="waiterName" id="waiterLabel"></label>
-          <input class="field" id="waiterName" type="text" maxlength="40" autocomplete="off" />
-          <div class="stars" id="stars" role="radiogroup" aria-label="Rating"></div>
-          <p class="rlabel" id="ratingLabel"></p>
-        </div>
-
-        <div class="box fade-up" id="positive" hidden style="text-align:center">
-          <div class="emoji-badge pop">🎉</div>
-          <h2 id="posTitle"></h2><p class="sub" id="posText"></p>
-          <a class="btn sand" id="mapsBtn" href="#" target="_blank" rel="noopener noreferrer" style="margin-top:16px">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
-            <span id="mapsLabel"></span>
-          </a>
-        </div>
-
-        <div class="box fade-up" id="negative" hidden>
-          <h2 id="negTitle" style="font-size:21px"></h2><p class="sub" id="negText"></p>
-          <p class="lbl" id="chipsLabel"></p>
-          <div class="chips" id="chips"></div>
-          <label class="lbl" for="comment" id="commentLabel"></label>
-          <textarea class="field" id="comment" rows="4" maxlength="600"></textarea>
-          <button class="btn wa" id="waBtn" type="button" style="margin-top:16px">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2a9.9 9.9 0 0 0-8.47 15l-1.5 5.5 5.64-1.48A9.9 9.9 0 1 0 12.04 2zm5.8 14.1c-.25.7-1.45 1.34-2 1.4-.5.06-1.13.09-1.82-.12-.42-.13-.96-.31-1.65-.6-2.9-1.25-4.8-4.17-4.94-4.37-.14-.19-1.18-1.57-1.18-3s.75-2.13 1.02-2.42c.27-.29.58-.36.78-.36h.56c.18 0 .42-.07.65.5.25.58.84 2.02.91 2.17.07.14.12.31.02.5-.1.2-.15.31-.3.48-.14.17-.3.38-.43.51-.14.14-.29.3-.12.58.17.29.75 1.24 1.62 2.01 1.1.98 2.03 1.29 2.32 1.43.29.14.46.12.63-.07.17-.2.72-.84.91-1.13.2-.29.38-.24.65-.14.27.1 1.7.8 2 .95.29.14.48.22.55.34.07.12.07.7-.18 1.4z"/></svg>
-            <span id="waLabel"></span>
-          </button>
-          <p class="hint" id="waHint"></p>
-          <a class="link" id="publicLink" href="#" target="_blank" rel="noopener noreferrer"></a>
-        </div>
-      </div>
-      <p class="foot"><span id="poweredBy2"></span> <span class="brand-font"><span class="w">I</span>k<span class="w">at</span>na</span></p>
+  <div id="tableForm" class="mx-auto mt-3 hidden max-w-xs" role="group">
+    <label for="tableInput" class="block text-xs font-semibold text-amber-300/90">أدخل رقم الطاولة (مثلاً 01):</label>
+    <div class="mt-2 flex gap-2">
+      <input id="tableInput" type="text" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" dir="ltr"
+             class="min-w-0 flex-1 rounded-xl border border-[#5e3b40] bg-[#332125] p-2.5 text-center font-display text-lg font-bold uppercase text-white placeholder:text-white/40 focus:border-gold-500" />
+      <button id="tableOkBtn" type="button" data-i18n="tableOk" class="btn-gold rounded-xl px-4 text-xs"></button>
     </div>
-  </main>
-</div>
+    <p id="tableErr" class="mt-1.5 hidden text-xs text-red-400" role="alert"></p>
+  </div>
+</section>
 
-<!-- ================================================== BOTTOM NAV -->
-<nav class="bnav" id="bnav">
-  <button type="button" data-nav="menu" aria-current="page">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/></svg><span id="navMenu"></span>
-  </button>
-  <button type="button" data-nav="order">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.6 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/></svg>
-    <span id="navOrder"></span><em class="badge-n num" id="cartBadge" hidden></em>
-  </button>
-  <button type="button" data-nav="review">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.7 5.8 6.3.8-4.6 4.4 1.2 6.3L12 17.2 6.4 20.3l1.2-6.3L3 9.6l6.3-.8Z"/></svg><span id="navRate"></span>
-  </button>
-  <button type="button" data-nav="table">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10h18M5 10v10M19 10v10M2 6h20"/></svg><span id="navTable"></span>
-  </button>
-</nav>
-
-<!-- ================================================== ORDER + QR SHEET -->
-<div class="overlay" id="orderSheet" role="dialog" aria-modal="true" aria-labelledby="orderTitle" hidden>
-  <div class="sheet">
-    <div class="grab"></div>
-    <h2 id="orderTitle"></h2>
-    <p class="sub"><span id="oTableLbl"></span> <b class="num" id="oTable"></b> · <span class="num" id="oRef"></span></p>
-    <div class="empty" id="oEmpty"></div>
-    <div id="oFull">
-      <ul class="olist" id="oList"></ul>
-      <div class="total"><span id="oTotalLbl"></span><b id="oTotal"></b></div>
-      <div class="qrwrap"><div id="qrBox"></div></div>
-      <p class="err" id="qrError" hidden></p>
-      <p class="hint" id="qrHint"></p>
-      <button class="btn danger" id="oCancel" type="button"></button>
+<!-- STICKY NAV PILLS (Matches Screenshot Category Tabs) -->
+<div class="nav-glass sticky top-0 z-30">
+  <div class="mx-auto max-w-2xl px-5 pb-2.5 pt-2">
+    <div class="glass grid grid-cols-2 gap-1 rounded-full p-1 mb-2" role="tablist">
+      <button id="tabBtnMenu"   role="tab" aria-selected="true"  aria-controls="panelMenu"   class="rounded-full px-4 py-2 text-xs font-bold transition" data-i18n="tabMenu"></button>
+      <button id="tabBtnReview" role="tab" aria-selected="false" aria-controls="panelReview" class="rounded-full px-4 py-2 text-xs font-bold transition" data-i18n="tabReview"></button>
     </div>
-    <button class="btn ghost" id="oClose" type="button"></button>
+    <div id="pills" class="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 pb-1" role="group"></div>
   </div>
 </div>
 
-<!-- ================================================== TABLE NUMBER SHEET -->
-<div class="overlay" id="tableSheet" role="dialog" aria-modal="true" aria-labelledby="tableTitle" hidden>
-  <div class="sheet">
-    <div class="grab"></div>
-    <h2 id="tableTitle"></h2>
-    <p class="sub" id="tableMsg"></p>
-    <!-- plain <div>, not a <form>: sandboxed previews block form submission -->
-    <div class="row" style="margin-top:16px">
-      <input class="field" id="tableInput" type="text" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-labelledby="tableTitle" />
-      <button class="btn green" id="tableOk" type="button"></button>
+<!-- MENU TAB (Horizontal List Cards matching Screenshot) -->
+<main id="panelMenu" role="tabpanel" class="mx-auto max-w-2xl px-5 pb-28 pt-4">
+  <div id="menuRoot" class="space-y-3"></div>
+  <p data-i18n="nutriNote" class="mx-auto mt-8 max-w-md text-center text-[11px] leading-relaxed text-white/65"></p>
+</main>
+
+<!-- REVIEW TAB -->
+<main id="panelReview" role="tabpanel" class="mx-auto hidden max-w-xl px-5 pb-16 pt-4">
+  <div id="reviewLocked" class="glass hidden rounded-3xl p-6 text-center">
+    <div class="pop mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gold-500/20 text-2xl">🙏</div>
+    <h2 data-i18n="lockedTitle" class="text-lg font-bold"></h2>
+    <p data-i18n="lockedText" class="mt-2 text-xs leading-relaxed text-white/80"></p>
+  </div>
+
+  <div id="reviewFlow">
+    <div class="glass rounded-3xl p-4">
+      <h2 data-i18n="reviewTitle" class="text-center font-display text-xl font-bold"></h2>
+      <p data-i18n="reviewSub" class="mt-1 text-center text-xs text-white/80"></p>
+
+      <label for="waiterName" data-i18n="waiterLabel" class="mt-4 block text-xs font-semibold uppercase tracking-wider text-gold-300"></label>
+      <input id="waiterName" type="text" maxlength="40" autocomplete="off"
+             class="mt-1.5 w-full rounded-xl border border-[#5e3b40] bg-[#332125] p-3 text-xs text-white placeholder:text-white/40 focus:border-gold-500" />
+
+      <div id="stars" class="mt-5 flex justify-center gap-1.5" dir="ltr" role="radiogroup" aria-label="Rating"></div>
+      <p id="ratingLabel" class="mt-2.5 h-5 text-center text-xs font-semibold text-gold-300"></p>
     </div>
-    <p class="err" id="tableErr" hidden></p>
-    <button class="btn ghost" id="tableClose" type="button"></button>
+
+    <section id="positive" class="mt-4 hidden rounded-3xl border border-gold-500/40 bg-gradient-to-b from-gold-500/20 to-[#1a1113]/60 p-5 text-center backdrop-blur">
+      <div class="pop mx-auto mb-2.5 flex h-12 w-12 items-center justify-center rounded-full bg-gold-500/25 text-2xl">🎉</div>
+      <h2 data-i18n="posTitle" class="text-lg font-bold"></h2>
+      <p data-i18n="posText" class="mt-1.5 text-xs leading-relaxed text-white/85"></p>
+      <a id="mapsBtn" href="#" target="_blank" rel="noopener noreferrer"
+         class="btn-gold mt-4 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm">
+        <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+        <span data-i18n="mapsBtn"></span>
+      </a>
+    </section>
+
+    <section id="negative" class="glass mt-4 hidden rounded-3xl p-4">
+      <h2 data-i18n="negTitle" class="text-base font-bold"></h2>
+      <p data-i18n="negText" class="mt-1 text-xs leading-relaxed text-white/80"></p>
+
+      <p data-i18n="chipsLabel" class="mt-4 text-xs font-semibold uppercase tracking-wider text-gold-300"></p>
+      <div id="chips" class="mt-2 flex flex-wrap gap-1.5"></div>
+
+      <label for="comment" data-i18n="commentLabel" class="mt-4 block text-xs font-semibold uppercase tracking-wider text-gold-300"></label>
+      <textarea id="comment" rows="3" maxlength="600"
+        class="mt-1.5 w-full resize-none rounded-xl border border-[#5e3b40] bg-[#332125] p-3 text-xs text-white placeholder:text-white/40 focus:border-gold-500"></textarea>
+
+      <button id="waBtn" type="button"
+        class="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-3 text-sm font-extrabold text-[#1a1113] shadow-[0_6px_20px_rgba(37,211,102,.3)] transition active:scale-[.98]">
+        <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor" aria-hidden="true"><path d="M12.04 2a9.9 9.9 0 0 0-8.47 15l-1.5 5.5 5.64-1.48A9.9 9.9 0 1 0 12.04 2zm5.8 14.1c-.25.7-1.45 1.34-2 1.4-.5.06-1.13.09-1.82-.12-.42-.13-.96-.31-1.65-.6-2.9-1.25-4.8-4.17-4.94-4.37-.14-.19-1.18-1.57-1.18-3s.75-2.13 1.02-2.42c.27-.29.58-.36.78-.36h.56c.18 0 .42-.07.65.5.25.58.84 2.02.91 2.17.07.14.12.31.02.5-.1.2-.15.31-.3.48-.14.17-.3.38-.43.51-.14.14-.29.3-.12.58.17.29.75 1.24 1.62 2.01 1.1.98 2.03 1.29 2.32 1.43.29.14.46.12.63-.07.17-.2.72-.84.91-1.13.2-.29.38-.24.65-.14.27.1 1.7.8 2 .95.29.14.48.22.55.34.07.12.07.7-.18 1.4z"/></svg>
+        <span data-i18n="waBtn"></span>
+      </button>
+      <p data-i18n="waHint" class="mt-2.5 text-center text-[11px] text-white/60"></p>
+
+      <a id="publicLink" href="#" target="_blank" rel="noopener noreferrer"
+         data-i18n="publicLink" class="mt-3 block text-center text-xs text-white/70 underline underline-offset-4 hover:text-gold-300"></a>
+    </section>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="mx-auto max-w-2xl px-5 pb-24 pt-4 text-center">
+  <div class="mx-auto mb-2 h-px w-12 bg-gradient-to-r from-transparent via-gold-500/70 to-transparent"></div>
+  <p class="text-[11px] text-white/65">
+    <span data-i18n="poweredBy"></span>
+    <span class="brand-font text-[11px] text-gold-400" dir="ltr"><span class="text-white">I</span>k<span class="text-white">at</span>na</span>
+  </p>
+</footer>
+
+<!-- STICKY CART BAR (Compact & Sleek) -->
+<div id="cartBar" class="pointer-events-none fixed inset-x-0 bottom-0 z-40 translate-y-full px-3 pb-[max(.5rem,env(safe-area-inset-bottom))] transition-transform duration-300" aria-hidden="true">
+  <div class="glass-strong mx-auto flex max-w-md items-center justify-between gap-2.5 rounded-2xl px-3 py-2 shadow-[0_-8px_30px_rgba(0,0,0,.6)]">
+    <div id="cartInfo" class="min-w-0 flex-1 ps-1">
+      <p id="cartCount" class="text-[10px] font-semibold uppercase tracking-wider text-white/80 leading-tight"></p>
+      <p id="cartTotal" class="font-display text-base font-bold text-gold-300 leading-tight"></p>
+    </div>
+    <button id="cancelBtn" type="button" class="ms-auto flex h-9 shrink-0 items-center gap-1 rounded-xl border border-white/15 bg-white/5 px-2.5 text-xs font-bold text-white/90 transition hover:bg-white/10">
+      <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v6M14 11v6"/></svg>
+      <span id="cancelLabel" class="hidden"></span>
+    </button>
+    <button id="qrBtn" type="button" class="btn-gold flex shrink-0 items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs">
+      <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h3M20 17v4"/></svg>
+      <span data-i18n="showQr"></span>
+    </button>
+  </div>
+</div>
+
+<!-- QR MODAL -->
+<div id="qrModal" class="fixed inset-0 z-50 hidden items-end justify-center bg-black/75 backdrop-blur-sm sm:items-center" role="dialog" aria-modal="true" aria-labelledby="qrTitle">
+  <div class="glass-strong fade-up max-h-[90vh] w-full max-w-sm overflow-y-auto rounded-t-3xl p-5 sm:rounded-3xl">
+    <div class="text-center">
+      <h2 id="qrTitle" data-i18n="qrTitle" class="font-display text-xl font-bold"></h2>
+      <p class="mt-0.5 text-xs text-white/80">
+        <span data-i18n="table"></span>
+        <span id="qrTable" class="font-bold text-gold-300" dir="ltr"></span>
+        <span class="mx-1 text-white/30">·</span>
+        <span id="qrRef" class="font-mono text-[11px] tracking-widest text-white/70" dir="ltr"></span>
+      </p>
+    </div>
+
+    <div class="mx-auto mt-4 w-fit rounded-2xl bg-white p-3 shadow-[0_0_30px_rgba(212,175,55,.3)]">
+      <div id="qrBox" class="flex h-[180px] w-[180px] items-center justify-center" dir="ltr"></div>
+    </div>
+    <p id="qrError" class="mt-2.5 hidden text-center text-xs text-amber-300"></p>
+    <p data-i18n="qrHint" class="mt-2.5 text-center text-[11px] text-white/75"></p>
+
+    <ul id="qrList" class="mt-4 space-y-1.5 border-t border-white/10 pt-3 text-xs"></ul>
+    <div class="mt-2.5 flex items-center justify-between border-t border-white/10 pt-2.5">
+      <span data-i18n="total" class="text-xs font-semibold text-white/85"></span>
+      <span id="qrTotal" class="font-display text-base font-bold text-gold-300"></span>
+    </div>
+
+    <button id="qrCancel" type="button"
+      class="mt-4 w-full rounded-xl border border-red-400/40 bg-red-500/10 px-4 py-3 text-xs font-bold text-red-300 transition hover:bg-red-500/20"></button>
+    <button id="qrClose" type="button" data-i18n="close"
+      class="mt-2.5 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-xs font-bold transition hover:bg-white/10"></button>
   </div>
 </div>
 
@@ -422,479 +304,740 @@
 (function () {
   'use strict';
 
-  /* =====================================================================
-     CONFIG – edit for each restaurant
-     ===================================================================== */
   const CONFIG = {
-    restaurantType: { ar: 'مطعم', fr: 'Restaurant', en: 'Restaurant' },
-    restaurantName: { ar: 'قصر الذواقة', fr: 'Le Palais Gourmand', en: 'Le Palais Gourmand' },
-    heroImage: '',                                   // optional: URL of a hero photo (tagine, dining room…)
+    restaurantName: { ar: 'Le Palais Gourmand', fr: 'Le Palais Gourmand', en: 'Le Palais Gourmand' },
     googleMapsReviewUrl: 'https://search.google.com/local/writereview?placeid=YOUR_PLACE_ID',
-    whatsappNumber: '212600000000',                  // manager, international format, digits only
-    currencyCode: 'MAD',                             // written in the QR text
+    whatsappNumber: '212600000000',
+    currencyCode: 'DH',
     reviewLockHours: 12
   };
 
-  /* =====================================================================
-     MENU – nutrition values are ILLUSTRATIVE ESTIMATES: replace with your kitchen's data.
-     `img` = Unsplash photo id; a terracotta placeholder shows if a photo fails to load.
-     `qr`  = English name printed in the QR so the waiter reads it whatever the customer's language.
-     ===================================================================== */
-  const IMG = (id) => 'https://images.unsplash.com/' + id + '?auto=format&fit=crop&w=500&q=70';
+  const IMG = (id) => 'https://images.unsplash.com/' + id + '?auto=format&fit=crop&w=800&q=70';
+
   const MENU = [
-    { id: 'm1', cat: 'mains', price: 120, kcal: 720, protein: 32, diabetic: false, lowChol: false, img: 'photo-1541518763669-27fef04b14ea', qr: 'Royal Couscous',
-      fr: { n: 'Couscous Royal', d: 'Semoule fine, agneau, poulet et merguez, légumes du jour et pois chiches, bouillon parfumé.', i: ['Semoule', 'Agneau', 'Poulet', 'Merguez', 'Carottes', 'Courgettes', 'Navets', 'Pois chiches', 'Épices'] },
-      ar: { n: 'كسكس ملكي', d: 'سميد رفيع مع لحم الضأن والدجاج والمرقاز وخضار الموسم والحمص ومرق عطري.', i: ['سميد', 'ضأن', 'دجاج', 'مرقاز', 'جزر', 'كوسة', 'لفت', 'حمص', 'توابل'] },
-      en: { n: 'Royal Couscous', d: 'Fine semolina with lamb, chicken and merguez, seasonal vegetables, chickpeas and a fragrant broth.', i: ['Semolina', 'Lamb', 'Chicken', 'Merguez', 'Carrots', 'Zucchini', 'Turnip', 'Chickpeas', 'Spices'] } },
-    { id: 'm2', cat: 'mains', price: 100, kcal: 480, protein: 35, diabetic: true, lowChol: false, img: 'photo-1511690743698-d9d85f2fbf38', qr: 'Chicken Tagine with Lemon',
-      fr: { n: 'Tajine de poulet au citron', d: 'Poulet mijoté aux olives et citrons confits, oignons, safran et coriandre.', i: ['Poulet', 'Citron confit', 'Olives', 'Oignons', 'Safran', 'Gingembre', 'Coriandre'] },
-      ar: { n: 'طاجين الدجاج بالليمون', d: 'دجاج مطهو ببطء مع الزيتون والليمون المخلل والبصل والزعفران والكزبرة.', i: ['دجاج', 'ليمون مخلل', 'زيتون', 'بصل', 'زعفران', 'زنجبيل', 'كزبرة'] },
-      en: { n: 'Chicken Tagine with Lemon', d: 'Slow-cooked chicken with olives and preserved lemon, onions, saffron and coriander.', i: ['Chicken', 'Preserved lemon', 'Olives', 'Onions', 'Saffron', 'Ginger', 'Coriander'] } },
-    { id: 'm3', cat: 'mains', price: 110, kcal: 520, protein: 40, diabetic: true, lowChol: false, img: 'photo-1555939594-58d7cb561ad1', qr: 'Beef Skewers',
-      fr: { n: 'Brochettes de bœuf', d: 'Cubes de bœuf marinés au cumin et paprika, grillés au charbon, légumes grillés.', i: ['Bœuf', 'Cumin', 'Paprika', 'Oignon', 'Poivron', 'Persil', 'Huile d’olive'] },
-      ar: { n: 'أسياخ اللحم', d: 'مكعبات لحم بقري متبّلة بالكمون والفلفل الحلو، مشوية على الفحم مع خضار مشوية.', i: ['لحم بقري', 'كمون', 'فلفل حلو', 'بصل', 'فلفل رومي', 'بقدونس', 'زيت زيتون'] },
-      en: { n: 'Beef Skewers', d: 'Cumin and paprika marinated beef cubes, chargrilled, with grilled vegetables.', i: ['Beef', 'Cumin', 'Paprika', 'Onion', 'Bell pepper', 'Parsley', 'Olive oil'] } },
+    { id: 'm1', cat: 'mains', price: 120, kcal: 720, protein: 32, diabetic: false, lowChol: false,
+      img: 'photo-1544025162-d76694265947',
+      nameAr: 'كسكس ملكي', nameFr: 'Couscous Royal', nameEn: 'Couscous Royal',
+      en: { name: 'Couscous Royal', desc: 'Traditional steamed semolina with tender meats and seven seasonal garden vegetables.' },
+      fr: { name: 'Couscous Royal', desc: 'Semoule fine et vapeur, viandes tendres et sept légumes de saison.' },
+      ar: { name: 'كسكس ملكي', desc: 'كسكس أصيل باللحوم المختارة وخضار موسمية طازجة.' } },
 
-    { id: 's1', cat: 'starters', price: 40, kcal: 150, protein: 6, diabetic: true, lowChol: true, img: 'photo-1512621776951-a57141f2eefd', qr: 'Moroccan Salad',
-      fr: { n: 'Salade marocaine', d: 'Tomates, concombre, poivron et oignon en dés, coriandre et jus de citron.', i: ['Tomate', 'Concombre', 'Poivron', 'Oignon', 'Coriandre', 'Citron', 'Huile d’olive'] },
-      ar: { n: 'سلطة مغربية', d: 'طماطم وخيار وفلفل وبصل مقطّع مكعبات مع الكزبرة وعصير الليمون.', i: ['طماطم', 'خيار', 'فلفل', 'بصل', 'كزبرة', 'ليمون', 'زيت زيتون'] },
-      en: { n: 'Moroccan Salad', d: 'Diced tomato, cucumber, pepper and onion with coriander and lemon juice.', i: ['Tomato', 'Cucumber', 'Pepper', 'Onion', 'Coriander', 'Lemon', 'Olive oil'] } },
-    { id: 's2', cat: 'starters', price: 35, kcal: 130, protein: 3, diabetic: true, lowChol: true, img: 'photo-1540189549336-e6e99c3679fe', qr: 'Zaalouk',
-      fr: { n: 'Zaalouk', d: 'Caviar d’aubergines fumées et tomates, ail, cumin et paprika, servi tiède.', i: ['Aubergine', 'Tomate', 'Ail', 'Cumin', 'Paprika', 'Coriandre', 'Huile d’olive'] },
-      ar: { n: 'زعلوك', d: 'باذنجان مشوي مع الطماطم والثوم والكمون والفلفل الحلو، يقدَّم دافئاً.', i: ['باذنجان', 'طماطم', 'ثوم', 'كمون', 'فلفل حلو', 'كزبرة', 'زيت زيتون'] },
-      en: { n: 'Zaalouk', d: 'Smoky eggplant and tomato spread with garlic, cumin and paprika, served warm.', i: ['Eggplant', 'Tomato', 'Garlic', 'Cumin', 'Paprika', 'Coriander', 'Olive oil'] } },
-    { id: 's3', cat: 'starters', price: 30, kcal: 210, protein: 11, diabetic: false, lowChol: true, img: 'photo-1547592166-23ac45744acd', qr: 'Harira Soup',
-      fr: { n: 'Harira', d: 'Soupe traditionnelle de tomates, lentilles et pois chiches, céleri et herbes fraîches.', i: ['Tomate', 'Lentilles', 'Pois chiches', 'Céleri', 'Coriandre', 'Persil', 'Vermicelle'] },
-      ar: { n: 'حريرة', d: 'شوربة تقليدية بالطماطم والعدس والحمص والكرفس والأعشاب الطازجة.', i: ['طماطم', 'عدس', 'حمص', 'كرفس', 'كزبرة', 'بقدونس', 'شعرية'] },
-      en: { n: 'Harira', d: 'Traditional soup of tomatoes, lentils and chickpeas with celery and fresh herbs.', i: ['Tomato', 'Lentils', 'Chickpeas', 'Celery', 'Coriander', 'Parsley', 'Vermicelli'] } },
+    { id: 'm2', cat: 'mains', price: 100, kcal: 480, protein: 35, diabetic: true, lowChol: false,
+      img: 'photo-1519708227418-c8fd9a32b7a2',
+      nameAr: 'طاجين الدجاج بالليمون', nameFr: 'Tajine de poulet au citron', nameEn: 'Lemon Chicken Tajine',
+      en: { name: 'Lemon Chicken Tajine', desc: 'Slow-cooked farm chicken with preserved lemon, olives and saffron.' },
+      fr: { name: 'Tajine de poulet au citron', desc: 'Poulet fermier confit au citron confit, olives et safran.' },
+      ar: { name: 'طاجين الدجاج بالليمون', desc: 'دجاج بلدي مطهو ببطء مع الليمون المخلل والزيتون والزعفران.' } },
 
-    { id: 'd1', cat: 'desserts', price: 55, kcal: 380, protein: 7, diabetic: false, lowChol: false, img: 'photo-1565958011703-44f9829ba187', qr: 'Milk Pastilla',
-      fr: { n: 'Pastilla au lait', d: 'Feuilles croustillantes, crème légère à la fleur d’oranger, amandes et cannelle.', i: ['Feuilles de brick', 'Lait', 'Fleur d’oranger', 'Amandes', 'Cannelle', 'Sucre glace'] },
-      ar: { n: 'بسطيلة بالحليب', d: 'رقائق مقرمشة بكريمة خفيفة بماء الزهر واللوز والقرفة.', i: ['ورق البسطيلة', 'حليب', 'ماء الزهر', 'لوز', 'قرفة', 'سكر ناعم'] },
-      en: { n: 'Milk Pastilla', d: 'Crisp pastry leaves with a light orange-blossom cream, almonds and cinnamon.', i: ['Brick pastry', 'Milk', 'Orange blossom', 'Almonds', 'Cinnamon', 'Icing sugar'] } },
-    { id: 'd2', cat: 'desserts', price: 45, kcal: 360, protein: 5, diabetic: false, lowChol: true, img: 'photo-1509440159596-0249088772ff', qr: 'Date & Almond Tart',
-      fr: { n: 'Tarte dattes & amandes', d: 'Dattes medjool et amandes grillées, servie avec un yaourt léger à la cannelle.', i: ['Dattes medjool', 'Amandes', 'Cannelle', 'Yaourt', 'Miel'] },
-      ar: { n: 'تارت التمر واللوز', d: 'تمر المجهول واللوز المحمّص مع زبادي خفيف بالقرفة.', i: ['تمر المجهول', 'لوز', 'قرفة', 'زبادي', 'عسل'] },
-      en: { n: 'Date & Almond Tart', d: 'Medjool dates and toasted almonds, served with a light cinnamon yoghurt.', i: ['Medjool dates', 'Almonds', 'Cinnamon', 'Yoghurt', 'Honey'] } },
-    { id: 'd3', cat: 'desserts', price: 35, kcal: 120, protein: 2, diabetic: false, lowChol: true, img: 'photo-1557800636-894a64c1696f', qr: 'Orange & Cinnamon',
-      fr: { n: 'Oranges à la cannelle', d: 'Rondelles d’orange fraîche, cannelle et eau de fleur d’oranger.', i: ['Orange', 'Cannelle', 'Fleur d’oranger', 'Menthe'] },
-      ar: { n: 'برتقال بالقرفة', d: 'شرائح برتقال طازجة بالقرفة وماء الزهر.', i: ['برتقال', 'قرفة', 'ماء الزهر', 'نعناع'] },
-      en: { n: 'Orange & Cinnamon', d: 'Fresh orange slices with cinnamon and orange-blossom water.', i: ['Orange', 'Cinnamon', 'Orange blossom', 'Mint'] } },
+    { id: 'm3', cat: 'mains', price: 110, kcal: 520, protein: 40, diabetic: false, lowChol: false,
+      img: 'photo-1555939594-58d7cb561ad1',
+      nameAr: 'أسياخ اللحم', nameFr: 'Brochettes de bœuf', nameEn: 'Beef Skewers',
+      en: { name: 'Beef Skewers', desc: 'Charcoal-grilled spiced beef skewers with herbs and warm flatbread.' },
+      fr: { name: 'Brochettes de bœuf', desc: 'Brochettes de bœuf marinées aux épices douces et grillées au charbon.' },
+      ar: { name: 'أسياخ اللحم', desc: 'قطع لحم بقري متبلة وممشوية على الفحم بأعشاب عطرية.' } },
 
-    { id: 'k1', cat: 'drinks', price: 20, kcal: 20, protein: 0, diabetic: true, lowChol: true, img: 'photo-1576092768241-dec231879fc3', qr: 'Moroccan Mint Tea',
-      fr: { n: 'Thé à la menthe', d: 'Thé vert gunpowder à la menthe fraîche, servi à la marocaine. Sans sucre sur demande.', i: ['Thé vert', 'Menthe fraîche', 'Eau', 'Sucre (facultatif)'] },
-      ar: { n: 'أتاي بالنعناع', d: 'شاي أخضر بالنعناع الطازج على الطريقة المغربية. بدون سكر عند الطلب.', i: ['شاي أخضر', 'نعناع طازج', 'ماء', 'سكر (اختياري)'] },
-      en: { n: 'Mint Tea', d: 'Gunpowder green tea with fresh mint, served the Moroccan way. Unsweetened on request.', i: ['Green tea', 'Fresh mint', 'Water', 'Sugar (optional)'] } },
-    { id: 'k2', cat: 'drinks', price: 25, kcal: 110, protein: 2, diabetic: false, lowChol: true, img: 'photo-1613478223719-2ab802602423', qr: 'Fresh Orange Juice',
-      fr: { n: 'Jus d’orange frais', d: 'Pressé à la commande, sans sucre ajouté.', i: ['Oranges'] },
-      ar: { n: 'عصير برتقال طازج', d: 'معصور عند الطلب دون سكر مضاف.', i: ['برتقال'] },
-      en: { n: 'Fresh Orange Juice', d: 'Pressed to order, no added sugar.', i: ['Oranges'] } },
-    { id: 'k3', cat: 'drinks', price: 35, kcal: 180, protein: 4, diabetic: true, lowChol: true, img: 'photo-1541658016709-82535e94bc69', qr: 'Avocado & Almond Smoothie',
-      fr: { n: 'Smoothie avocat & amande', d: 'Avocat mixé au lait d’amande, une touche de miel et pistaches concassées.', i: ['Avocat', 'Lait d’amande', 'Miel', 'Pistaches', 'Glaçons'] },
-      ar: { n: 'سموذي الأفوكادو واللوز', d: 'أفوكادو ممزوج بحليب اللوز ولمسة عسل وفستق مجروش.', i: ['أفوكادو', 'حليب اللوز', 'عسل', 'فستق', 'ثلج'] },
-      en: { n: 'Avocado & Almond Smoothie', d: 'Avocado blended with almond milk, a touch of honey and crushed pistachios.', i: ['Avocado', 'Almond milk', 'Honey', 'Pistachios', 'Ice'] } }
+    { id: 's1', cat: 'salads', price: 40, kcal: 150, protein: 6, diabetic: true, lowChol: true,
+      img: 'photo-1546069901-ba9599a7e63c',
+      nameAr: 'سلطة مغربية', nameFr: 'Salade Marocaine', nameEn: 'Moroccan Salad',
+      en: { name: 'Moroccan Salad', desc: 'Finely diced tomatoes, cucumbers and peppers with fresh coriander and olive oil.' },
+      fr: { name: 'Salade Marocaine', desc: 'Tomates, concombres et poivrons finement coupés, persil et huile d’olive.' },
+      ar: { name: 'سلطة مغربية', desc: 'طماطم، خيار وفلفل مقطع بعناية مع البقدونس وزيت الزيتون.' } },
+
+    { id: 'd1', cat: 'desserts', price: 50, kcal: 410, protein: 7, diabetic: false, lowChol: true,
+      img: 'photo-1551024709-8f23befc6f87',
+      nameAr: 'كعكة السميد بماء الزهر', nameFr: 'Gâteau de semoule à la fleur d’oranger', nameEn: 'Orange Blossom Semolina Cake',
+      en: { name: 'Orange Blossom Semolina Cake', desc: 'Moist semolina cake infused with orange blossom syrup and pistachios.' },
+      fr: { name: 'Gâteau de semoule à la fleur d’oranger', desc: 'Gâteau moelleux imbibé de sirop de fleur d’oranger et pistaches.' },
+      ar: { name: 'كعكة السميد بماء الزهر', desc: 'كعكة رطبة مسقية بشراب زهر البرتقال والفستق.' } }
   ];
-  const CATS = ['mains', 'starters', 'desserts', 'drinks'];
-  const CHIP_KEYS = ['delay', 'wrongOrder', 'temp', 'waiter', 'quality', 'clean', 'price', 'other'];
 
-  /* =====================================================================
-     TRANSLATIONS
-     ===================================================================== */
   const I18N = {
-    fr: { dir: 'ltr', lang: 'fr', locale: 'fr-FR', cur: 'DH',
-      tag1: 'Une cuisine authentique aux saveurs marocaines', tag2: 'مطبخ أصيل بنكهات مغربية',
-      table: 'Table', enterTable: 'Entrez la table', tableTitle: 'Votre numéro de table', tableAsk: 'Saisissez le numéro indiqué sur votre table.', tableNeeded: 'Saisissez d’abord votre numéro de table pour afficher le QR au serveur.',
-      tableInvalid: 'Numéro invalide : 6 lettres ou chiffres maximum.', tablePh: '12', tableOk: 'Valider', close: 'Fermer',
-      navMenu: 'Menu', navOrder: 'Commande', navRate: 'Avis', navTable: 'Table',
-      cats: { all: 'Tous', mains: 'Plats principaux', starters: 'Entrées', desserts: 'Desserts', drinks: 'Boissons' },
-      ing: 'Ingrédients', kcal: 'kcal', diabetic: 'Adapté aux diabétiques', lowChol: 'Faible en cholestérol', add: 'Ajouter', less: 'Retirer un', more: 'Ajouter un', details: 'Détails',
-      nutri: 'Valeurs nutritionnelles estimatives par portion. Signalez toute allergie à votre serveur.', poweredBy: 'Propulsé par',
-      orderTitle: 'Votre commande', empty: 'Votre panier est vide. Ajoutez des plats depuis le menu.', total: 'Total', qrHint: 'Montrez ce QR code au serveur pour qu’il le scanne et valide votre commande.', qrFail: 'Impossible de générer le QR code. Montrez la commande ci-dessus au serveur.',
-      cancelNew: 'Annuler la commande et recommencer', cancelSure: 'Touchez à nouveau pour confirmer',
-      reviewTitle: 'Comment était notre service ?', reviewSub: 'Touchez les étoiles, votre avis compte.', waiterLabel: 'Nom du serveur (facultatif)', waiterPh: 'Qui s’est occupé de vous ?',
-      ratings: ['', 'Très décevant', 'Décevant', 'Correct', 'Très bien', 'Excellent !'],
-      posTitle: 'Merci infiniment !', posText: 'Nous sommes ravis que vous ayez apprécié. Partagez votre avis sur Google Maps : une minute qui nous aide énormément.', mapsBtn: 'Laisser un avis sur Google Maps',
-      negTitle: 'Désolé, nous voulons faire mieux', negText: 'Dites-nous ce qui s’est passé. Votre message sera transmis directement au responsable.', chipsLabel: 'Quel était le problème ?',
-      chips: { delay: 'Retard en cuisine', wrongOrder: 'Commande erronée / fausse', temp: 'Température du plat', waiter: 'Attitude du serveur', quality: 'Qualité des plats', clean: 'Propreté', price: 'Prix', other: 'Autre' },
-      commentLabel: 'Commentaire (facultatif)', commentPh: 'Dites-nous en plus...', waBtn: 'Envoyer au responsable via WhatsApp', waHint: 'WhatsApp s’ouvrira avec un message prêt, il suffit d’appuyer sur envoyer.', publicLink: 'Ou publiez votre avis publiquement sur Google Maps',
-      lockedTitle: 'Merci, nous avons bien reçu votre avis', lockedText: 'Un avis a déjà été enregistré pour cette table. Merci pour votre temps.',
-      msg: { head: 'Bonjour, voici l’avis d’un client :', restaurant: 'Restaurant', table: 'Table', rating: 'Note', waiter: 'Serveur', issues: 'Problèmes', comment: 'Commentaire', order: 'Commande', none: 'Aucun' } },
-    ar: { dir: 'rtl', lang: 'ar', locale: 'ar-u-nu-latn', cur: 'درهم',
-      tag1: 'مطبخ أصيل بنكهات مغربية', tag2: 'Une cuisine authentique aux saveurs marocaines',
-      table: 'الطاولة', enterTable: 'أدخل الطاولة', tableTitle: 'رقم طاولتك', tableAsk: 'أدخل الرقم المكتوب على طاولتك.', tableNeeded: 'أدخل رقم طاولتك أولاً لإظهار الرمز للنادل.',
-      tableInvalid: 'رقم غير صالح: حتى 6 أحرف أو أرقام فقط.', tablePh: '12', tableOk: 'تأكيد', close: 'إغلاق',
-      navMenu: 'القائمة', navOrder: 'طلبي', navRate: 'قيّم', navTable: 'الطاولة',
-      cats: { all: 'الكل', mains: 'الأطباق الرئيسية', starters: 'المقبلات', desserts: 'الحلويات', drinks: 'المشروبات' },
-      ing: 'المكوّنات', kcal: 'سعرة', diabetic: 'مناسب لمرضى السكري', lowChol: 'قليل الكوليسترول', add: 'أضف', less: 'إنقاص', more: 'زيادة', details: 'التفاصيل',
-      nutri: 'القيم الغذائية تقديرية لكل حصة. يرجى إخبار النادل بأي حساسية غذائية.', poweredBy: 'بدعم من',
-      orderTitle: 'طلبك', empty: 'سلتك فارغة. أضف أطباقاً من القائمة.', total: 'المجموع', qrHint: 'اعرضوا هذا الرمز على النادل لمسحه وتأكيد طلبكم.', qrFail: 'تعذّر إنشاء الرمز. اعرضوا الطلب أعلاه على النادل.',
-      cancelNew: 'إلغاء الطلب وبدء طلب جديد', cancelSure: 'اضغط مرة أخرى للتأكيد',
-      reviewTitle: 'كيف كانت خدمتنا؟', reviewSub: 'اضغطوا على النجوم، رأيكم يهمّنا.', waiterLabel: 'اسم النادل (اختياري)', waiterPh: 'من خدمكم اليوم؟',
-      ratings: ['', 'سيّئ جداً', 'دون المتوسط', 'عادي', 'جيّد', 'ممتاز!'],
-      posTitle: 'شكراً جزيلاً!', posText: 'يسعدنا أن التجربة أعجبتكم. هل تشاركونها على Google Maps؟ دقيقة واحدة تصنع فرقاً كبيراً لنا.', mapsBtn: 'اترك تقييماً على Google Maps',
-      negTitle: 'نعتذر، ونريد أن نتحسّن', negText: 'أخبرونا بما حدث وسيصل كلامكم مباشرة إلى المدير.', chipsLabel: 'ما المشكلة؟',
-      chips: { delay: 'تأخير المطبخ', wrongOrder: 'طلب خاطئ / غير صحيح', temp: 'حرارة الأكل', waiter: 'تعامل النادل', quality: 'جودة الأكل', clean: 'النظافة', price: 'الأسعار', other: 'أخرى' },
-      commentLabel: 'تعليق (اختياري)', commentPh: 'أخبرونا بالتفصيل...', waBtn: 'أرسل إلى المدير عبر واتساب', waHint: 'سيُفتح واتساب برسالة جاهزة، اضغطوا إرسال فقط.', publicLink: 'أو انشروا رأيكم علناً على Google Maps',
-      lockedTitle: 'شكراً، وصلنا رأيكم', lockedText: 'تم تسجيل تقييم لهذه الطاولة. نقدّر وقتكم كثيراً.',
-      msg: { head: 'مرحباً، هذا تقييم زبون:', restaurant: 'المطعم', table: 'الطاولة', rating: 'التقييم', waiter: 'النادل', issues: 'المشاكل', comment: 'التعليق', order: 'الطلب', none: 'بدون' } },
-    en: { dir: 'ltr', lang: 'en', locale: 'en-US', cur: 'DH',
-      tag1: 'Authentic cuisine with Moroccan flavours', tag2: 'مطبخ أصيل بنكهات مغربية',
-      table: 'Table', enterTable: 'Enter table', tableTitle: 'Your table number', tableAsk: 'Type the number shown on your table.', tableNeeded: 'Enter your table number first to show the QR to your waiter.',
-      tableInvalid: 'Invalid number: up to 6 letters or digits.', tablePh: '12', tableOk: 'Confirm', close: 'Close',
-      navMenu: 'Menu', navOrder: 'Order', navRate: 'Rate', navTable: 'Table',
-      cats: { all: 'All', mains: 'Main dishes', starters: 'Starters', desserts: 'Desserts', drinks: 'Drinks' },
-      ing: 'Ingredients', kcal: 'kcal', diabetic: 'Diabetes-friendly', lowChol: 'Low cholesterol', add: 'Add', less: 'Remove one', more: 'Add one', details: 'Details',
-      nutri: 'Nutritional values are estimates per serving. Please tell your waiter about any allergies.', poweredBy: 'Powered by',
-      orderTitle: 'Your order', empty: 'Your basket is empty. Add dishes from the menu.', total: 'Total', qrHint: 'Show this QR code to your waiter so they can scan it and confirm your order.', qrFail: 'Could not generate the QR code. Please show the order above to your waiter.',
-      cancelNew: 'Cancel order & start new', cancelSure: 'Tap again to confirm',
-      reviewTitle: 'How was our service?', reviewSub: 'Tap the stars, your opinion matters.', waiterLabel: 'Waiter’s name (optional)', waiterPh: 'Who looked after you?',
-      ratings: ['', 'Very disappointing', 'Disappointing', 'Okay', 'Great', 'Excellent!'],
-      posTitle: 'Thank you so much!', posText: 'We’re delighted you enjoyed your visit. Would you share it on Google Maps? One minute helps us enormously.', mapsBtn: 'Leave a review on Google Maps',
-      negTitle: 'Sorry, we want to do better', negText: 'Tell us what went wrong. Your message goes straight to the manager.', chipsLabel: 'What went wrong?',
-      chips: { delay: 'Kitchen delay', wrongOrder: 'Wrong or false order', temp: 'Food temperature', waiter: 'Waiter attitude', quality: 'Food quality', clean: 'Cleanliness', price: 'Prices', other: 'Other' },
-      commentLabel: 'Comment (optional)', commentPh: 'Tell us more...', waBtn: 'Send to Manager via WhatsApp', waHint: 'WhatsApp will open with a ready message, just hit send.', publicLink: 'Or post your review publicly on Google Maps',
-      lockedTitle: 'Thank you, we received your feedback', lockedText: 'A review has already been recorded for this table. We appreciate your time.',
-      msg: { head: 'Hello, here is a customer review:', restaurant: 'Restaurant', table: 'Table', rating: 'Rating', waiter: 'Waiter', issues: 'Issues', comment: 'Comment', order: 'Order', none: 'None' } }
+    ar: {
+      dir: 'rtl', lang: 'ar', locale: 'ar-MA',
+      welcome: 'مرحباً بكم في',
+      tagline: 'مطبخ أصيل بنكهات مغربية',
+      table: 'طاولة',
+      tableOk: 'حفظ',
+      tabMenu: 'المنيو والطلب',
+      tabReview: 'تقييم الخدمة',
+      nutriNote: '💡 المعلومات الغذائية والسعرات الحرارية هي تقديرات تقريبية لكل وجبة.',
+      add: 'أضف للطلب',
+      kcal: 'kcal',
+      protein: 'g',
+      showQr: 'عرض QR',
+      close: 'إغلاق',
+      cancelOrder: 'إلغاء',
+      total: 'المجموع الإجمالي:',
+      qrTitle: 'كود طلب الطاولة',
+      qrHint: 'أظهر هذا الكود للنادل لتأكيد الطلب',
+      reviewTitle: 'كيف كانت تجربتك معنا؟',
+      reviewSub: 'رأيك يهمنا لتحسين خدمتنا دائماً.',
+      waiterLabel: 'اسم النادل (اختياري)',
+      posTitle: 'شكراً لك على زيارتك الرائعة! 🙏',
+      posText: 'يسعدنا جداً أن تجربتك نالت إعجابك. هل توفقنا دقيقة لترك تقييم على خرائط جوجل؟',
+      mapsBtn: 'تقييم على Google Maps',
+      negTitle: 'نعتذر بشدة عن أي تقصير',
+      negText: 'نرجو إخبارنا بما لم يعجبك ليتم تداركه فوراً من طرف المسؤول.',
+      chipsLabel: 'ما الذي لم يكن على ما يرام؟',
+      commentLabel: 'ملاحظات إضافية (اختياري)',
+      waBtn: 'إرسال للمسؤول عبر واتساب',
+      waHint: 'سيفتح واتساب برسالة جاهزة مباشرة للمدير.',
+      publicLink: 'أو نشر تقييم عام عبر الإنترنت',
+      lockedTitle: 'تم إرسال تقييمك بنجاح',
+      lockedText: 'شكراً لك، لقد تم تسجيل ملاحظتك لهذه الطاولة وستتم متابعتها من الإدارة.',
+      poweredBy: 'مدعوم من طرف',
+      categories: { all: 'الكل / Tous', mains: 'الأطباق الرئيسية', salads: 'المقبلات / Entrées', desserts: 'الحلويات' },
+      chips: {
+        kitchen_delay: '👨‍🍳 تأخير في تحضير الطعام',
+        food_quality: '🍽️ جودة أو حرارة الأطباق',
+        false_order: '❌ طلب غير دقيق أو ناقص',
+        service_delay: '🤵 بطء في خدمة النادل',
+        staff: '🗣️ تعامل غير لائق',
+        clean: '✨ نظافة الطاولة أو المكان'
+      },
+      ratings: ['', 'غير مقتنع تماماً', 'دون المتوقع', 'مقبول', 'جيد جداً', 'ممتاز ورائع!']
+    },
+    fr: {
+      dir: 'ltr', lang: 'fr', locale: 'fr-FR',
+      welcome: 'BIENVENUE AU',
+      tagline: 'Une cuisine authentique aux saveurs marocaines',
+      table: 'Table',
+      tableOk: 'OK',
+      tabMenu: 'Menu & Commande',
+      tabReview: 'Avis & Service',
+      nutriNote: '💡 Les valeurs nutritionnelles et calories sont des estimations indicatives.',
+      add: 'Ajouter',
+      kcal: 'kcal',
+      protein: 'g',
+      showQr: 'Voir QR',
+      close: 'Fermer',
+      cancelOrder: 'Annuler',
+      total: 'Total général :',
+      qrTitle: 'QR Code de Commande',
+      qrHint: 'Montrez ce QR code au serveur',
+      reviewTitle: 'Comment était votre expérience ?',
+      reviewSub: 'Votre avis nous aide à vous offrir le meilleur.',
+      waiterLabel: 'Nom du serveur (optionnel)',
+      posTitle: 'Merci infiniment pour votre visite ! 🙏',
+      posText: 'Nous sommes ravis que vous ayez apprécié. Pourriez-vous laisser un avis sur Google Maps ?',
+      mapsBtn: 'Laisser un avis sur Google Maps',
+      negTitle: 'Nous sommes désolés pour ce désagrément',
+      negText: 'Dites-nous ce qui n’a pas fonctionné afin que le responsable puisse agir immédiatement.',
+      chipsLabel: 'Quel a été le problème ?',
+      commentLabel: 'Commentaires (optionnel)',
+      waBtn: 'Envoyer au responsable via WhatsApp',
+      waHint: 'WhatsApp s’ouvrira avec un message prêt à l’envoi.',
+      publicLink: 'Ou laisser un avis public en ligne',
+      lockedTitle: 'Avis bien enregistré',
+      lockedText: 'Merci, votre retour pour cette table a bien été transmis à la direction.',
+      poweredBy: 'Propulsé par',
+      categories: { all: 'Tous', mains: 'Plats principaux', salads: 'Entrées', desserts: 'Desserts' },
+      chips: {
+        kitchen_delay: '👨‍🍳 Attente cuisine trop longue',
+        food_quality: '🍽️ Qualité ou température du plat',
+        false_order: '❌ Erreur ou oubli dans la commande',
+        service_delay: '🤵 Retard du service en salle',
+        staff: '🗣️ Accueil ou attitude du personnel',
+        clean: '✨ Propreté de la table'
+      },
+      ratings: ['', 'Très décevant', 'Insatisfaisant', 'Correct', 'Très bien', 'Excellent !']
+    }
   };
 
-  /* =====================================================================
-     HELPERS / STATE
-     ===================================================================== */
-  const $ = (id) => document.getElementById(id);
+  const state = {
+    lang: 'fr',
+    tab: 'menu',
+    cat: 'all',
+    table: '',
+    cart: {},
+    rating: 0,
+    hoverRating: 0,
+    chips: new Set(),
+    cancelArmed: false
+  };
+
   const t = () => I18N[state.lang];
-  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const fmt = (n) => new Intl.NumberFormat(t().locale).format(n);
-  const money = (n) => fmt(n) + ' ' + t().cur;
-  const byId = Object.fromEntries(MENU.map((d) => [d.id, d]));
-  const second = () => (state.lang === 'ar' ? 'fr' : 'ar');         // second (smaller) name under the main one
 
-  const state = { lang: 'fr', tab: 'menu', cat: 'all', rating: 0, hover: 0, tags: new Set() };
-  const cart = new Map();
-  const openCards = new Set();
-  let table = null, pendingOrder = false, qrRef = '', armed = false, armTimer = null, lastFocus = null;
+  function getTableFromUrl() {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      const val = p.get('table');
+      if (val) {
+        const clean = val.trim().toUpperCase().replace(/[^A-Z0-9_-]/g, '').slice(0, 6);
+        if (clean) return clean;
+      }
+    } catch (_) {}
+    return '';
+  }
 
-  const ICO = {
-    flame: '<svg class="fl" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.5 2c.5 3-1 4.7-2.5 6.4C8.5 10 7 11.7 7 14.3A5.3 5.3 0 0 0 12.3 20c3 0 5.7-2.2 5.7-5.7 0-2.1-1-3.6-2-4.9-.3 1.2-.9 2-1.8 2.4.5-3.6-.2-7.3-1.7-9.8Z"/></svg>',
-    bell: '<svg class="dm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M3 9v6M6.5 6v12M17.5 6v12M21 9v6M6.5 12h11"/></svg>',
-    chev: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>',
-    ph: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 30h36l-3 8H9zM12 30c0-9 5-16 12-16s12 7 12 16M24 14v-4M21 10h6"/></svg>'
-  };
+  function initTable() {
+    const fromUrl = getTableFromUrl();
+    if (fromUrl) {
+      state.table = fromUrl;
+      hideTableForm();
+    } else {
+      try {
+        const saved = localStorage.getItem('ikatna_table');
+        if (saved) {
+          state.table = saved;
+          hideTableForm();
+          return;
+        }
+      } catch (_) {}
+      state.table = '';
+      showTableForm();
+    }
+    updateTableUI();
+  }
 
-  /* ---------- table number ---------- */
-  const cleanTable = (raw) => { const v = String(raw == null ? '' : raw).trim(); return /^[A-Za-z0-9-]{1,6}$/.test(v) ? v.toUpperCase() : null; };
-  try { table = cleanTable(new URLSearchParams(location.search).get('table')); } catch (e) {}
-  const normalizeTable = (s) => String(s).replace(/[٠-٩]/g, (d) => d.charCodeAt(0) - 0x0660).replace(/[۰-۹]/g, (d) => d.charCodeAt(0) - 0x06F0).toUpperCase().replace(/[^A-Z0-9-]/g, '');
+  function showTableForm() {
+    const box = document.getElementById('tableForm');
+    if (box) box.classList.remove('hidden');
+    const input = document.getElementById('tableInput');
+    if (input) input.focus();
+  }
 
-  /* ---------- cart ---------- */
-  const CART_KEY = 'ikatna_cart';
-  const saveCart = () => { try { sessionStorage.setItem(CART_KEY, JSON.stringify([...cart])); } catch (e) {} };
-  (function loadCart() { try { JSON.parse(sessionStorage.getItem(CART_KEY) || '[]').forEach(([id, q]) => { if (byId[id] && Number.isInteger(q) && q > 0 && q < 100) cart.set(id, q); }); } catch (e) {} })();
-  const cartCount = () => [...cart.values()].reduce((a, b) => a + b, 0);
-  const cartTotal = () => [...cart].reduce((s, [id, q]) => s + byId[id].price * q, 0);
+  function hideTableForm() {
+    const box = document.getElementById('tableForm');
+    if (box) box.classList.add('hidden');
+  }
 
-  /* =====================================================================
-     RENDER – language / hero / nav
-     ===================================================================== */
-  function applyLang(lang) {
+  function updateTableUI() {
+    const numEl = document.getElementById('tableNum');
+    if (numEl) numEl.textContent = state.table || '—';
+    const qrT = document.getElementById('qrTable');
+    if (qrT) qrT.textContent = state.table ? '#' + state.table : '—';
+  }
+
+  function setTable(val) {
+    const clean = (val || '').trim().toUpperCase().replace(/[^A-Z0-9_-]/g, '').slice(0, 6);
+    const errEl = document.getElementById('tableErr');
+    if (!clean) {
+      if (errEl) {
+        errEl.textContent = state.lang === 'ar' ? 'الرجاء إدخال رقم الطاولة' : 'Veuillez entrer un numéro de table';
+        errEl.classList.remove('hidden');
+      }
+      return;
+    }
+    if (errEl) errEl.classList.add('hidden');
+    state.table = clean;
+    try { localStorage.setItem('ikatna_table', clean); } catch (_) {}
+    hideTableForm();
+    updateTableUI();
+  }
+
+  function getReviewLockKey() {
+    return 'ikatna_reviewed_' + (state.table || 'GEN');
+  }
+
+  function checkReviewLock() {
+    try {
+      const raw = localStorage.getItem(getReviewLockKey());
+      if (raw) {
+        const ts = parseInt(raw, 10);
+        const hours = (Date.now() - ts) / (1000 * 60 * 60);
+        if (hours < CONFIG.reviewLockHours) return true;
+      }
+    } catch (_) {}
+    return false;
+  }
+
+  function setReviewLock() {
+    try { localStorage.setItem(getReviewLockKey(), String(Date.now())); } catch (_) {}
+  }
+
+  function updateReviewLockUI() {
+    const locked = checkReviewLock();
+    const lockedBox = document.getElementById('reviewLocked');
+    const flowBox = document.getElementById('reviewFlow');
+    if (lockedBox && flowBox) {
+      lockedBox.classList.toggle('hidden', !locked);
+      flowBox.classList.toggle('hidden', locked);
+    }
+  }
+
+  function applyLanguage(lang) {
+    if (!I18N[lang]) return;
     state.lang = lang;
-    const L = t();
+    const L = I18N[lang];
+
     document.documentElement.lang = L.lang;
     document.documentElement.dir = L.dir;
-    document.querySelectorAll('#langSwitch button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
 
-    $('restType').textContent = CONFIG.restaurantType[lang];
-    $('restName').textContent = CONFIG.restaurantName[lang];
-    $('tag1').textContent = L.tag1; $('tag2').textContent = L.tag2;
-    const set = (id, v) => { $(id).textContent = v; };
-    set('navMenu', L.navMenu); set('navOrder', L.navOrder); set('navRate', L.navRate); set('navTable', L.navTable);
-    set('nutriNote', L.nutri); set('poweredBy', L.poweredBy); set('poweredBy2', L.poweredBy);
-    // review
-    set('reviewTitle', L.reviewTitle); set('reviewSub', L.reviewSub); set('waiterLabel', L.waiterLabel);
-    set('posTitle', L.posTitle); set('posText', L.posText); set('mapsLabel', L.mapsBtn);
-    set('negTitle', L.negTitle); set('negText', L.negText); set('chipsLabel', L.chipsLabel); set('commentLabel', L.commentLabel);
-    set('waLabel', L.waBtn); set('waHint', L.waHint); set('publicLink', L.publicLink); set('lockedTitle', L.lockedTitle); set('lockedText', L.lockedText);
-    $('waiterName').placeholder = L.waiterPh; $('comment').placeholder = L.commentPh;
-    $('mapsBtn').href = CONFIG.googleMapsReviewUrl; $('publicLink').href = CONFIG.googleMapsReviewUrl;
-    // sheets
-    set('orderTitle', L.orderTitle); set('oEmpty', L.empty); set('oTotalLbl', L.total); set('qrHint', L.qrHint); set('oClose', L.close);
-    set('tableTitle', L.tableTitle); set('tableMsg', L.tableAsk); set('tableOk', L.tableOk); set('tableClose', L.close); $('tableInput').placeholder = L.tablePh;
-    renderTable(); renderPills(); renderMenu(); renderChips(); paintStars(); renderCart();
-    if (!$('orderSheet').hidden) renderOrder(false);
-    try { localStorage.setItem('ikatna_lang', lang); } catch (e) {}
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (L[key]) el.textContent = L[key];
+    });
+
+    document.querySelectorAll('#langSwitch button').forEach(b => {
+      const active = b.getAttribute('data-lang') === lang;
+      b.classList.toggle('lang-on', active);
+      b.classList.toggle('text-white/80', !active);
+    });
+
+    const cancelLbl = document.getElementById('cancelLabel');
+    if (cancelLbl) cancelLbl.textContent = L.cancelOrder;
+
+    renderPills();
+    renderMenu();
+    renderChips();
+    paintStars();
+    updateCartBar();
   }
 
-  function renderTable() {
-    $('chipNum').textContent = table || '—';
-    $('chipLbl').textContent = table ? t().table : t().enterTable;
-    $('tableChip').classList.toggle('empty', !table);
-    $('oTable').textContent = table || '—'; $('oTableLbl').textContent = t().table;
-  }
-
-  function setNav(tab) {
+  function switchTab(tab) {
     state.tab = tab;
-    $('panelMenu').hidden = tab !== 'menu';
-    $('panelReview').hidden = tab !== 'review';
-    document.querySelectorAll('#bnav [data-nav]').forEach((b) => {
-      const on = (b.dataset.nav === 'menu' && tab === 'menu') || (b.dataset.nav === 'review' && tab === 'review');
-      if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
-    });
-    if (tab === 'review') renderReviewState();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const isMenu = tab === 'menu';
+    const menuP = document.getElementById('panelMenu');
+    const revP = document.getElementById('panelReview');
+    const btnM = document.getElementById('tabBtnMenu');
+    const btnR = document.getElementById('tabBtnReview');
+
+    if (menuP) menuP.classList.toggle('hidden', !isMenu);
+    if (revP) revP.classList.toggle('hidden', isMenu);
+
+    if (btnM) {
+      btnM.setAttribute('aria-selected', isMenu ? 'true' : 'false');
+      btnM.className = `rounded-full px-4 py-2 text-xs font-bold transition ${isMenu ? 'tab-on' : 'text-white/85 hover:text-white'}`;
+    }
+    if (btnR) {
+      btnR.setAttribute('aria-selected', !isMenu ? 'true' : 'false');
+      btnR.className = `rounded-full px-4 py-2 text-xs font-bold transition ${!isMenu ? 'tab-on' : 'text-white/85 hover:text-white'}`;
+    }
+
+    updateCartBar();
+    if (!isMenu) updateReviewLockUI();
   }
 
-  /* =====================================================================
-     MENU
-     ===================================================================== */
   function renderPills() {
-    const wrap = $('pills');
+    const wrap = document.getElementById('pills');
+    if (!wrap) return;
     wrap.innerHTML = '';
-    ['all', ...CATS].forEach((c) => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'pill';
-      b.innerHTML = '<span>' + esc(I18N[state.lang].cats[c]) + '</span><span>' + esc(I18N[second()].cats[c]) + '</span>';
-      b.setAttribute('aria-pressed', String(state.cat === c));
-      b.addEventListener('click', () => { state.cat = c; renderPills(); renderMenu(); });
-      wrap.appendChild(b);
+    const cats = t().categories;
+
+    Object.keys(cats).forEach(key => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'pill rounded-full px-4 py-2 text-xs font-semibold whitespace-nowrap';
+      btn.textContent = cats[key];
+      const active = state.cat === key;
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+      btn.onclick = () => {
+        state.cat = key;
+        renderPills();
+        renderMenu();
+      };
+      wrap.appendChild(btn);
     });
-  }
-
-  function ctlHtml(id) {
-    const u = t(), q = cart.get(id) || 0;
-    if (!q) return '<button type="button" class="plus" data-act="inc" data-id="' + id + '" aria-label="' + esc(u.add) + '">+</button>';
-    return '<div class="step"><button type="button" data-act="dec" data-id="' + id + '" aria-label="' + esc(u.less) + '">−</button><b class="num">' + fmt(q) + '</b>' +
-           '<button type="button" data-act="inc" data-id="' + id + '" aria-label="' + esc(u.more) + '">+</button></div>';
-  }
-
-  function cardHtml(d) {
-    const u = t(), A = d[state.lang], B = d[second()], open = openCards.has(d.id);
-    return '<article class="card' + (open ? ' open' : '') + '" data-card="' + d.id + '">' +
-      '<div class="card-top">' +
-        '<div class="thumbbox"><div class="ph">' + ICO.ph + '</div>' +
-          '<img src="' + esc(IMG(d.img)) + '" alt="' + esc(A.n) + '" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()" />' +
-          '<div class="ctl" data-ctl="' + d.id + '">' + ctlHtml(d.id) + '</div></div>' +
-        '<button type="button" class="card-main" data-act="toggle" data-id="' + d.id + '" aria-expanded="' + open + '">' +
-          '<h3 class="n1">' + esc(A.n) + '</h3><p class="n2">' + esc(B.n) + '</p>' +
-          '<div class="meta"><span>' + ICO.flame + '<span class="num">' + fmt(d.kcal) + '</span> ' + esc(u.kcal) + '</span><i></i><span>' + ICO.bell + '<span class="num">' + fmt(d.protein) + '</span> g</span></div>' +
-        '</button>' +
-        '<div class="side"><button type="button" class="chev" data-act="toggle" data-id="' + d.id + '" aria-label="' + esc(u.details) + '">' + ICO.chev + '</button><span class="price">' + esc(money(d.price)) + '</span></div>' +
-      '</div>' +
-      '<div class="more"' + (open ? '' : ' hidden') + '>' +
-        '<p class="desc">' + esc(A.d) + '</p>' +
-        '<div class="badges">' + (d.diabetic ? '<span class="badge ok">✓ ' + esc(u.diabetic) + '</span>' : '') + (d.lowChol ? '<span class="badge heart">♥ ' + esc(u.lowChol) + '</span>' : '') + '</div>' +
-        '<p class="ing-t">' + esc(u.ing) + '</p><p class="ing">' + A.i.map(esc).join(' · ') + '</p>' +
-      '</div></article>';
   }
 
   function renderMenu() {
-    const cats = state.cat === 'all' ? CATS : [state.cat];
-    $('menuRoot').innerHTML = cats.map((c) =>
-      (state.cat === 'all' ? '<h2 class="sec-title">' + esc(t().cats[c]) + '</h2>' : '') +
-      MENU.filter((d) => d.cat === c).map(cardHtml).join('')).join('');
-  }
+    const root = document.getElementById('menuRoot');
+    if (!root) return;
+    root.innerHTML = '';
 
-  $('menuRoot').addEventListener('click', (e) => {
-    const b = e.target.closest('[data-act]');
-    if (!b) return;
-    const id = b.dataset.id, act = b.dataset.act;
-    if (!byId[id]) return;
-    if (act === 'toggle') {
-      const card = b.closest('.card'), open = !openCards.has(id);
-      open ? openCards.add(id) : openCards.delete(id);
-      card.classList.toggle('open', open);
-      card.querySelector('.more').hidden = !open;
-      card.querySelector('.card-main').setAttribute('aria-expanded', String(open));
+    const list = MENU.filter(item => state.cat === 'all' || item.cat === state.cat);
+    const L = t();
+
+    if (list.length === 0) {
+      root.innerHTML = '<p class="py-16 text-center text-xs text-white/50">Aucun plat trouvé.</p>';
       return;
     }
-    changeQty(id, act === 'dec' ? -1 : 1);
-  });
 
-  function changeQty(id, delta) {
-    const next = (cart.get(id) || 0) + delta;
-    if (next <= 0) cart.delete(id); else cart.set(id, Math.min(next, 20));
-    saveCart();
-    const box = document.querySelector('[data-ctl="' + id + '"]');
-    if (box) box.innerHTML = ctlHtml(id);
-    renderCart();
-    if (!$('orderSheet').hidden) renderOrder(true);
-  }
+    list.forEach(item => {
+      const data = item[state.lang] || item.fr || item.en;
+      const qty = state.cart[item.id] || 0;
 
-  function renderCart() {
-    const n = cartCount();
-    $('cartBadge').hidden = !n;
-    $('cartBadge').textContent = fmt(n);
-    if (!n && armed) setArmed(false);
-  }
+      const card = document.createElement('div');
+      card.className = 'dish-card flex items-center justify-between gap-3 p-3 rounded-2xl shadow-md';
 
-  /* =====================================================================
-     SHEETS
-     ===================================================================== */
-  function openSheet(id) { lastFocus = document.activeElement; $(id).hidden = false; document.body.style.overflow = 'hidden'; }
-  function closeSheet(id) {
-    $(id).hidden = true;
-    if ($('orderSheet').hidden && $('tableSheet').hidden) document.body.style.overflow = '';
-    if (lastFocus && lastFocus.focus) { try { lastFocus.focus(); } catch (e) {} }
-  }
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') ['tableSheet', 'orderSheet'].forEach((s) => { if (!$(s).hidden) closeSheet(s); }); });
-  ['orderSheet', 'tableSheet'].forEach((s) => $(s).addEventListener('click', (e) => { if (e.target === $(s)) closeSheet(s); }));
+      const imgHtml = `
+        <div class="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-[#26181b]">
+          <img src="${IMG(item.img)}" alt="${escapeHtml(data.name)}" loading="lazy"
+               class="h-full w-full object-cover"
+               onerror="this.style.display='none';" />
+        </div>
+      `;
 
-  /* ---------- table number ---------- */
-  function openTable(message) {
-    $('tableMsg').textContent = message || t().tableAsk;
-    $('tableErr').hidden = true;
-    $('tableInput').value = table || '';
-    openSheet('tableSheet');
-    setTimeout(() => { $('tableInput').focus(); $('tableInput').select(); }, 120);
-  }
-  function confirmTable() {
-    const v = cleanTable(normalizeTable($('tableInput').value));
-    if (!v) { $('tableErr').textContent = t().tableInvalid; $('tableErr').hidden = false; $('tableInput').focus(); return; }
-    table = v;
-    try { history.replaceState(null, '', '?table=' + encodeURIComponent(v)); } catch (e) {}
-    renderTable();
-    closeSheet('tableSheet');
-    if (state.tab === 'review') renderReviewState();
-    if (pendingOrder) { pendingOrder = false; openOrder(); }
-  }
-  $('tableInput').addEventListener('input', (e) => { e.target.value = normalizeTable(e.target.value); $('tableErr').hidden = true; });
-  $('tableInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); confirmTable(); } });
-  $('tableOk').addEventListener('click', confirmTable);
-  $('tableClose').addEventListener('click', () => { pendingOrder = false; closeSheet('tableSheet'); });
-  $('tableChip').addEventListener('click', () => openTable());
+      let actionHtml = '';
+      if (qty === 0) {
+        actionHtml = `
+          <button type="button" onclick="window.__ikatna.add('${item.id}', 1)"
+                  class="btn-gold rounded-xl px-3 py-1.5 text-[11px] flex items-center gap-1">
+            <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            <span>${item.price} ${CONFIG.currencyCode}</span>
+          </button>
+        `;
+      } else {
+        actionHtml = `
+          <div class="flex items-center gap-1.5 rounded-xl border border-gold-500/50 bg-gold-500/20 p-1">
+            <button type="button" onclick="window.__ikatna.add('${item.id}', -1)"
+                    class="flex h-6 w-6 items-center justify-center rounded-lg bg-white/10 text-xs font-bold text-gold-300" aria-label="Decrease">-</button>
+            <span class="font-display text-xs font-extrabold text-gold-300 px-1" dir="ltr">${qty}</span>
+            <button type="button" onclick="window.__ikatna.add('${item.id}', 1)"
+                    class="flex h-6 w-6 items-center justify-center rounded-lg bg-white/10 text-xs font-bold text-gold-300" aria-label="Increase">+</button>
+          </div>
+        `;
+      }
 
-  /* ---------- order + QR ---------- */
-  function newRef() {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    const r = (window.crypto && crypto.getRandomValues) ? crypto.getRandomValues(new Uint8Array(4)) : [1, 2, 3, 4].map(() => Math.floor(Math.random() * 256));
-    return Array.from(r, (x) => chars[x % chars.length]).join('');
-  }
-  function orderText() {
-    const d = new Date(), hh = String(d.getHours()).padStart(2, '0'), mm = String(d.getMinutes()).padStart(2, '0');
-    const lines = ['IKATNA ORDER', 'TABLE: ' + (table || 'UNKNOWN'), 'REF: ' + qrRef + ' ' + hh + ':' + mm, '------'];
-    cart.forEach((q, id) => lines.push(q + 'x ' + byId[id].qr));
-    lines.push('------', 'ITEMS: ' + cartCount(), 'TOTAL: ' + cartTotal() + ' ' + CONFIG.currencyCode);
-    return lines.join('\n');
-  }
-
-  function renderOrder(regenQr) {
-    const u = t(), has = cartCount() > 0;
-    $('oEmpty').hidden = has; $('oFull').hidden = !has;
-    $('oTable').textContent = table || '—'; $('oRef').textContent = '#' + qrRef;
-    $('oList').innerHTML = [...cart].map(([id, q]) =>
-      '<li><span class="nm">' + esc(byId[id][state.lang].n) + '</span>' +
-      '<div class="step"><button type="button" data-act="dec" data-id="' + id + '" aria-label="' + esc(u.less) + '">−</button><b class="num">' + fmt(q) + '</b><button type="button" data-act="inc" data-id="' + id + '" aria-label="' + esc(u.more) + '">+</button></div>' +
-      '<span class="lp">' + esc(money(byId[id].price * q)) + '</span></li>').join('');
-    $('oTotal').textContent = money(cartTotal());
-    $('oCancel').textContent = armed ? u.cancelSure : u.cancelNew;
-    $('oCancel').classList.toggle('armed', armed);
-    if (!has || !regenQr) return;
-    const box = $('qrBox'), err = $('qrError');
-    box.innerHTML = ''; err.hidden = true;
-    const text = orderText();
-    try {
-      if (typeof QRCode === 'undefined') throw new Error('qrcode.js not loaded');
-      new QRCode(box, { text: text, width: 216, height: 216, colorDark: '#123d2e', colorLight: '#ffffff', correctLevel: text.length > 900 ? QRCode.CorrectLevel.L : QRCode.CorrectLevel.M });
-    } catch (e) { err.textContent = u.qrFail; err.hidden = false; }
-  }
-
-  function openOrder() {
-    if (cartCount() && !table) { pendingOrder = true; openTable(t().tableNeeded); return; }   // the waiter needs the table number
-    setArmed(false);
-    qrRef = newRef();
-    openSheet('orderSheet');
-    renderOrder(true);
-  }
-  $('oList').addEventListener('click', (e) => { const b = e.target.closest('[data-act]'); if (b && byId[b.dataset.id]) changeQty(b.dataset.id, b.dataset.act === 'dec' ? -1 : 1); });
-  $('oClose').addEventListener('click', () => { setArmed(false); closeSheet('orderSheet'); });
-
-  /* cancel & start new: first tap asks, second tap clears */
-  function setArmed(on) {
-    armed = on; clearTimeout(armTimer);
-    if (on) armTimer = setTimeout(() => setArmed(false), 4000);
-    if (!$('orderSheet').hidden) renderOrder(false);
-  }
-  $('oCancel').addEventListener('click', () => {
-    if (!armed) { setArmed(true); return; }
-    cart.clear(); saveCart(); armed = false; clearTimeout(armTimer);
-    closeSheet('orderSheet'); renderMenu(); renderCart();
-  });
-
-  /* ---------- bottom nav ---------- */
-  document.querySelectorAll('#bnav [data-nav]').forEach((b) => b.addEventListener('click', () => {
-    const n = b.dataset.nav;
-    if (n === 'menu' || n === 'review') setNav(n);
-    else if (n === 'order') openOrder();
-    else if (n === 'table') openTable();
-  }));
-  document.querySelectorAll('#langSwitch button').forEach((b) => b.addEventListener('click', () => applyLang(b.dataset.lang)));
-
-  /* =====================================================================
-     REVIEW
-     ===================================================================== */
-  const starsEl = $('stars');
-  const starSvg = '<svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.1 6.6.9-4.8 4.6 1.2 6.6L12 17.5l-5.9 3.2 1.2-6.6L2.5 9.5l6.6-.9L12 2.5z"/></svg>';
-  for (let i = 1; i <= 5; i++) {
-    const b = document.createElement('button');
-    b.type = 'button'; b.className = 'star'; b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', 'false'); b.innerHTML = starSvg;
-    b.addEventListener('click', () => setRating(i));
-    b.addEventListener('mouseenter', () => { state.hover = i; paintStars(); });
-    b.addEventListener('mouseleave', () => { state.hover = 0; paintStars(); });
-    starsEl.appendChild(b);
-  }
-  function paintStars() {
-    const a = state.hover || state.rating;
-    [...starsEl.children].forEach((b, i) => { b.classList.toggle('on', i + 1 <= a); b.setAttribute('aria-checked', String(i + 1 === state.rating)); b.setAttribute('aria-label', (i + 1) + ' / 5'); });
-    $('ratingLabel').textContent = a ? t().ratings[a] : '';
-  }
-  function setRating(n) { state.rating = n; paintStars(); renderReviewState(true); }
-
-  const lockKey = () => 'ikatna_review_' + (table || 'x');
-  function isLocked() { try { const ts = Number(localStorage.getItem(lockKey())); return !!ts && Date.now() - ts < CONFIG.reviewLockHours * 3600 * 1000; } catch (e) { return false; } }
-  function lockReview() { try { localStorage.setItem(lockKey(), String(Date.now())); } catch (e) {} }
-
-  function renderReviewState(animate) {
-    const locked = isLocked();
-    $('reviewLocked').hidden = !locked; $('reviewFlow').hidden = locked;
-    if (locked) return;
-    const r = state.rating;
-    $('positive').hidden = !(r >= 4); $('negative').hidden = !(r >= 1 && r <= 3);
-    const shown = r >= 4 ? $('positive') : (r >= 1 ? $('negative') : null);
-    if (animate && shown) { shown.classList.remove('fade-up'); void shown.offsetWidth; shown.classList.add('fade-up'); setTimeout(() => shown.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80); }
-  }
-
-  function renderChips() {
-    const wrap = $('chips'); wrap.innerHTML = '';
-    CHIP_KEYS.forEach((k) => {
-      const b = document.createElement('button');
-      b.type = 'button'; b.className = 'chip'; b.textContent = t().chips[k]; b.setAttribute('aria-pressed', String(state.tags.has(k)));
-      b.addEventListener('click', () => { state.tags.has(k) ? state.tags.delete(k) : state.tags.add(k); b.setAttribute('aria-pressed', String(state.tags.has(k))); });
-      wrap.appendChild(b);
+      card.innerHTML = `
+        <div class="flex items-center gap-3 min-w-0 flex-1">
+          ${imgHtml}
+          <div class="min-w-0 flex-1">
+            <h3 class="font-display text-sm font-bold text-white truncate">${escapeHtml(data.name)}</h3>
+            <p class="mt-0.5 text-[11px] text-white/70 line-clamp-1">${escapeHtml(data.desc)}</p>
+            <div class="mt-2 flex items-center gap-3 text-[11px] text-gold-300/90 font-medium">
+              <span class="inline-flex items-center gap-1">🔥 ${item.kcal} ${L.kcal}</span>
+              <span class="inline-flex items-center gap-1">🥩 ${item.protein}${L.protein}</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col items-end justify-between gap-2 shrink-0">
+          <span class="rounded-full bg-gold-500/20 px-3 py-1 font-display text-xs font-bold text-gold-300 border border-gold-500/30">
+            ${item.price} ${CONFIG.currencyCode}
+          </span>
+          ${actionHtml}
+        </div>
+      `;
+      root.appendChild(card);
     });
   }
 
-  function waUrl() {
-    const L = t(), M = L.msg;
-    const issues = [...state.tags].map((k) => '• ' + L.chips[k]).join('\n') || M.none;
-    const lines = [M.head, '', '🏪 ' + M.restaurant + ': ' + CONFIG.restaurantName[state.lang], '🪑 ' + M.table + ': ' + (table || M.none), '⭐ ' + M.rating + ': ' + state.rating + '/5',
-      '🧑‍🍳 ' + M.waiter + ': ' + ($('waiterName').value.trim().slice(0, 40) || M.none), '⚠️ ' + M.issues + ':', issues, '💬 ' + M.comment + ': ' + ($('comment').value.trim() || M.none)];
-    if (cartCount()) { lines.push('🧾 ' + M.order + ':'); cart.forEach((q, id) => lines.push('  ' + q + 'x ' + byId[id].qr)); }   // lets the manager check "wrong order" complaints
+  function getCartSummary() {
+    let totalQty = 0;
+    let totalPrice = 0;
+    const items = [];
+
+    Object.keys(state.cart).forEach(id => {
+      const q = state.cart[id];
+      if (q > 0) {
+        const item = MENU.find(m => m.id === id);
+        if (item) {
+          totalQty += q;
+          totalPrice += item.price * q;
+          items.push({ item, qty: q, sub: item.price * q });
+        }
+      }
+    });
+    return { totalQty, totalPrice, items };
+  }
+
+  function updateCartBar() {
+    const bar = document.getElementById('cartBar');
+    if (!bar) return;
+    const { totalQty, totalPrice } = getCartSummary();
+    const show = (totalQty > 0 && state.tab === 'menu');
+
+    bar.classList.toggle('translate-y-full', !show);
+    bar.classList.toggle('pointer-events-none', !show);
+    bar.setAttribute('aria-hidden', show ? 'false' : 'true');
+
+    if (show) {
+      const countEl = document.getElementById('cartCount');
+      const totalEl = document.getElementById('cartTotal');
+      if (countEl) countEl.textContent = `${totalQty} ${totalQty === 1 ? 'article' : 'articles'}`;
+      if (totalEl) totalEl.textContent = `${totalPrice} ${CONFIG.currencyCode}`;
+    }
+  }
+
+  function modifyQty(id, delta) {
+    const cur = state.cart[id] || 0;
+    const next = cur + delta;
+    if (next <= 0) delete state.cart[id];
+    else state.cart[id] = next;
+    state.cancelArmed = false;
+    updateCancelButtonUI();
+    renderMenu();
+    updateCartBar();
+  }
+
+  function updateCancelButtonUI() {
+    const btn = document.getElementById('cancelBtn');
+    if (!btn) return;
+    if (state.cancelArmed) {
+      btn.className = 'ms-auto flex h-9 shrink-0 items-center gap-1 rounded-xl border border-red-500 bg-red-500/20 px-2.5 text-[11px] font-bold text-red-200 transition';
+    } else {
+      btn.className = 'ms-auto flex h-9 shrink-0 items-center gap-1 rounded-xl border border-white/15 bg-white/5 px-2.5 text-xs font-bold text-white/90 transition hover:bg-white/10';
+    }
+  }
+
+  function clearCart() {
+    state.cart = {};
+    state.cancelArmed = false;
+    updateCancelButtonUI();
+    renderMenu();
+    updateCartBar();
+    closeQrModal();
+  }
+
+  function openQrModal() {
+    const { totalQty, totalPrice, items } = getCartSummary();
+    if (totalQty === 0) return;
+
+    const modal = document.getElementById('qrModal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    const tableStr = state.table ? '#' + state.table : 'ANY';
+    const refStr = 'ORD-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+    const qrRefEl = document.getElementById('qrRef');
+    if (qrRefEl) qrRefEl.textContent = refStr;
+
+    const listEl = document.getElementById('qrList');
+    if (listEl) {
+      listEl.innerHTML = items.map(({ item, qty, sub }) => `
+        <li class="flex justify-between items-center py-1">
+          <span class="text-white/95"><strong>${qty}x</strong> ${escapeHtml(item.nameFr)}</span>
+          <span class="font-semibold text-gold-300" dir="ltr">${sub} ${CONFIG.currencyCode}</span>
+        </li>
+      `).join('');
+    }
+
+    const totalValEl = document.getElementById('qrTotal');
+    if (totalValEl) totalValEl.textContent = `${totalPrice} ${CONFIG.currencyCode}`;
+
+    const cancelBtn = document.getElementById('qrCancel');
+    if (cancelBtn) cancelBtn.textContent = t().cancelOrder;
+
+    const lines = [
+      `IKATNA ORDER`,
+      `TABLE: ${tableStr}`,
+      `REF: ${refStr}`,
+      `---`
+    ];
+    items.forEach(({ item, qty }) => {
+      lines.push(`${qty}x ${item.nameFr} (${item.price * qty} ${CONFIG.currencyCode})`);
+    });
+    lines.push(`---`);
+    lines.push(`TOTAL: ${totalPrice} ${CONFIG.currencyCode}`);
+
+    const box = document.getElementById('qrBox');
+    const errEl = document.getElementById('qrError');
+    if (box) {
+      box.innerHTML = '';
+      if (errEl) errEl.classList.add('hidden');
+      
+      const qrText = encodeURIComponent(lines.join('\n'));
+      const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${qrText}`;
+      
+      const img = document.createElement('img');
+      img.src = qrImageUrl;
+      img.alt = 'Order QR Code';
+      img.onerror = () => {
+        if (errEl) {
+          errEl.textContent = 'Erreur de génération QR.';
+          errEl.classList.remove('hidden');
+        }
+      };
+      box.appendChild(img);
+    }
+  }
+
+  function closeQrModal() {
+    const modal = document.getElementById('qrModal');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+  }
+
+  function initReview() {
+    const starsEl = document.getElementById('stars');
+    if (!starsEl) return;
+    starsEl.innerHTML = '';
+
+    const starSvg = '<svg viewBox="0 0 24 24" class="h-10 w-10 sm:h-11 sm:w-11" stroke-width="1.6" stroke-linejoin="round"><path d="M12 2.5l2.9 6.1 6.6.9-4.8 4.6 1.2 6.6L12 17.5l-5.9 3.2 1.2-6.6L2.5 9.5l6.6-.9L12 2.5z"/></svg>';
+
+    for (let i = 1; i <= 5; i++) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'star p-1';
+      b.setAttribute('role', 'radio');
+      b.setAttribute('aria-checked', 'false');
+      b.setAttribute('aria-label', String(i));
+      b.innerHTML = starSvg;
+
+      b.onclick = () => setRating(i);
+      b.onmouseenter = () => { state.hoverRating = i; paintStars(); };
+      b.onmouseleave = () => { state.hoverRating = 0; paintStars(); };
+      starsEl.appendChild(b);
+    }
+
+    renderChips();
+    paintStars();
+    updateReviewSections();
+  }
+
+  function paintStars() {
+    const active = state.hoverRating || state.rating;
+    const starsEl = document.getElementById('stars');
+    if (!starsEl) return;
+
+    [...starsEl.children].forEach((b, idx) => {
+      const val = idx + 1;
+      const on = val <= active;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-checked', state.rating === val ? 'true' : 'false');
+    });
+
+    const lbl = document.getElementById('ratingLabel');
+    if (lbl) {
+      lbl.textContent = active ? (t().ratings[active] || '') : '';
+    }
+  }
+
+  function setRating(n) {
+    state.rating = n;
+    paintStars();
+    updateReviewSections();
+    setReviewLock();
+  }
+
+  function updateReviewSections() {
+    const pos = document.getElementById('positive');
+    const neg = document.getElementById('negative');
+    const r = state.rating;
+
+    if (pos) pos.classList.toggle('hidden', r < 4);
+    if (neg) {
+      neg.classList.toggle('hidden', !(r >= 1 && r <= 3));
+    }
+  }
+
+  function renderChips() {
+    const wrap = document.getElementById('chips');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    const chipKeys = t().chips;
+
+    Object.keys(chipKeys).forEach(key => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'chip rounded-full px-3 py-1.5 text-[11px] font-semibold';
+      btn.textContent = chipKeys[key];
+      const active = state.chips.has(key);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+      btn.onclick = () => {
+        if (state.chips.has(key)) state.chips.delete(key);
+        else state.chips.add(key);
+        btn.setAttribute('aria-pressed', state.chips.has(key) ? 'true' : 'false');
+      };
+      wrap.appendChild(btn);
+    });
+  }
+
+  function buildWhatsAppUrl() {
+    const L = t();
+    const tableVal = state.table || 'N/A';
+    const waiterVal = (document.getElementById('waiterName').value || '').trim() || 'Non spécifié';
+    const commentVal = (document.getElementById('comment').value || '').trim() || 'Aucun';
+    const issues = [...state.chips].map(k => '• ' + (L.chips[k] || k)).join('\n') || 'Aucun';
+
+    const lines = [
+      '🚨 Nouvel avis client (Le Palais Gourmand):',
+      ``,
+      `🪑 Table: #${tableVal}`,
+      `👤 Serveur: ${waiterVal}`,
+      `⭐ Note: ${state.rating}/5`,
+      `⚠️ Problèmes:`,
+      issues,
+      `💬 Commentaire: ${commentVal}`
+    ];
+
     return 'https://wa.me/' + CONFIG.whatsappNumber + '?text=' + encodeURIComponent(lines.join('\n'));
   }
-  $('waBtn').addEventListener('click', () => { window.open(waUrl(), '_blank', 'noopener'); lockReview(); setTimeout(() => renderReviewState(false), 400); });
-  $('mapsBtn').addEventListener('click', () => { lockReview(); setTimeout(() => renderReviewState(false), 400); });
 
-  /* =====================================================================
-     INIT
-     ===================================================================== */
-  (function init() {
-    if (CONFIG.heroImage) { const h = $('heroPhoto'); h.src = CONFIG.heroImage; h.hidden = false; h.onerror = () => { h.hidden = true; }; }
-    let lang = null;
-    try { lang = localStorage.getItem('ikatna_lang'); } catch (e) {}
-    if (!I18N[lang]) { const nav = (navigator.language || '').slice(0, 2).toLowerCase(); lang = I18N[nav] ? nav : 'fr'; }
-    applyLang(lang);
-    setNav('menu');
-    window.scrollTo(0, 0);
-  })();
+  function escapeHtml(str) {
+    return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('#langSwitch button').forEach(b => {
+      b.onclick = () => applyLanguage(b.getAttribute('data-lang'));
+    });
+
+    const btnM = document.getElementById('tabBtnMenu');
+    const btnR = document.getElementById('tabBtnReview');
+    if (btnM) btnM.onclick = () => switchTab('menu');
+    if (btnR) btnR.onclick = () => switchTab('review');
+
+    const editBtn = document.getElementById('tableEditBtn');
+    if (editBtn) {
+      editBtn.onclick = () => {
+        showTableForm();
+        const inp = document.getElementById('tableInput');
+        if (inp) inp.value = state.table;
+      };
+    }
+
+    const okBtn = document.getElementById('tableOkBtn');
+    const tInp = document.getElementById('tableInput');
+    if (okBtn && tInp) {
+      okBtn.onclick = () => setTable(tInp.value);
+      tInp.onkeydown = (e) => { if (e.key === 'Enter') setTable(tInp.value); };
+    }
+
+    const qrBtn = document.getElementById('qrBtn');
+    if (qrBtn) qrBtn.onclick = openQrModal;
+
+    const cancelBtn = document.getElementById('cancelBtn');
+    if (cancelBtn) {
+      cancelBtn.onclick = () => {
+        if (!state.cancelArmed) {
+          state.cancelArmed = true;
+          updateCancelButtonUI();
+          setTimeout(() => {
+            if (state.cancelArmed) {
+              state.cancelArmed = false;
+              updateCancelButtonUI();
+            }
+          }, 4000);
+        } else {
+          clearCart();
+        }
+      };
+    }
+
+    const qrClose = document.getElementById('qrClose');
+    if (qrClose) qrClose.onclick = closeQrModal;
+
+    const qrCancel = document.getElementById('qrCancel');
+    if (qrCancel) qrCancel.onclick = clearCart;
+
+    const qrModal = document.getElementById('qrModal');
+    if (qrModal) {
+      qrModal.onclick = (e) => {
+        if (e.target === qrModal) closeQrModal();
+      };
+    }
+
+    const mapsBtn = document.getElementById('mapsBtn');
+    if (mapsBtn) mapsBtn.href = CONFIG.googleMapsReviewUrl;
+
+    const publicLink = document.getElementById('publicLink');
+    if (publicLink) publicLink.href = CONFIG.googleMapsReviewUrl;
+
+    const waBtn = document.getElementById('waBtn');
+    if (waBtn) {
+      waBtn.onclick = () => {
+        const url = buildWhatsAppUrl();
+        window.open(url, '_blank', 'noopener');
+        setReviewLock();
+        updateReviewLockUI();
+      };
+    }
+
+    window.__ikatna = {
+      add: (id, delta) => modifyQty(id, delta)
+    };
+
+    initTable();
+    applyLanguage('fr');
+    initReview();
+  });
+
 })();
 </script>
 </body>
