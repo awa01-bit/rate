@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#121820" />
-<title>Le Palais Gourmand – Menu & Reviews</title>
+<meta name="theme-color" content="#0f172a" />
+<title>Ikatna – Le Palais Gourmand</title>
 
-<!-- Fonts -->
+<!-- Fonts: Playfair Display, Cairo, Inter, Bitcount Single -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Bitcount+Single:wght@100..900&family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet" />
 
 <!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
-<!-- QRCode.js Library for reliable QR code generation -->
+<!-- QRCode.js Library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <script>
@@ -21,17 +21,21 @@
     theme: {
       extend: {
         colors: {
-          slatecard: {
-            bg: '#121820',
-            surface: '#1a2332',
-            card: '#f1f5f9', /* Soft gray-white */
-            carddark: '#1e293b'
+          coolgray: {
+            bg: '#0b0f17',
+            surface: '#111827',
+            card: '#1e293b', /* Cool gray card */
+            cardhover: '#334155',
+            border: '#334155',
+            text: '#f8fafc',
+            muted: '#94a3b8'
           },
           gold: { 300: '#fde047', 400: '#facc15', 500: '#eab308', 600: '#ca8a04' }
         },
         fontFamily: {
           display: ['"Playfair Display"', 'Cairo', 'serif'],
-          body: ['Inter', 'Cairo', 'system-ui', 'sans-serif']
+          body: ['Inter', 'Cairo', 'system-ui', 'sans-serif'],
+          brand: ['"Bitcount Single"', 'Inter', 'monospace']
         }
       }
     }
@@ -41,27 +45,30 @@
 <style>
   html { scroll-behavior: smooth; }
   body {
-    background-color: #121820 !important;
+    background-color: #0b0f17 !important;
     background-image: 
-      radial-gradient(circle at 10% 10%, rgba(30, 41, 59, 0.5) 0%, transparent 40%),
-      radial-gradient(circle at 90% 90%, rgba(234, 179, 8, 0.08) 0%, transparent 40%),
-      linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      radial-gradient(circle at 15% 15%, rgba(30, 41, 59, 0.6) 0%, transparent 45%),
+      radial-gradient(circle at 85% 85%, rgba(234, 179, 8, 0.06) 0%, transparent 45%),
+      linear-gradient(135deg, #0b0f17 0%, #111827 100%);
     background-attachment: fixed;
     font-family: 'Inter', 'Cairo', sans-serif;
   }
 
+  html[lang="ar"] body { font-family: 'Cairo', sans-serif; direction: rtl; }
+  html[lang="fr"] body, html[lang="en"] body { font-family: 'Inter', sans-serif; direction: ltr; }
+
   .no-scrollbar { scrollbar-width: none; }
   .no-scrollbar::-webkit-scrollbar { display: none; }
 
-  /* Gray-white card design with subtle modern border */
+  /* Cool gray card design with modern styling */
   .dish-card {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
+    background: #1e293b;
+    border: 1px solid #334155;
     border-radius: 1.25rem;
-    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2), 0 8px 10px -6px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
     transition: transform .15s ease, border-color .15s ease;
   }
-  .dish-card:hover { border-color: #cbd5e1; transform: translateY(-2px); }
+  .dish-card:hover { border-color: #64748b; transform: translateY(-2px); }
 
   .btn-gold-badge {
     background: linear-gradient(135deg, #fef08a 0%, #eab308 100%);
@@ -70,60 +77,69 @@
     font-weight: 700;
   }
 
-  .pill { background: rgba(30, 41, 59, 0.8); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); transition: all .2s; }
+  .pill { background: #111827; color: #94a3b8; border: 1px solid #334155; transition: all .2s; }
   .pill[aria-pressed="true"] { background: #eab308 !important; color: #0f172a !important; font-weight: 700; border-color: #facc15; }
 
-  .lang-btn { background: rgba(30, 41, 59, 0.8); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); }
-  .lang-btn.active { background: #eab308; color: #0f172a; font-weight: 700; }
+  .lang-btn { background: #111827; color: #94a3b8; border: 1px solid #334155; }
+  .lang-btn.active { background: #eab308; color: #0f172a; font-weight: 700; border-color: #facc15; }
 
   .tab-on { background: #eab308; color: #0f172a; font-weight: 700; }
+
+  .brand-font { font-family: 'Bitcount Single', 'Inter', monospace; font-weight: 600; letter-spacing: .12em; }
 
   /* Star rating styling */
   .star svg { fill: transparent; stroke: #94a3b8; transition: fill .2s, stroke .2s; cursor: pointer; }
   .star.on svg { fill: #eab308; stroke: #eab308; filter: drop-shadow(0 0 6px rgba(234, 179, 8, 0.5)); }
 
-  .chip { border: 1px solid #334155; background: #1e293b; color: #cbd5e1; transition: all .15s ease; }
-  .chip[aria-pressed="true"] { background: rgba(234,179,8,0.2); border-color: #eab308; color: #fef08a; }
+  .chip { border: 1px solid #334155; background: #0f172a; color: #cbd5e1; transition: all .15s ease; }
+  .chip[aria-pressed="true"] { background: rgba(234,179,8,0.25); border-color: #eab308; color: #fef08a; }
+
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display: none; }
+  details[open] .chev { transform: rotate(180deg); }
+  .chev { transition: transform .2s ease; }
 
   #qrcode canvas, #qrcode img { margin: 0 auto; border-radius: 0.5rem; }
 </style>
 </head>
 
 <body class="min-h-screen text-slate-100 antialiased">
+<div class="fixed inset-x-0 top-0 z-50 h-[3px]" style="background:linear-gradient(90deg,#803427 0%,#eab308 50%,#006233 100%)"></div>
 
 <!-- TOP HERO BANNER -->
-<div class="relative w-full overflow-hidden bg-[#0f172a] pb-6 pt-3 text-white border-b border-slate-800 shadow-xl">
-  <div class="absolute inset-0 opacity-25 mix-blend-overlay bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=1000&q=80')"></div>
-  <div class="absolute inset-0 bg-gradient-to-t from-[#121820] via-[#0f172a]/70 to-transparent"></div>
+<header class="relative w-full overflow-hidden bg-[#0f172a] pb-6 pt-3 text-white border-b border-slate-800 shadow-xl">
+  <div class="absolute inset-0 opacity-20 mix-blend-overlay bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=1000&q=80')"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-[#0b0f17] via-[#0f172a]/70 to-transparent"></div>
 
   <div class="relative z-10 mx-auto max-w-md px-4">
     <div class="flex items-center justify-between pt-2">
-      <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-400">
-        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 13.8A4.8 4.8 0 0 1 9.2 6a5.5 5.5 0 0 1 10.6 1.5A3.8 3.8 0 0 1 20 15H6z"/><path d="M6 15v5a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-5"/></svg>
+      <!-- Ikatna Brand Logo Touch -->
+      <div class="flex items-center gap-2">
+        <span class="brand-font text-sm text-amber-400" dir="ltr"><span class="text-white">I</span>k<span class="text-white">at</span>na</span>
       </div>
-      <div id="langSwitch" class="inline-flex rounded-full bg-slate-800/90 p-1 backdrop-blur border border-slate-700" role="group">
-        <button data-lang="fr" class="lang-btn rounded-full px-3.5 py-1 text-xs transition">FR</button>
-        <button data-lang="ar" class="lang-btn rounded-full px-3.5 py-1 text-xs transition">AR</button>
+      <!-- Language Switch (AR, FR, EN) -->
+      <div id="langSwitch" class="inline-flex rounded-full bg-slate-900/90 p-1 backdrop-blur border border-slate-700" role="group">
+        <button data-lang="ar" class="lang-btn rounded-full px-3 py-1 text-xs transition">عربي</button>
+        <button data-lang="fr" class="lang-btn rounded-full px-3 py-1 text-xs transition">FR</button>
+        <button data-lang="en" class="lang-btn rounded-full px-3 py-1 text-xs transition">EN</button>
       </div>
     </div>
 
     <div class="mt-3 text-center">
-      <h1 class="font-display text-3xl font-bold italic tracking-wide text-amber-300 drop-shadow-md">Restaurant</h1>
-      <h2 class="font-display text-2xl font-bold text-white tracking-wider">Le Palais Gourmand</h2>
-      <p class="mt-2 text-xs font-medium text-slate-300">Une cuisine authentique aux saveurs marocaines</p>
-      <p class="mt-0.5 text-xs font-bold text-amber-300" dir="rtl">مطبخ أصيل بنكهات مغربية</p>
+      <h1 class="font-display text-3xl font-bold italic tracking-wide text-amber-300 drop-shadow-md">Le Palais Gourmand</h1>
+      <p id="heroSub" class="mt-2 text-xs font-medium text-slate-300">Une cuisine authentique aux saveurs marocaines</p>
     </div>
   </div>
-</div>
+</header>
 
-<!-- STICKY NAVIGATION TABS (Menu & Review) -->
-<div class="sticky top-0 z-30 bg-[#121820]/95 backdrop-blur border-b border-slate-800 shadow-md">
+<!-- STICKY NAVIGATION TABS -->
+<div class="sticky top-0 z-30 bg-[#0b0f17]/95 backdrop-blur border-b border-slate-800 shadow-md">
   <div class="mx-auto max-w-md px-4 py-2.5">
     <div class="grid grid-cols-2 gap-1 rounded-full bg-slate-900 p-1 border border-slate-800" role="tablist">
-      <button id="tabBtnMenu" role="tab" aria-selected="true" class="rounded-full px-4 py-2 text-xs font-bold transition tab-on">Menu & Commande</button>
-      <button id="tabBtnReview" role="tab" aria-selected="false" class="rounded-full px-4 py-2 text-xs font-bold transition text-slate-400 hover:text-white">Avis & Service</button>
+      <button id="tabBtnMenu" role="tab" aria-selected="true" class="rounded-full px-4 py-2 text-xs font-bold transition tab-on" data-i18n="tabMenu">Menu & Commande</button>
+      <button id="tabBtnReview" role="tab" aria-selected="false" class="rounded-full px-4 py-2 text-xs font-bold transition text-slate-400 hover:text-white" data-i18n="tabReview">Avis & Service</button>
     </div>
-    <!-- Category pills for menu -->
+    <!-- Category pills -->
     <div id="catNavContainer" class="mt-2">
       <div id="pills" class="no-scrollbar flex gap-2 overflow-x-auto pb-1" role="group"></div>
     </div>
@@ -133,21 +149,22 @@
 <!-- MENU TAB PANEL -->
 <main id="panelMenu" role="tabpanel" class="mx-auto max-w-md px-4 pb-32 pt-4">
   <div id="menuRoot" class="space-y-3.5"></div>
+  <p data-i18n="nutriNote" class="mx-auto mt-8 max-w-sm text-center text-[11px] leading-relaxed text-slate-400"></p>
 </main>
 
 <!-- REVIEW TAB PANEL -->
 <main id="panelReview" role="tabpanel" class="mx-auto hidden max-w-md px-4 pb-32 pt-4">
   <div id="reviewLocked" class="hidden rounded-3xl bg-slate-900 border border-slate-800 p-6 text-center shadow-xl">
     <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/20 text-2xl">🙏</div>
-    <h3 class="text-base font-bold text-amber-300">Avis bien enregistré</h3>
-    <p class="mt-1 text-xs text-slate-300">Merci, votre retour pour cette table a bien été transmis à la direction.</p>
+    <h3 data-i18n="lockedTitle" class="text-base font-bold text-amber-300">Avis bien enregistré</h3>
+    <p data-i18n="lockedText" class="mt-1 text-xs text-slate-300">Merci, votre retour pour cette table a bien été transmis à la direction.</p>
   </div>
 
   <div id="reviewFlow" class="rounded-3xl bg-slate-900 border border-slate-800 p-5 shadow-xl">
-    <h3 class="text-center font-display text-lg font-bold text-amber-300">Comment était votre expérience ?</h3>
-    <p class="mt-1 text-center text-xs text-slate-400">Votre avis nous aide à vous offrir le meilleur.</p>
+    <h3 data-i18n="reviewTitle" class="text-center font-display text-lg font-bold text-amber-300">Comment était votre expérience ?</h3>
+    <p data-i18n="reviewSub" class="mt-1 text-center text-xs text-slate-400">Votre avis nous aide à vous offrir le meilleur.</p>
     
-    <label for="waiterName" class="mt-4 block text-[11px] font-semibold uppercase tracking-wider text-amber-400">Nom du serveur (optionnel)</label>
+    <label for="waiterName" data-i18n="waiterLabel" class="mt-4 block text-[11px] font-semibold uppercase tracking-wider text-amber-400">Nom du serveur (optionnel)</label>
     <input id="waiterName" type="text" maxlength="40" class="mt-1 w-full rounded-xl bg-slate-800 border border-slate-700 p-2.5 text-xs text-white placeholder:text-slate-500 focus:border-amber-400 focus:outline-none" />
 
     <div id="stars" class="mt-5 flex justify-center gap-2" dir="ltr"></div>
@@ -156,29 +173,37 @@
     <!-- Positive Experience Section -->
     <section id="positive" class="mt-4 hidden rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-center">
       <div class="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-amber-500/20 text-xl">🎉</div>
-      <h4 class="text-sm font-bold text-amber-300">Merci infiniment pour votre visite !</h4>
-      <p class="mt-1 text-[11px] text-slate-300">Nous sommes ravis que vous ayez apprécié. Pourriez-vous laisser un avis sur Google Maps ?</p>
+      <h4 data-i18n="posTitle" class="text-sm font-bold text-amber-300">Merci infiniment pour votre visite !</h4>
+      <p data-i18n="posText" class="mt-1 text-[11px] text-slate-300">Nous sommes ravis que vous ayez apprécié. Pourriez-vous laisser un avis sur Google Maps ?</p>
       <a id="mapsBtn" href="https://search.google.com/local/writereview?placeid=YOUR_PLACE_ID" target="_blank" rel="noopener noreferrer"
          class="btn-gold-badge mt-3 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-xs">
-        <span>Laisser un avis sur Google Maps</span>
+        <span data-i18n="mapsBtn">Laisser un avis sur Google Maps</span>
       </a>
     </section>
 
-    <!-- Negative Experience Section -->
+    <!-- Negative Experience Section with extended options -->
     <section id="negative" class="mt-4 hidden rounded-2xl border border-slate-700 bg-slate-800 p-4">
-      <h4 class="text-xs font-bold text-slate-200">Nous sommes désolés pour ce désagrément</h4>
-      <p class="mt-1 text-[11px] text-slate-400">Dites-nous ce qui n’a pas fonctionné :</p>
+      <h4 data-i18n="negTitle" class="text-xs font-bold text-slate-200">Nous sommes désolés pour ce désagrément</h4>
+      <p data-i18n="chipsLabel" class="mt-1 text-[11px] text-slate-400">Quel a été le problème ?</p>
       <div id="chips" class="mt-2.5 flex flex-wrap gap-1.5"></div>
       
-      <label for="comment" class="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-amber-400">Commentaires (optionnel)</label>
+      <label for="comment" data-i18n="commentLabel" class="mt-3 block text-[11px] font-semibold uppercase tracking-wider text-amber-400">Commentaires (optionnel)</label>
       <textarea id="comment" rows="2" maxlength="300" class="mt-1 w-full resize-none rounded-xl bg-slate-900 border border-slate-700 p-2 text-xs text-white placeholder:text-slate-500 focus:border-amber-400 focus:outline-none"></textarea>
 
       <button id="waBtn" type="button" class="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-4 py-2.5 text-xs font-extrabold text-slate-950 shadow-md">
-        <span>Envoyer au responsable via WhatsApp</span>
+        <span data-i18n="waBtn">Envoyer au responsable via WhatsApp</span>
       </button>
     </section>
   </div>
 </main>
+
+<!-- FOOTER WITH IKATNA TOUCH -->
+<footer class="mx-auto max-w-md px-4 pb-28 pt-4 text-center">
+  <p class="text-[11px] text-slate-500">
+    <span data-i18n="poweredBy">Powered by</span> 
+    <span class="brand-font text-xs text-amber-400" dir="ltr"><span class="text-white">I</span>k<span class="text-white">at</span>na</span>
+  </p>
+</footer>
 
 <!-- STICKY CART BAR -->
 <div id="cartBar" class="pointer-events-none fixed inset-x-0 bottom-0 z-40 translate-y-full px-3 pb-[max(.6rem,env(safe-area-inset-bottom))] transition-transform duration-300">
@@ -190,7 +215,7 @@
 
     <div class="flex items-center gap-2">
       <div class="flex items-center gap-1.5 rounded-xl bg-slate-800 border border-slate-700 px-2.5 py-1">
-        <span class="text-[10px] text-slate-400 font-semibold">Table:</span>
+        <span data-i18n="table" class="text-[10px] text-slate-400 font-semibold">Table:</span>
         <span id="tableNum" class="font-bold text-amber-300 text-xs" dir="ltr">—</span>
         <button id="tableEditBtn" type="button" class="text-amber-400 hover:text-white p-0.5">
           <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
@@ -199,7 +224,7 @@
 
       <button id="qrBtn" type="button" class="btn-gold-badge flex shrink-0 items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs">
         <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h3M20 17v4"/></svg>
-        <span>QR Code</span>
+        <span data-i18n="showQr">QR Code</span>
       </button>
     </div>
   </div>
@@ -208,33 +233,32 @@
 <!-- TABLE MODAL -->
 <div id="tableModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
   <div class="w-full max-w-xs rounded-3xl bg-slate-900 border border-slate-700 p-5 text-center text-white shadow-2xl">
-    <h3 class="font-display text-lg font-bold text-amber-300">Numéro de table</h3>
-    <p class="mt-1 text-xs text-slate-300">Veuillez entrer votre numéro de table.</p>
+    <h3 data-i18n="tableModalTitle" class="font-display text-lg font-bold text-amber-300">Numéro de table</h3>
+    <p data-i18n="tableModalSub" class="mt-1 text-xs text-slate-300">Veuillez entrer votre numéro de table.</p>
     <input id="tableInput" type="text" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" dir="ltr"
            class="mt-3 w-full rounded-xl bg-slate-800 border border-slate-700 p-2.5 text-center font-display text-lg font-bold uppercase tracking-widest text-white placeholder:text-slate-500 focus:border-amber-400 focus:outline-none" placeholder="ex: 05" />
-    <button id="tableOkBtn" type="button" class="btn-gold-badge mt-4 w-full rounded-xl py-2.5 text-xs font-bold">Valider</button>
+    <button id="tableOkBtn" type="button" data-i18n="tableOk" class="btn-gold-badge mt-4 w-full rounded-xl py-2.5 text-xs font-bold">Valider</button>
   </div>
 </div>
 
-<!-- QR MODAL (Fixed with native reliable qrcode.js) -->
+<!-- QR MODAL -->
 <div id="qrModal" class="fixed inset-0 z-50 hidden items-end justify-center bg-black/80 backdrop-blur-sm sm:items-center p-3" role="dialog">
   <div class="w-full max-w-sm rounded-3xl bg-slate-900 border border-slate-700 p-5 text-white shadow-2xl">
     <div class="text-center">
-      <h3 class="font-display text-lg font-bold text-amber-300">QR Code de Commande</h3>
-      <p class="mt-0.5 text-xs text-slate-300">Table: <span id="qrTable" class="font-bold text-amber-300" dir="ltr"></span></p>
+      <h3 data-i18n="qrTitle" class="font-display text-lg font-bold text-amber-300">QR Code de Commande</h3>
+      <p class="mt-0.5 text-xs text-slate-300"><span data-i18n="table">Table</span>: <span id="qrTable" class="font-bold text-amber-300" dir="ltr"></span></p>
     </div>
     
-    <!-- Real functional QR code container -->
     <div class="mx-auto mt-4 w-fit rounded-2xl bg-white p-3 shadow-md">
       <div id="qrcode" class="flex items-center justify-center"></div>
     </div>
 
     <ul id="qrList" class="mt-3.5 space-y-1.5 border-t border-slate-800 pt-2.5 text-xs max-h-32 overflow-y-auto text-slate-300"></ul>
     <div class="mt-2 flex items-center justify-between border-t border-slate-800 pt-2 text-xs font-bold text-amber-300">
-      <span>Total :</span>
+      <span data-i18n="total">Total :</span>
       <span id="qrTotal">0 DH</span>
     </div>
-    <button id="qrClose" type="button" class="mt-4 w-full rounded-xl border border-slate-700 bg-slate-800 py-2.5 text-xs font-bold transition hover:bg-slate-700">Fermer</button>
+    <button id="qrClose" type="button" data-i18n="close" class="mt-4 w-full rounded-xl border border-slate-700 bg-slate-800 py-2.5 text-xs font-bold transition hover:bg-slate-700">Fermer</button>
   </div>
 </div>
 
@@ -244,49 +268,206 @@
 
   const CONFIG = { currencyCode: 'DH', whatsappNumber: '212600000000' };
 
+  // Menu items structured with correct verified images and diabetic friendliness info
   const MENU = [
-    { id: 'd1', cat: 'desserts', price: 50, kcal: 410, protein: 7,
-      img: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=500&q=80',
-      nameFr: 'Gâteau de semoule à la fleur d’oranger', nameAr: 'كعكة السميد بماء الزهر',
-      descFr: 'Gâteau moelleux imbibé de sirop de fleur d’oranger et pistaches.', descAr: 'كعكة رطبة مسقية بشراب زهر البرتقال والفستق.' },
-    { id: 'm1', cat: 'mains', price: 120, kcal: 720, protein: 32,
+    { id: 'd1', cat: 'desserts', price: 50, kcal: 410, protein: 7, diabetic: false,
+      img: 'https://images.unsplash.com/photo-1579372786545-d24232daf58c?auto=format&fit=crop&w=500&q=80',
+      nameFr: 'Gâteau de semoule à la fleur d’oranger', nameAr: 'كعكة السميد بماء الزهر', nameEn: 'Orange Blossom Semolina Cake',
+      descFr: 'Gâteau moelleux imbibé de sirop de fleur d’oranger et pistaches.',
+      descAr: 'كعكة رطبة مسقية بشراب زهر البرتقال والفستق.',
+      descEn: 'Moist semolina cake infused with orange blossom syrup and pistachios.',
+      ingFr: ['Semoule', 'Fleur d’oranger', 'Miel', 'Pistaches', 'Beurre'],
+      ingAr: ['سميد', 'ماء زهر', 'عسل', 'فستق', 'زبدة'],
+      ingEn: ['Semolina', 'Orange blossom', 'Honey', 'Pistachios', 'Butter'] },
+
+    { id: 'm1', cat: 'mains', price: 120, kcal: 720, protein: 32, diabetic: true,
       img: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=500&q=80',
-      nameFr: 'Couscous Royal', nameAr: 'كسكس ملكي',
-      descFr: 'Semoule fine et vapeur, viandes tendres et sept légumes de saison.', descAr: 'كسكس أصيل باللحوم المختارة وخضار موسمية طازجة.' },
-    { id: 'm2', cat: 'mains', price: 100, kcal: 480, protein: 35,
+      nameFr: 'Couscous Royal', nameAr: 'كسكس ملكي', nameEn: 'Couscous Royal',
+      descFr: 'Semoule fine et vapeur, viandes tendres et sept légumes de saison.',
+      descAr: 'كسكس أصيل باللحوم المختارة وخضار موسمية طازجة.',
+      descEn: 'Fine steamed semolina with tender meats and seven seasonal vegetables.',
+      ingFr: ['Semoule de blé', 'Viande d’agneau', 'Poulet', 'Légumes de saison', 'Bouillon aux épices'],
+      ingAr: ['سميد القمح', 'لحم الضأن', 'دجاج', 'خضار موسمية', 'مرق بالبهارات'],
+      ingEn: ['Wheat semolina', 'Lamb', 'Chicken', 'Seasonal vegetables', 'Spiced broth'] },
+
+    { id: 'm2', cat: 'mains', price: 100, kcal: 480, protein: 35, diabetic: true,
       img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=500&q=80',
-      nameFr: 'Tajine de poulet au citron', nameAr: 'طاجين الدجاج بالليمون',
-      descFr: 'Poulet fermier confit au citron confit, olives et safran.', descAr: 'دجاج بلدي مطهو ببطء مع الليمون المخلل والزيتون والزعفران.' },
-    { id: 'm3', cat: 'mains', price: 110, kcal: 520, protein: 40,
+      nameFr: 'Tajine de poulet au citron', nameAr: 'طاجين الدجاج بالليمون', nameEn: 'Lemon Chicken Tajine',
+      descFr: 'Poulet fermier confit au citron confit, olives et safran.',
+      descAr: 'دجاج بلدي مطهو ببطء مع الليمون المخلل والزيتون والزعفران.',
+      descEn: 'Farm chicken simmered with preserved lemon, olives and saffron.',
+      ingFr: ['Poulet fermier', 'Citron confit', 'Olives rouges', 'Safran', 'Oignons'],
+      ingAr: ['دجاج بلدي', 'ليمون مخلل', 'زيتون أحمر', 'زعفران', 'بصل'],
+      ingEn: ['Farm chicken', 'Preserved lemon', 'Red olives', 'Saffron', 'Onions'] },
+
+    { id: 'm3', cat: 'mains', price: 110, kcal: 520, protein: 40, diabetic: true,
       img: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=500&q=80',
-      nameFr: 'Brochettes de bœuf', nameAr: 'أسياخ اللحم',
-      descFr: 'Brochettes de bœuf marinées aux épices douces et grillées au charbon.', descAr: 'قطع لحم بقري متبلة وممشوية على الفحم بأعشاب عطرية.' },
-    { id: 's1', cat: 'salads', price: 40, kcal: 150, protein: 6,
+      nameFr: 'Brochettes de bœuf', nameAr: 'أسياخ اللحم', nameEn: 'Beef Skewers',
+      descFr: 'Brochettes de bœuf marinées aux épices douces et grillées au charbon.',
+      descAr: 'قطع لحم بقري متبلة وممشوية على الفحم بأعشاب عطرية.',
+      descEn: 'Marinated beef skewers grilled over charcoal with aromatic herbs.',
+      ingFr: ['Viande de bœuf', 'Épices douces', 'Persil', 'Oignon'],
+      ingAr: ['لحم بقر', 'بهارات خفيفة', 'بقدونس', 'بصل'],
+      ingEn: ['Beef', 'Mild spices', 'Parsley', 'Onion'] },
+
+    { id: 's1', cat: 'salads', price: 40, kcal: 150, protein: 6, diabetic: true,
       img: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=500&q=80',
-      nameFr: 'Salade Marocaine', nameAr: 'سلطة مغربية',
-      descFr: 'Tomates, concombres et poivrons finement coupés, persil et huile d’olive.', descAr: 'طماطم، خيار وفلفل مقطع بعناية مع البقدونس وزيت الزيتون.' },
-    { id: 'dr1', cat: 'drinks', price: 25, kcal: 90, protein: 0,
+      nameFr: 'Salade Marocaine', nameAr: 'سلطة مغربية', nameEn: 'Moroccan Salad',
+      descFr: 'Tomates, concombres et poivrons finement coupés, persil et huile d’olive.',
+      descAr: 'طماطم، خيار وفلفل مقطع بعناية مع البقدونس وزيت الزيتون.',
+      descEn: 'Finely diced tomatoes, cucumbers and peppers with parsley and olive oil.',
+      ingFr: ['Tomates', 'Concombres', 'Poivrons', 'Persil', 'Huile d’olive'],
+      ingAr: ['طماطم', 'خيار', 'فلفل رومي', 'بقدونس', 'زيت زيتون'],
+      ingEn: ['Tomatoes', 'Cucumbers', 'Bell peppers', 'Parsley', 'Olive oil'] },
+
+    { id: 'dr1', cat: 'drinks', price: 25, kcal: 90, protein: 0, diabetic: true,
       img: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=500&q=80',
-      nameFr: 'Thé à la menthe', nameAr: 'شاي مغربي بالنعناع',
-      descFr: 'Thé vert traditionnel infusé à la menthe fraîche.', descAr: 'شاي أخضر أصيل منعش بأوراق النعناع الطازج.' }
+      nameFr: 'Thé à la menthe', nameAr: 'شاي مغربي بالنعناع', nameEn: 'Moroccan Mint Tea',
+      descFr: 'Thé vert traditionnel infusé à la menthe fraîche.',
+      descAr: 'شاي أخضر أصيل منعش بأوراق النعناع الطازج.',
+      descEn: 'Traditional green tea infused with fresh mint leaves.',
+      ingFr: ['Thé vert gunpowder', 'Menthe fraîche', 'Sucre naturel'],
+      ingAr: ['شاي أخضر', 'نعناع طازج', 'سكر طبيعي'],
+      ingEn: ['Gunpowder green tea', 'Fresh mint', 'Natural sugar'] }
   ];
 
   const I18N = {
     fr: {
-      categories: { all: 'Tous', desserts: 'Desserts', mains: 'Plats principaux', salads: 'Entrées', drinks: 'Boissons' },
+      dir: 'ltr', lang: 'fr',
+      heroSub: 'Une cuisine authentique aux saveurs marocaines',
+      tabMenu: 'Menu & Commande',
+      tabReview: 'Avis & Service',
+      nutriNote: '💡 Les valeurs nutritionnelles et calories sont des estimations indicatives par portion.',
+      add: 'Ajouter',
+      ingredients: 'Ingrédients :',
+      diabeticOk: 'Adapté au diabète',
       kcal: 'kcal', protein: 'g',
+      table: 'Table',
+      showQr: 'QR Code',
+      close: 'Fermer',
+      total: 'Total :',
+      qrTitle: 'QR Code de Commande',
+      qrHint: 'Montrez ce QR code au serveur',
+      reviewTitle: 'Comment était votre expérience ?',
+      reviewSub: 'Votre avis nous aide à vous offrir le meilleur.',
+      waiterLabel: 'Nom du serveur (optionnel)',
+      posTitle: 'Merci infiniment pour votre visite ! 🙏',
+      posText: 'Nous sommes ravis que vous ayez apprécié. Pourriez-vous laisser un avis sur Google Maps ?',
+      mapsBtn: 'Laisser un avis sur Google Maps',
+      negTitle: 'Nous sommes désolés pour ce désagrément',
+      negText: 'Dites-nous ce qui n’a pas fonctionné :',
+      chipsLabel: 'Quel a été le problème ?',
+      commentLabel: 'Commentaires (optionnel)',
+      waBtn: 'Envoyer au responsable via WhatsApp',
+      lockedTitle: 'Avis bien enregistré',
+      lockedText: 'Merci, votre retour pour cette table a bien été transmis à la direction.',
+      poweredBy: 'Powered by',
+      tableModalTitle: 'Numéro de table',
+      tableModalSub: 'Veuillez entrer votre numéro de table.',
+      tableOk: 'Valider',
+      categories: { all: 'Tous', desserts: 'Desserts', mains: 'Plats principaux', salads: 'Entrées', drinks: 'Boissons' },
       ratings: ['', 'Très décevant', 'Insatisfaisant', 'Correct', 'Très bien', 'Excellent !'],
-      chips: { kitchen_delay: '👨‍🍳 Attente cuisine', food_quality: '🍽️ Qualité du plat', service_delay: '🤵 Retard du service', clean: '✨ Propreté' }
+      chips: {
+        kitchen_delay: '👨‍🍳 Attente cuisine trop longue',
+        food_quality: '🍽️ Qualité ou température du plat',
+        false_order: '❌ Erreur ou oubli dans la commande',
+        service_delay: '🤵 Retard du service en salle',
+        staff: '🗣️ Accueil ou attitude du personnel',
+        clean: '✨ Propreté de la table'
+      }
     },
     ar: {
-      categories: { all: 'الكل', desserts: 'الحلويات', mains: 'الأطباق الرئيسية', salads: 'المقبلات', drinks: 'المشروبات' },
+      dir: 'rtl', lang: 'ar',
+      heroSub: 'مطبخ أصيل بنكهات مغربية',
+      tabMenu: 'المنيو والطلب',
+      tabReview: 'تقييم الخدمة',
+      nutriNote: '💡 المعلومات الغذائية والسعرات الحرارية هي تقديرات تقريبية لكل وجبة.',
+      add: 'أضف',
+      ingredients: 'المكونات:',
+      diabeticOk: 'مناسب للسكري',
       kcal: 'سعرة', protein: 'غ',
+      table: 'طاولة',
+      showQr: 'عرض QR',
+      close: 'إغلاق',
+      total: 'المجموع:',
+      qrTitle: 'كود طلب الطاولة',
+      qrHint: 'أظهر هذا الكود للنادل',
+      reviewTitle: 'كيف كانت تجربتك معنا؟',
+      reviewSub: 'رأيك يهمنا لتحسين خدمتنا دائماً.',
+      waiterLabel: 'اسم النادل (اختياري)',
+      posTitle: 'شكراً لك على زيارتك الرائعة! 🙏',
+      posText: 'يسعدنا جداً أن تجربتك نالت إعجابك. هل توفقنا دقيقة لترك تقييم على خرائط جوجل؟',
+      mapsBtn: 'تقييم على Google Maps',
+      negTitle: 'نعتذر بشدة عن أي تقصير',
+      negText: 'نرجو إخبارنا بما لم يعجبك ليتم تداركه فوراً.',
+      chipsLabel: 'ما الذي لم يكن على ما يرام؟',
+      commentLabel: 'ملاحظات إضافية (اختياري)',
+      waBtn: 'إرسال للمسؤول عبر واتساب',
+      lockedTitle: 'تم إرسال تقييمك بنجاح',
+      lockedText: 'شكراً لك، لقد تم تسجيل ملاحظتك لهذه الطاولة وستتم متابعتها من الإدارة.',
+      poweredBy: 'مدعوم من طرف',
+      tableModalTitle: 'رقم الطاولة',
+      tableModalSub: 'الرجاء إدخال رقم الطاولة للمتابعة.',
+      tableOk: 'حفظ واختيار',
+      categories: { all: 'الكل', desserts: 'الحلويات', mains: 'الأطباق الرئيسية', salads: 'المقبلات', drinks: 'المشروبات' },
       ratings: ['', 'غير مقتنع تماماً', 'دون المتوقع', 'مقبول', 'جيد جداً', 'ممتاز ورائع!'],
-      chips: { kitchen_delay: '👨‍🍳 تأخير في الطعام', food_quality: '🍽️ جودة الأطباق', service_delay: '🤵 بطء الخدمة', clean: '✨ النظافة' }
+      chips: {
+        kitchen_delay: '👨‍🍳 تأخير في تحضير الطعام',
+        food_quality: '🍽️ جودة أو حرارة الأطباق',
+        false_order: '❌ طلب غير دقيق أو ناقص',
+        service_delay: '🤵 بطء في خدمة النادل',
+        staff: '🗣️ تعامل غير لائق',
+        clean: '✨ نظافة الطاولة أو المكان'
+      }
+    },
+    en: {
+      dir: 'ltr', lang: 'en',
+      heroSub: 'Authentic cuisine with Moroccan flavors',
+      tabMenu: 'Menu & Order',
+      tabReview: 'Rate Service',
+      nutriNote: '💡 Nutritional values and calories are approximate estimates per serving.',
+      add: 'Add',
+      ingredients: 'Ingredients:',
+      diabeticOk: 'Diabetes Friendly',
+      kcal: 'kcal', protein: 'g',
+      table: 'Table',
+      showQr: 'QR Code',
+      close: 'Close',
+      total: 'Total:',
+      qrTitle: 'Table Order QR Code',
+      qrHint: 'Show this QR code to your waiter',
+      reviewTitle: 'How was your experience?',
+      reviewSub: 'Your feedback helps us serve you better every day.',
+      waiterLabel: 'Waiter name (optional)',
+      posTitle: 'Thank you so much for visiting! 🙏',
+      posText: 'We are delighted you enjoyed your time. Would you share a review on Google Maps?',
+      mapsBtn: 'Review on Google Maps',
+      negTitle: 'We sincerely apologize',
+      negText: 'Please let us know what went wrong:',
+      chipsLabel: 'What went wrong?',
+      commentLabel: 'Additional comments (optional)',
+      waBtn: 'Send feedback to manager via WhatsApp',
+      lockedTitle: 'Feedback Submitted',
+      lockedText: 'Thank you. Your feedback for this table has been recorded and forwarded.',
+      poweredBy: 'Powered by',
+      tableModalTitle: 'Table Number',
+      tableModalSub: 'Please enter your table number to continue.',
+      tableOk: 'Confirm',
+      categories: { all: 'All', desserts: 'Desserts', mains: 'Mains', salads: 'Salads', drinks: 'Drinks' },
+      ratings: ['', 'Very disappointing', 'Disappointing', 'Okay', 'Great', 'Excellent!'],
+      chips: {
+        kitchen_delay: '👨‍🍳 Kitchen delay',
+        food_quality: '🍽️ Food quality or temperature',
+        false_order: '❌ Wrong or missing items',
+        service_delay: '🤵 Slow waiter service',
+        staff: '🗣️ Staff attitude',
+        clean: '✨ Cleanliness'
+      }
     }
   };
 
   const state = { lang: 'fr', tab: 'menu', cat: 'all', table: '', cart: {}, rating: 0, hoverRating: 0, chips: new Set() };
+  const t = () => I18N[state.lang];
 
   function initTable() {
     try {
@@ -303,14 +484,29 @@
   }
 
   function applyLanguage(lang) {
+    if (!I18N[lang]) return;
     state.lang = lang;
+    const L = I18N[lang];
+
+    document.documentElement.lang = L.lang;
+    document.documentElement.dir = L.dir;
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (L[key]) el.textContent = L[key];
+    });
+
+    document.getElementById('heroSub').textContent = L.heroSub;
+
     document.querySelectorAll('#langSwitch button').forEach(b => {
       b.classList.toggle('active', b.getAttribute('data-lang') === lang);
     });
+
     renderPills();
     renderMenu();
     renderChips();
     paintStars();
+    updateCartBar();
   }
 
   function switchTab(tab) {
@@ -329,7 +525,7 @@
   function renderPills() {
     const wrap = document.getElementById('pills');
     wrap.innerHTML = '';
-    const cats = I18N[state.lang].categories;
+    const cats = t().categories;
     Object.keys(cats).forEach(key => {
       const btn = document.createElement('button');
       btn.type = 'button';
@@ -346,23 +542,23 @@
     const root = document.getElementById('menuRoot');
     root.innerHTML = '';
     const list = MENU.filter(item => state.cat === 'all' || item.cat === state.cat);
-    const L = I18N[state.lang];
+    const L = t();
 
     list.forEach(item => {
-      const isAr = state.lang === 'ar';
-      const name = isAr ? item.nameAr : item.nameFr;
-      const desc = isAr ? item.descAr : item.descFr;
+      const name = state.lang === 'ar' ? item.nameAr : (state.lang === 'en' ? item.nameEn : item.nameFr);
+      const desc = state.lang === 'ar' ? item.descAr : (state.lang === 'en' ? item.descEn : item.descFr);
+      const ing = state.lang === 'ar' ? item.ingAr : (state.lang === 'en' ? item.ingEn : item.ingFr);
       const qty = state.cart[item.id] || 0;
 
       const card = document.createElement('div');
-      card.className = 'dish-card flex items-center justify-between gap-3 p-3 text-slate-800';
+      card.className = 'dish-card p-3.5 text-slate-100';
 
       let actionHtml = '';
       if (qty === 0) {
         actionHtml = `
           <button type="button" onclick="window.__ikatna.add('${item.id}', 1)"
                   class="btn-gold-badge rounded-xl px-3 py-1.5 text-xs flex items-center gap-1">
-            <span>+ Ajouter</span>
+            <span>+ ${L.add}</span>
           </button>
         `;
       } else {
@@ -375,28 +571,43 @@
         `;
       }
 
+      let diabeticBadge = item.diabetic ? `<span class="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-semibold text-emerald-300">✅ ${L.diabeticOk}</span>` : '';
+
       card.innerHTML = `
-        <div class="flex items-center gap-3 min-w-0 flex-1">
-          <div class="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-slate-200 shadow-inner">
-            <img src="${item.img}" alt="${name}" loading="lazy" class="h-full w-full object-cover" />
-          </div>
-          <div class="min-w-0 flex-1">
-            <h3 class="font-display text-sm font-bold text-slate-900 truncate">${name}</h3>
-            <p class="mt-0.5 text-[11px] text-slate-600 line-clamp-1">${desc}</p>
-            <div class="mt-2 flex items-center gap-2 text-[11px] text-slate-500 font-medium">
-              <span>🔥 ${item.kcal} ${L.kcal}</span>
-              <span class="text-slate-300">|</span>
-              <span>🥩 ${item.protein}${L.protein}</span>
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex items-start gap-3 min-w-0 flex-1">
+            <div class="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-slate-800 shadow-inner">
+              <img src="${item.img}" alt="${name}" loading="lazy" class="h-full w-full object-cover" />
+            </div>
+            <div class="min-w-0 flex-1">
+              <h3 class="font-display text-sm font-bold text-white truncate">${name}</h3>
+              <p class="mt-0.5 text-[11px] text-slate-300 line-clamp-2">${desc}</p>
+              <div class="mt-2 flex flex-wrap items-center gap-2 text-[11px] text-slate-400 font-medium">
+                <span>🔥 ${item.kcal} ${L.kcal}</span>
+                <span>•</span>
+                <span>🥩 ${item.protein}${L.protein}</span>
+                ${diabeticBadge}
+              </div>
             </div>
           </div>
-        </div>
-        <div class="flex flex-col items-end justify-between gap-3 shrink-0">
-          <span class="font-display text-sm font-extrabold text-slate-900 bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-500/30">
-            ${item.price} ${CONFIG.currencyCode}
-          </span>
-          <div class="flex items-center gap-1">
-            ${actionHtml}
+          <div class="flex flex-col items-end justify-between gap-3 shrink-0">
+            <span class="font-display text-sm font-extrabold text-amber-300 bg-amber-500/15 px-2.5 py-0.5 rounded-full border border-amber-500/30">
+              ${item.price} ${CONFIG.currencyCode}
+            </span>
           </div>
+        </div>
+
+        <!-- Ingredients Details Drawer -->
+        <details class="mt-3 group border-t border-slate-800 pt-2">
+          <summary class="flex items-center justify-between text-xs font-semibold text-amber-300 py-0.5">
+            <span>${L.ingredients}</span>
+            <svg viewBox="0 0 24 24" class="chev h-3.5 w-3.5 text-amber-400" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <p class="mt-1 text-[11px] text-slate-300 leading-relaxed ps-1">${ing.join(', ')}</p>
+        </details>
+
+        <div class="mt-3 flex items-center justify-end border-t border-slate-800 pt-2.5">
+          ${actionHtml}
         </div>
       `;
       root.appendChild(card);
@@ -484,7 +695,7 @@
     Object.keys(chipKeys).forEach(key => {
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'chip rounded-full px-3 py-1.5 text-[11px] font-semibold';
+      btn.className = 'chip rounded-full px-3.5 py-1.5 text-[11px] font-semibold';
       btn.textContent = chipKeys[key];
       const active = state.chips.has(key);
       btn.setAttribute('aria-pressed', active ? 'true' : 'false');
@@ -515,7 +726,6 @@
     `).join('');
     document.getElementById('qrTotal').textContent = `${totalPrice} ${CONFIG.currencyCode}`;
 
-    // Generate reliable local QR Code using qrcode.js
     const box = document.getElementById('qrcode');
     box.innerHTML = '';
     new QRCode(box, {
