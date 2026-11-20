@@ -51,6 +51,8 @@ select:focus,textarea:focus{border-color:#a94a53;box-shadow:0 0 0 3px #8d1b2712}
 textarea{margin-top:13px;min-height:92px;resize:vertical}
 .submit{display:none;width:100%;margin-top:14px;border:0;border-radius:13px;padding:14px 16px;background:var(--wine);color:#fff;font-size:14px;font-weight:750;cursor:pointer;box-shadow:0 7px 16px #690b1426}
 .submit.show{display:block}
+.gsmall{display:none;text-align:center;margin-top:12px;font-size:11px;color:#808080;text-decoration:underline}
+.gsmall.show{display:block}
 .submit:hover{background:var(--wine2)}
 .good{display:none;text-align:center;background:#f8f3e9;border:1px solid #efe3c9;padding:18px;border-radius:17px;margin-top:15px}
 .good.show{display:block}
@@ -130,6 +132,7 @@ textarea{margin-top:13px;min-height:92px;resize:vertical}
         </div>
         <textarea id="comment" data-placeholder="commentPlaceholder" placeholder="Un commentaire supplémentaire ? (facultatif)"></textarea>
         <button class="submit" id="sendFeedback" data-i18n="send">Envoyer mon retour sur WhatsApp</button>
+        <a class="gsmall" id="googleSmall" href="https://www.google.com/maps/place/3eme+%C3%A9tage,+Centre+dentaire+Israfile,+au+dessus+de+Carrefour+market,+Business+Center,+Bureau+31,+Bouznika+13100/@33.7897447,-7.1578548,15z/data=!4m6!3m5!1s0xda7a7cbfb2ed3d5:0xdf688f1c29e99f5e!8m2!3d33.7897447!4d-7.1578548!16s%2Fg%2F11yqy4vkvh" target="_blank" rel="noopener" data-i18n="googleSmall">Vous préférez Google ? Voir notre page</a>
       </div>
 
       <div class="good" id="good">
@@ -150,7 +153,7 @@ fr:{
  sourceTitle:"Comment nous avez-vous connus ?",sourceSub:"Cela nous aide à mieux comprendre comment nos patients nous découvrent.",sourcePlaceholder:"Choisissez une réponse",
  rateTitle:"Merci de votre visite !",rateSub:"Comment évaluez-vous votre expérience chez nous ?",chooseStars:"Choisissez une note de 1 à 5",
  sorry:"Nous sommes désolés de l’apprendre.",reasonSub:"Qu’est-ce qui pourrait être amélioré ? (Plusieurs choix possibles)",commentPlaceholder:"Un commentaire supplémentaire ? (facultatif)",
- send:"Envoyer mon retour sur WhatsApp",thanks:"Merci beaucoup pour votre confiance !",googlePrompt:"Votre avis nous aide à continuer à nous améliorer. Vous pouvez le partager sur Google.",googleBtn:"Écrire un avis Google",footer:"Merci de nous avoir rendu visite à Bouznika.",
+ send:"Envoyer mon retour sur WhatsApp",thanks:"Merci beaucoup pour votre confiance !",googlePrompt:"Votre avis nous aide à continuer à nous améliorer. Vous pouvez le partager sur Google.",googleBtn:"Écrire un avis Google",googleSmall:"Vous préférez Google ? Voir notre page",footer:"Merci de nous avoir rendu visite à Bouznika.",
  rating:["","Très insatisfait","Insatisfait","Moyen","Satisfait","Très satisfait"],
  sourceOptions:["Google","Recommandation d’un proche","Réseaux sociaux","En passant devant le cabinet","Autre"],
  reasons:["Accueil","Temps d’attente","Communication / explications","Confort","Organisation / rendez-vous","Autre"]
@@ -160,7 +163,7 @@ en:{
  sourceTitle:"How did you hear about us?",sourceSub:"This helps us understand how patients discover our clinic.",sourcePlaceholder:"Choose an answer",
  rateTitle:"Thank you for visiting!",rateSub:"How would you rate your experience with us?",chooseStars:"Choose a rating from 1 to 5",
  sorry:"We’re sorry your experience wasn't perfect.",reasonSub:"What could we improve? (Choose all that apply)",commentPlaceholder:"Would you like to add a comment? (optional)",
- send:"Send feedback via WhatsApp",thanks:"Thank you for your trust!",googlePrompt:"Your review helps us keep improving. You can share it on Google.",googleBtn:"Write a Google review",footer:"Thank you for visiting us in Bouznika.",
+ send:"Send feedback via WhatsApp",thanks:"Thank you for your trust!",googlePrompt:"Your review helps us keep improving. You can share it on Google.",googleBtn:"Write a Google review",googleSmall:"Prefer Google? View our page",footer:"Thank you for visiting us in Bouznika.",
  rating:["","Very dissatisfied","Dissatisfied","Average","Satisfied","Very satisfied"],
  sourceOptions:["Google","Recommendation","Social media","Passing by the clinic","Other"],
  reasons:["Reception","Waiting time","Communication / explanations","Comfort","Appointments / organisation","Other"]
@@ -170,7 +173,7 @@ ar:{
  sourceTitle:"كيف تعرفتم على عيادتنا؟",sourceSub:"يساعدنا ذلك على معرفة الطريقة التي يتعرف بها المرضى على عيادتنا.",sourcePlaceholder:"اختاروا إجابة",
  rateTitle:"شكراً لزيارتكم!",rateSub:"كيف تقيّمون تجربتكم في عيادتنا؟",chooseStars:"اختاروا تقييماً من 1 إلى 5",
  sorry:"نأسف لأن تجربتكم لم تكن كما توقعتم.",reasonSub:"ما الجانب الذي يمكننا تحسينه؟ (يمكن اختيار أكثر من إجابة)",commentPlaceholder:"هل ترغبون في إضافة تعليق؟ (اختياري)",
- send:"إرسال الملاحظات عبر واتساب",thanks:"شكراً جزيلاً على ثقتكم!",googlePrompt:"يساعدنا تقييمكم على تحسين خدماتنا. يمكنكم مشاركة رأيكم على Google.",googleBtn:"كتابة تقييم على Google",footer:"شكراً لزيارتكم عيادتنا في بوزنيقة.",
+ send:"إرسال الملاحظات عبر واتساب",thanks:"شكراً جزيلاً على ثقتكم!",googlePrompt:"يساعدنا تقييمكم على تحسين خدماتنا. يمكنكم مشاركة رأيكم على Google.",googleBtn:"كتابة تقييم على Google",googleSmall:"تفضلون Google؟ زوروا صفحتنا",footer:"شكراً لزيارتكم عيادتنا في بوزنيقة.",
  rating:["","غير راضٍ جداً","غير راضٍ","متوسط","راضٍ","راضٍ جداً"],
  sourceOptions:["Google","توصية من أحد الأقارب","مواقع التواصل الاجتماعي","مررت بجانب العيادة","أخرى"],
  reasons:["الاستقبال","مدة الانتظار","التواصل / الشرح","الراحة","تنظيم المواعيد","أخرى"]
@@ -199,6 +202,7 @@ document.querySelectorAll(".star").forEach(b=>b.addEventListener("click",()=>{
  $("reasons").classList.toggle("show",rating<=3);
  $("good").classList.toggle("show",rating>=4);
  $("sendFeedback").classList.toggle("show",rating<=3);
+ $("googleSmall").classList.toggle("show",rating<=3);
 }));
 document.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>b.classList.toggle("on")));
 $("googleLink").href=MAPS_URL;
